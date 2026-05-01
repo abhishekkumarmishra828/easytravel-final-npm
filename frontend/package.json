@@ -1,0 +1,11 @@
+{
+  "name": "easytravel-smart-india",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NPM-start travel and tourism website prototype with smart destination recommendations.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  }
+}

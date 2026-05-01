@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+    <defs>
+      <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+        <stop offset="0%" stop-color="#7288b8"/>
+        <stop offset="55%" stop-color="#9db0d1"/>
+        <stop offset="100%" stop-color="#d5a58b"/>
+      </linearGradient>
+    </defs>
+    
+        <rect x="0" y="0" width="1600" height="900" fill="url(#g)"/>
+        <circle cx="1260" cy="140" r="80" fill="rgba(255,255,255,.18)"/>
+        <rect x="0" y="640" width="1600" height="260" fill="#d5a58b"/>
+        <path d="M0 680 C180 640 260 610 420 640 C610 676 760 700 950 650 C1150 598 1320 620 1600 680 L1600 900 L0 900 Z" fill="#1d2b53" opacity=".35"/>
+        <rect x="690" y="300" width="220" height="280" rx="8" fill="rgba(255,255,255,.85)"/>
+        <rect x="740" y="340" width="120" height="240" rx="8" fill="#9db0d1" opacity=".22"/>
+        <path d="M670 320 L800 210 L930 320 Z" fill="rgba(255,255,255,.92)"/>
+        <rect x="770" y="390" width="60" height="190" fill="rgba(255,255,255,.95)"/>
+        <rect x="500" y="380" width="110" height="200" rx="8" fill="rgba(255,255,255,.82)"/>
+        <path d="M485 392 L555 320 L625 392 Z" fill="rgba(255,255,255,.9)"/>
+        <rect x="990" y="380" width="110" height="200" rx="8" fill="rgba(255,255,255,.82)"/>
+        <path d="M975 392 L1045 320 L1115 392 Z" fill="rgba(255,255,255,.9)"/>
+        <rect x="760" y="470" width="80" height="110" fill="#22345e" opacity=".55"/>
+        
+    <rect x="0" y="0" width="1600" height="900" fill="url(#fade)"/>
+    <defs>
+      <linearGradient id="fade" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0%" stop-color="rgba(8,18,41,.04)"/>
+        <stop offset="100%" stop-color="rgba(8,18,41,.36)"/>
+      </linearGradient>
+    </defs>
+    <text x="90" y="720" font-size="94" font-family="Inter,Arial,sans-serif" font-weight="800" fill="white">Delhi</text>
+    <text x="90" y="790" font-size="34" font-family="Inter,Arial,sans-serif" fill="rgba(255,255,255,.92)">Heritage route • local highlights</text>
+    </svg>

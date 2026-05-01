@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+    <defs>
+      <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+        <stop offset="0%" stop-color="#b8876a"/>
+        <stop offset="55%" stop-color="#d2b59b"/>
+        <stop offset="100%" stop-color="#6f8fa6"/>
+      </linearGradient>
+    </defs>
+    
+        <rect x="0" y="0" width="1600" height="900" fill="url(#g)"/>
+        <rect x="0" y="560" width="1600" height="340" fill="#6f8fa6"/>
+        <rect x="0" y="640" width="1600" height="260" fill="#405b7d" opacity=".55"/>
+        <path d="M0 630 C220 590 350 580 520 610 C760 652 980 674 1220 620 C1370 586 1460 590 1600 620 L1600 900 L0 900 Z" fill="#12213f" opacity=".45"/>
+        <rect x="190" y="320" width="230" height="180" fill="rgba(255,255,255,.82)"/>
+        <rect x="450" y="270" width="260" height="230" fill="rgba(255,255,255,.76)"/>
+        <rect x="740" y="300" width="250" height="200" fill="rgba(255,255,255,.82)"/>
+        <rect x="1030" y="255" width="220" height="245" fill="rgba(255,255,255,.74)"/>
+        <rect x="1280" y="330" width="160" height="170" fill="rgba(255,255,255,.8)"/>
+        <path d="M180 500 L430 500 L470 560 L140 560 Z" fill="#e1d6c7" opacity=".82"/>
+        <path d="M420 500 L710 500 L750 560 L380 560 Z" fill="#e8dccd" opacity=".85"/>
+        <path d="M700 500 L990 500 L1030 560 L660 560 Z" fill="#e4d5c1" opacity=".84"/>
+        <path d="M1010 500 L1260 500 L1300 560 L970 560 Z" fill="#e4d6c4" opacity=".83"/>
+        
+    <rect x="0" y="0" width="1600" height="900" fill="url(#fade)"/>
+    <defs>
+      <linearGradient id="fade" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0%" stop-color="rgba(8,18,41,.04)"/>
+        <stop offset="100%" stop-color="rgba(8,18,41,.36)"/>
+      </linearGradient>
+    </defs>
+    <text x="90" y="720" font-size="94" font-family="Inter,Arial,sans-serif" font-weight="800" fill="white">Varanasi</text>
+    <text x="90" y="790" font-size="34" font-family="Inter,Arial,sans-serif" fill="rgba(255,255,255,.92)">Ghats • spiritual stays</text>
+    </svg>

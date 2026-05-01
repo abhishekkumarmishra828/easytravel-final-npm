@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyTravel Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(135deg,#edf2fb,#dfe7f7);color:#1a2d55}
+    .wrap{min-height:100vh;display:grid;place-items:center;padding:20px}
+    .card{width:min(980px,100%);display:grid;grid-template-columns:1.1fr .9fr;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(25,45,85,.16)}
+    .left{padding:42px;background:linear-gradient(135deg,#1f355f,#405a8f);color:#fff}
+    .left h1{font-size:54px;line-height:1.05;margin:0 0 16px}
+    .left p{font-size:18px;line-height:1.6;opacity:.92}
+    .right{padding:34px}
+    .tabs{display:flex;gap:12px;margin-bottom:20px}
+    .tab{padding:12px 16px;border-radius:14px;border:1px solid #d8e2f5;background:#f8faff;font-weight:800;cursor:pointer}
+    .tab.active{background:#ff7b57;color:#fff;border-color:#ff7b57}
+    .field{margin-bottom:14px}
+    label{display:block;font-weight:700;margin-bottom:8px}
+    input{width:100%;padding:14px 16px;border-radius:14px;border:1px solid #d8e2f5;font:inherit}
+    button.submit{width:100%;padding:15px 18px;border:none;border-radius:16px;background:#ff7b57;color:#fff;font-weight:800;font-size:17px;cursor:pointer}
+    .muted{color:#617494;font-size:14px}
+    .msg{margin-top:14px;padding:12px 14px;border-radius:12px;background:#f5f8ff;border:1px solid #d8e2f5;color:#243b67;display:none}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    a{text-decoration:none;color:inherit}
+    @media (max-width:800px){.card{grid-template-columns:1fr}.left h1{font-size:42px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="left">
+      <div style="font-size:14px;font-weight:800;margin-bottom:12px;opacity:.9">EasyTravel Pro • User Login</div>
+      <h1>Pehle register karo, phir login karke travel explore karo.</h1>
+      <p>Registration mandatory hai. Pehle account banao, fir login karo. Login ke bina traveller website explore, booking, package aur destination pages access nahi kar paega. User data MongoDB me save hoga aur admin dashboard me dikhega.</p>
+      <a href="/" style="display:inline-block;margin-top:22px;padding:12px 18px;border-radius:14px;background:#fff;color:#1a2d55;font-weight:800">Go to home</a>
+    </div>
+    <div class="right">
+      <div class="tabs">
+        <button class="tab active" id="loginTab" type="button">Login</button>
+        <button class="tab" id="registerTab" type="button">Register</button>
+      </div>
+
+      <form id="authForm">
+        <div class="row" id="nameRow" style="display:none">
+          <div class="field" style="grid-column:1 / span 2">
+            <label>Full name</label>
+            <input id="name" placeholder="Enter full name" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input id="email" type="email" placeholder="Enter email" required />
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <input id="password" type="password" placeholder="Enter password" required />
+        </div>
+
+        <button class="submit" id="submitBtn" type="submit">Login now</button>
+        <div class="msg" id="msg"></div>
+      </form>
+
+      <p class="muted" style="margin-top:16px">Step 1: Register • Step 2: Login • Step 3: Explore tours and packages. Admin banana ho to backend `.env` me `ADMIN_EMAIL` same email set kar do.</p>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+  const API_BASE = window.EASYTRAVEL_API_BASE || "";
+
+  const loginTab = document.getElementById("loginTab");
+  const registerTab = document.getElementById("registerTab");
+  const nameRow = document.getElementById("nameRow");
+  const form = document.getElementById("authForm");
+  const msg = document.getElementById("msg");
+  const submitBtn = document.getElementById("submitBtn");
+  const forgotToggle = document.getElementById("forgotToggle");
+  const forgotWrap = document.getElementById("forgotWrap");
+  const forgotBtn = document.getElementById("forgotBtn");
+
+  let mode = "login";
+
+  function setMode(nextMode) {
+    mode = nextMode;
+    loginTab.classList.toggle("active", mode === "login");
+    registerTab.classList.toggle("active", mode === "register");
+    nameRow.style.display = mode === "register" ? "grid" : "none";
+    submitBtn.textContent = mode === "register" ? "Create account" : "Login now";
+    msg.style.display = "none";
+  }
+
+  function showMsg(text) {
+    msg.style.display = "block";
+    msg.textContent = text;
+  }
+
+  function validPassword(password) {
+    return /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{5,}$/.test(password);
+  }
+
+  loginTab.addEventListener("click", () => setMode("login"));
+  registerTab.addEventListener("click", () => setMode("register"));
+  forgotToggle && forgotToggle.addEventListener("click", () => {
+    forgotWrap.style.display = forgotWrap.style.display === "none" ? "block" : "none";
+  });
+
+  forgotBtn && forgotBtn.addEventListener("click", async () => {
+    const email = document.getElementById("forgotEmail").value.trim();
+    if (!email) {
+      showMsg("Registered email enter karo.");
+      return;
+    }
+    try {
+      const res = await fetch(API_BASE + "/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      showMsg(data.message || "Request sent");
+    } catch (error) {
+      console.error(error);
+      showMsg("Forget password request send nahi ho pa raha.");
+    }
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msg.style.display = "none";
+
+    const payload = {
+      email: document.getElementById("email").value.trim().toLowerCase(),
+      password: document.getElementById("password").value.trim(),
+    };
+
+    if (mode === "register") {
+      payload.name = document.getElementById("name").value.trim();
+      if (!payload.name) {
+        showMsg("Register karne ke liye full name required hai.");
+        return;
+      }
+      if (!validPassword(payload.password)) {
+        showMsg("Password me minimum 5 characters, 1 Capital letter aur 1 Special symbol required hai.");
+        return;
+      }
+    }
+
+    const endpoint = mode === "register" ? "/api/auth/register" : "/api/auth/login";
+
+    try {
+      submitBtn.disabled = true;
+      submitBtn.textContent = mode === "register" ? "Creating..." : "Logging in...";
+
+      const res = await fetch(API_BASE + endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (mode === "register") {
+        if (data.success) {
+          showMsg("Registration successful. Ab login tab pe jaake login karo.");
+          form.reset();
+          setMode("login");
+          document.getElementById("email").value = payload.email;
+          return;
+        }
+        showMsg(data.message || "Registration failed");
+        return;
+      }
+
+      showMsg(data.message || "Done");
+      if (data.success && data.token) {
+        localStorage.setItem("easytravel_token", data.token);
+        localStorage.setItem("easytravel_user", JSON.stringify(data.user));
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 700);
+      }
+    } catch (error) {
+      console.error("Auth error:", error);
+      showMsg("Server error. Backend aur port 5055 check karke fir try karo.");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = mode === "register" ? "Create account" : "Login now";
+    }
+  });
+</script>
+
+  <script src="/review-feature.js"></script>
+</body>
+</html>

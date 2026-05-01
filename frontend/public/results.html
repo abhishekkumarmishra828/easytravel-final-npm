@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyTravel Results</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo-badge">✈</div>
+        <div>
+          <h1>EasyTravel Pro</h1>
+          <p>Route results + place explorer</p>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="#tickets">Results</a>
+        <a href="#placeExplorer">Place explorer</a>
+      </nav>
+      <a class="nav-cta" href="/">New search</a>
+    </div>
+  </header>
+
+  <div class="container results-page-header">
+    <div class="results-hero results-hero-enhanced">
+      <div class="result-route result-route-enhanced">
+        <div class="result-copy">
+          <div class="hero-kicker" style="color:var(--navy);background:#edf3ff;border-color:#dbe4f6;">Smart recommendation result</div>
+          <h2 id="resultTitle" style="font-size:54px;color:var(--navy);margin:16px 0 10px;">Results</h2>
+          <p class="result-subtitle" id="resultSubtitle">Ticket search ke saath curated destination discovery, arrival planning aur smart city highlights.</p>
+          <div class="route-badges" id="routeBadges"></div>
+          <div class="result-mini-stats">
+            <div class="mini-stat-card"><span>Age smart picks</span><strong id="miniStatPlaces">3 places</strong></div>
+            <div class="mini-stat-card"><span>Stay mood</span><strong id="miniStatMood">Comfort</strong></div>
+            <div class="mini-stat-card"><span>Flow</span><strong id="miniStatFlow">Ticket + city</strong></div>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="secondary-btn" id="bookNowTop">Book Now</button>
+            <a class="primary-btn" style="display:inline-grid;place-items:center;text-decoration:none;" href="/">Modify search</a>
+          </div>
+        </div>
+        <div class="results-visual-card">
+          <img id="resultHeroImage" alt="destination preview" />
+          <div class="visual-overlay"></div>
+          <div class="visual-caption">
+            <span class="visual-chip">Live destination preview</span>
+            <h3 id="visualPlaceName">Selected destination</h3>
+            <p id="visualPlaceLine">Map, famous place aur trip planning ek hi page par.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section" id="tickets">
+    <div class="container result-layout">
+      <div class="ticket-list">
+        <h3 id="ticketHeading" style="margin:0;font-size:34px;">Suggested routes</h3>
+        <p class="recommend-note" id="routeInsight"></p>
+        <div id="ticketListWrap"></div>
+        <div class="notice" id="irctcNotice">Train mode me “Book on IRCTC” official redirect button diya gaya hai. Is website ka main advantage planning, age-based destination discovery, station-arrival comfort aur city intelligence hai.</div>
+      </div>
+      <div style="display:grid;gap:24px;">
+        <div class="recommend-card">
+          <h3 id="recHeading">Recommendations</h3>
+          <div id="placeChips" class="route-badges"></div>
+          <p class="recommend-note" id="recNote"></p>
+          <div class="rec-quick-links" id="recQuickLinks"></div>
+        </div>
+        <div class="recommend-card" id="packageCard">
+          <h3 style="font-size:34px;">Your package book karo</h3>
+          <p class="recommend-note" id="packageNote">Destination ke budget, age aur days ke hisaab se sample package.</p>
+          <div id="packagePreview" class="package-preview"></div>
+          <a id="packageBtn" class="primary-btn" style="display:inline-grid;place-items:center;text-decoration:none;height:58px;padding:0 20px;margin-top:14px;">Book package</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="placeExplorer">
+    <div class="container explorer-card">
+      <div class="explorer-top">
+        <div>
+          <div class="hero-kicker" style="color:var(--navy);background:#edf3ff;border-color:#dbe4f6;">Selected place explorer</div>
+          <h3 id="placeTitle" style="margin:16px 0 8px;font-size:44px;">Place</h3>
+          <p id="placeSummary" class="recommend-note"></p>
+        </div>
+        <div class="link-row">
+          <a id="googleBtn" target="_blank" href="#">Open on Google</a>
+          <a id="wikiBtn" target="_blank" href="#">Wikipedia / details</a>
+        </div>
+      </div>
+
+      <div class="explorer-grid">
+        <div>
+          <div class="place-photo"><img id="placeImage" alt="place image" /></div>
+          <div class="info-grid">
+            <div class="info-item"><h5>Best for</h5><p id="bestFor"></p></div>
+            <div class="info-item"><h5>Reach idea</h5><p id="distance"></p></div>
+            <div class="info-item"><h5>City</h5><p id="placeCity"></p></div>
+          </div>
+        </div>
+        <div class="place-meta">
+          <div class="video-panel">
+            <div class="video-panel-head">
+              <h4>Place videos</h4>
+              <p>Unreliable embedded players hata kar stable travel-video links diye gaye hain, taaki “video unavailable” error na aaye.</p>
+            </div>
+            <div class="video-cards" id="videoCards"></div>
+          </div>
+          <div class="map-box"><iframe id="mapFrame" loading="lazy" title="map"></iframe></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container planner-card">
+      <h3 style="margin:0;font-size:38px;color:var(--navy);">Arrival planning after booking</h3>
+      <div class="planner-grid">
+        <div class="planner-box"><h4>Official work stay</h4><p>Business hotel cluster + quick station/bus stop pickup idea + calm dinner zones.</p></div>
+        <div class="planner-box"><h4>Night chill suggestions</h4><p>Destination city ke hisaab se nightlife, food street ya calm waterfront options.</p></div>
+        <div class="planner-box"><h4>Why platform matters</h4><p>Booking ke baad bhi trip planning continue hoti hai — isi wajah se user direct ticket site par nahi chala jata.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div><h4>EasyTravel Pro</h4><p>Not just booking — planning intelligence.</p></div>
+      <div><h4>Train booking</h4><p>Search + compare here</p><p>Final official booking via IRCTC</p></div>
+      <div><h4>Bus / hotel</h4><p>Internal route discovery + place explorer</p></div>
+      <div><h4>Prototype logic</h4><p>Route search → age suggestions → map/video → booking decision</p></div>
+    </div>
+  </footer>
+
+  <script src="/data.js"></script>
+  <script src="/results.js"></script>
+  <script src="/review-feature.js"></script>
+</body>
+</html>

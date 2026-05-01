@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyTravel Package Planner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <div class="brand"><div class="logo-badge">✈</div><div><h1>EasyTravel Pro</h1><p>Package planner</p></div></div>
+      <nav class="nav-links"><a href="/">Home</a><a href="/results.html">Results</a></nav>
+      <a class="nav-cta" href="/">New search</a>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <div class="package-showcase">
+        <div class="package-gallery" id="packageGallery"></div>
+        <div class="package-sidebar">
+          <div class="hero-kicker" style="color:var(--navy);background:#edf3ff;border-color:#dbe4f6;">Destination package intake</div>
+          <h2 id="pkgTitle" class="package-main-title">Book your destination package</h2>
+          <div class="price-line"><span class="price-old" id="oldPrice">₹15,900</span> <span class="price-new" id="newPrice">₹11,100</span></div>
+
+          <form id="packageForm" class="package-form-grid" style="margin-top:22px;">
+            <div class="field"><label>Name</label><input id="travellerName" required placeholder="Traveller name"></div>
+            <div class="field"><label>Email</label><input id="emailInput" type="email" placeholder="you@example.com"></div>
+            <div class="field"><label>Phone No.</label><input id="phoneInput" placeholder="+91-"></div>
+            <div class="field"><label>Number of people</label><input id="peopleInput" type="number" min="1" value="1"></div>
+            <div class="field"><label>Destination</label><input id="destinationInput" required></div>
+            <div class="field"><label>Age</label><input id="ageInput" type="number" required min="1" max="100"></div>
+            <div class="field"><label>Days</label><input id="daysInput" type="number" required min="1" max="15" value="3"></div>
+            <div class="field"><label>Budget</label><select id="budgetInput"><option>Budget</option><option>Comfort</option><option>Premium</option></select></div>
+            <div class="field"><label>Arrival mode</label><select id="modeInput"><option>train</option><option>bus</option><option>hotel</option></select></div>
+            <div class="field"><label>Month of travel</label><input id="monthInput" placeholder="April / May / December"></div>
+            <div class="field" style="grid-column:1/-1"><label>Query</label><textarea id="prefInput" rows="4" placeholder="Temple / food / official work / family / nightlife / calm stay"></textarea></div>
+            <div class="package-actions">
+              <button id="reviewPackageBtn" class="secondary-btn" type="button" style="background:#223f74;color:#fff;">Review package</button>
+              <button id="enquireBtn" class="primary-btn" type="submit">Enquire Now</button>
+              <a id="whatsappBtn" class="whatsapp-btn" target="_blank" rel="noopener">Whatsapp Us</a>
+              <button id="payNowBtn" class="pay-btn" type="button" disabled>Pay Now</button>
+              <button id="downloadBtn" class="download-btn" type="button">Download Itinerary</button>
+            </div>
+            <div id="reviewPanel" style="display:none;grid-column:1/-1;margin-top:14px;padding:18px;border-radius:20px;border:1px solid #d7e1f0;background:#f8fbff;">
+              <h3 style="margin:0 0 10px;font-size:28px;color:#1f3c73;">Package review summary</h3>
+              <div id="reviewContent" style="color:#29456f;line-height:1.8;"></div>
+              <label style="display:flex;gap:10px;align-items:flex-start;margin-top:14px;color:#1f3c73;font-weight:800;">
+                <input id="reviewConfirmCheck" type="checkbox" style="margin-top:5px;transform:scale(1.2);" />
+                Maine selected package, traveller details, price, features, coupon aur stay rules review kar liya hai.
+              </label>
+            </div>
+          </form>
+          <div id="packageMsg" style="display:none;margin-top:14px;padding:12px 14px;border-radius:12px;background:#f5f8ff;border:1px solid #d8e2f5;color:#243b67"></div>
+          <p class="package-category">Categories: <span id="packageCategories">Family Tours, India</span></p>
+        </div>
+      </div>
+
+      <div id="packageOutput" class="planner-card" style="margin-top:28px;display:block;"></div>
+    </div>
+  </section>
+  <div id="toastMsg" style="position:fixed;right:24px;bottom:24px;z-index:9999;display:none;min-width:280px;max-width:420px;padding:16px 18px;border-radius:16px;background:#1f8f53;color:#fff;font-weight:800;box-shadow:0 14px 40px rgba(0,0,0,.18)">Form submitted successfully.</div>
+  <script src="/data.js"></script>
+  <script src="/scraped-data.js"></script>
+  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+  <script src="/package.js"></script>
+
+  <div id="paymentModal" style="display:none;position:fixed;inset:0;background:rgba(10,20,40,.55);z-index:10000;padding:20px;overflow:auto">
+    <div style="max-width:640px;margin:60px auto;background:#fff;border-radius:24px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.2)">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px">
+        <h3 style="margin:0;font-size:34px;color:#1a2d55">Confirm package payment</h3>
+        <button id="closePaymentModal" type="button" style="border:none;background:#eef3ff;color:#1a2d55;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer">Close</button>
+      </div>
+      <p style="margin:0 0 18px;color:#51688f;font-size:18px">Traveller details ke basis par payment summary generate hoga. Demo version me payment record MongoDB me save hoga aur confirmation toast show hoga.</p>
+      <div id="paymentSummary" style="background:#f7faff;border:1px solid #d8e2f5;border-radius:18px;padding:18px;margin-bottom:18px"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <button id="confirmPaymentBtn" type="button" class="pay-btn" style="height:64px">Confirm Payment</button>
+        <button id="cancelPaymentBtn" type="button" class="download-btn" style="height:64px">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

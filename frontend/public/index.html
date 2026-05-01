@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyTravel Pro India</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo-badge"><img src="/assets/title-tree.png" alt="EasyTravel logo" /></div>
+        <div>
+          <h1>EasyTravel Pro</h1>
+          <p>Ticket booking + destination intelligence for India travel</p>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="#discover">Discover</a>
+        <a href="#states">Popular states</a>
+        <a href="#why">Why us</a>
+        <a href="/results.html?mode=train&from=Patna%20Junction%20(PNBE)&to=Delhi&date=2026-04-04&age=28">Demo results</a>
+      </nav>
+      <a href="/login.html" style="font-weight:800;color:var(--navy)">Login</a>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span id="authStatusChip" style="padding:10px 14px;border-radius:999px;background:#eef3ff;color:#1a2d55;font-weight:800;font-size:14px">Login required</span>
+        <button id="logoutBtn" type="button" style="display:none;padding:10px 16px;border:none;border-radius:999px;background:#1a2d55;color:#fff;font-weight:800;cursor:pointer">Log out</button>
+      </div>
+      <a class="nav-cta" href="#plan">Start planning</a>
+    </div>
+  </header>
+
+  <section class="hero" id="discover">
+    <div id="heroSlides"></div>
+    <div class="hero-overlay"></div>
+    <div class="container hero-inner">
+      <div class="hero-kicker">Smart booking + age-based destination suggestions</div>
+      <h2 id="heroTitle">Discover India before you arrive</h2>
+      <p id="heroSubtitle">Search ke baad traveller age ke hisaab se places, videos, map, station pickup and stay ideas milenge.</p>
+      <div class="landmark-row" id="landmarkRow"></div>
+      <div class="hero-controls"><button class="hero-arrow" id="heroPrev" type="button">‹</button><div class="hero-dots" id="heroDots"></div><button class="hero-arrow" id="heroNext" type="button">›</button></div>
+
+      <div class="search-panel" id="plan">
+        <div class="search-title">Plan your state-to-state trip</div>
+        <form id="searchForm">
+          <div class="form-grid">
+            <div class="field">
+              <label>From station / city</label>
+              <input list="stationList" id="fromInput" value="Patna Junction (PNBE)" placeholder="Enter source station or city" required />
+            </div>
+            <div class="field">
+              <label>To destination city</label>
+              <input list="destinationList" id="toInput" value="Delhi" placeholder="Enter destination city" required />
+            </div>
+            <div class="field">
+              <label>Travel date</label>
+              <input id="dateInput" type="date" value="2026-04-04" required />
+            </div>
+            <div class="field">
+              <label>Traveller age</label>
+              <input id="ageInput" type="number" min="1" max="100" value="28" required />
+            </div>
+            <div class="field mode">
+              <label>Mode</label>
+              <select id="modeInput">
+                <option value="train">Train</option>
+                <option value="bus">Bus</option>
+                <option value="hotel">Hotel</option>
+              </select>
+            </div>
+            <div class="action-wrap">
+              <button class="primary-btn" type="submit">Search Tickets + Suggestions</button>
+            </div>
+          </div>
+        </form>
+        <datalist id="stationList"></datalist>
+        <datalist id="destinationList"></datalist>
+        <div class="search-status" id="searchStatus"></div>
+        <div class="notice">Train results page me suggested route cards + age-based place explorer milega. Final railway booking button IRCTC redirect ke liye diya gaya hai, taaki official booking layer trusted rahe aur tumhari website planning layer par unique bane.</div>
+      </div>
+    </div>
+  </section>
+
+  
+<section class="section" id="states">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="section-kicker">Popular Indian states + destinations</span>
+        <h3>Explore India through mood-based travel cards</h3>
+      </div>
+      <p>Delhi se Dwarka, Kanyakumari se Meghalaya tak. Har card me landmark vibe, quick entry point aur hover animation diya gaya hai.</p>
+    </div>
+    <div class="mood-grid">
+      <article class="mood-card">
+        <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=1200&q=80" alt="Delhi" />
+        <div class="mood-overlay">
+          <h3>Delhi</h3>
+          <p>India Gate, Qutub Minar, food trails, official trip comfort stays.</p>
+          <div class="mood-actions">
+            <a class="landmark-chip" href="/results.html?mode=train&from=Patna%20Junction%20(PNBE)&to=Delhi&date=2026-04-04&age=28">Open trip flow</a>
+            <a class="landmark-chip" href="https://en.wikipedia.org/wiki/Delhi" target="_blank">Explore landmark</a>
+          </div>
+        </div>
+      </article>
+      <article class="mood-card">
+        <img src="https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=1200&q=80" alt="Mumbai" />
+        <div class="mood-overlay">
+          <h3>Mumbai</h3>
+          <p>Gateway views, business district stays, sea-face evenings and pickups.</p>
+          <div class="mood-actions">
+            <a class="landmark-chip" href="/results.html?mode=train&from=Delhi&to=Mumbai&date=2026-04-04&age=28">Open trip flow</a>
+            <a class="landmark-chip" href="https://en.wikipedia.org/wiki/Mumbai" target="_blank">Explore landmark</a>
+          </div>
+        </div>
+      </article>
+      <article class="mood-card">
+        <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1200&q=80" alt="Goa" />
+        <div class="mood-overlay">
+          <h3>Goa</h3>
+          <p>Leisure, nightlife, calm beaches and destination videos before arrival.</p>
+          <div class="mood-actions">
+            <a class="landmark-chip" href="/results.html?mode=train&from=Mumbai&to=Goa&date=2026-04-04&age=28">Open trip flow</a>
+            <a class="landmark-chip" href="https://en.wikipedia.org/wiki/Goa" target="_blank">Explore landmark</a>
+          </div>
+        </div>
+      </article>
+      <article class="mood-card">
+        <img src="https://www.kanyakumaritourism.in/images/places-to-visit/headers/vivekananda-rock-memorial-kanyakumari-tourism-entry-fee-timings-holidays-reviews-header.jpg" alt="Kanyakumari" />
+        <div class="mood-overlay">
+          <h3>Kanyakumari</h3>
+          <p>Sunrise points, Vivekananda Rock access and southern coast calm routes.</p>
+          <div class="mood-actions">
+            <a class="landmark-chip" href="/results.html?mode=train&from=Chennai&to=Kanyakumari&date=2026-04-04&age=28">Open trip flow</a>
+            <a class="landmark-chip" href="https://en.wikipedia.org/wiki/Kanyakumari" target="_blank">Explore landmark</a>
+          </div>
+        </div>
+      </article>
+      <article class="mood-card">
+        <img src="https://gujarattourism.com/content/dam/gujrattourism/images/religious-sites/dwarkadhish-temple/Dwarkadhish-Temple-1.jpg" alt="Dwarka" />
+        <div class="mood-overlay">
+          <h3>Dwarka</h3>
+          <p>Temple circuits, spiritual stays, family-friendly Gujarat travel planning.</p>
+          <div class="mood-actions">
+            <a class="landmark-chip" href="/results.html?mode=train&from=Ahmedabad&to=Dwarka&date=2026-04-04&age=28">Open trip flow</a>
+            <a class="landmark-chip" href="https://en.wikipedia.org/wiki/Dwarka" target="_blank">Explore landmark</a>
+          </div>
+        </div>
+      </article>
+      <article class="mood-card">
+        <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80" alt="Haridwar" />
+        <div class="mood-overlay">
+          <h3>Haridwar</h3>
+          <p>Ghat aarti, temple access, senior comfort and spiritual detours.</p>
+          <div class="mood-actions">
+            <a class="landmark-chip" href="/results.html?mode=train&from=Delhi&to=Haridwar&date=2026-04-04&age=28">Open trip flow</a>
+            <a class="landmark-chip" href="https://en.wikipedia.org/wiki/Haridwar" target="_blank">Explore landmark</a>
+          </div>
+        </div>
+      </article>
+      <article class="mood-card">
+        <img src="https://images.unsplash.com/photo-1506461883276-594a12b11cf3?auto=format&fit=crop&w=1200&q=80" alt="Himalaya" />
+        <div class="mood-overlay">
+          <h3>Himalaya</h3>
+          <p>Mountain routes, scenic stays, cold-weather circuit and trek mood.</p>
+          <div class="mood-actions">
+            <a class="landmark-chip" href="/results.html?mode=train&from=Delhi&to=Shimla&date=2026-04-04&age=28">Open trip flow</a>
+            <a class="landmark-chip" href="https://en.wikipedia.org/wiki/Himalayas" target="_blank">Explore landmark</a>
+          </div>
+        </div>
+      </article>
+      <article class="mood-card">
+        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=80" alt="Assam" />
+        <div class="mood-overlay">
+          <h3>Assam</h3>
+          <p>Guwahati, cruise mood, tea-garden energy and northeast discovery.</p>
+          <div class="mood-actions">
+            <a class="landmark-chip" href="/results.html?mode=train&from=Patna&to=Guwahati&date=2026-04-04&age=28">Open trip flow</a>
+            <a class="landmark-chip" href="https://en.wikipedia.org/wiki/Assam" target="_blank">Explore landmark</a>
+          </div>
+        </div>
+      </article>
+      <article class="mood-card">
+        <img src="/assets/meghalaya-card.jpg" alt="Meghalaya" />
+        <div class="mood-overlay">
+          <h3>Meghalaya</h3>
+          <p>Shillong, falls, caves, monsoon beauty and family-friendly northeast packages.</p>
+          <div class="mood-actions">
+            <a class="landmark-chip" href="/results.html?mode=train&from=Guwahati&to=Shillong&date=2026-04-04&age=28">Open trip flow</a>
+            <a class="landmark-chip" href="https://en.wikipedia.org/wiki/Meghalaya" target="_blank">Explore landmark</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+  <section class="section" id="why">
+    <div class="container planner-card">
+      <h3 style="margin:0;font-size:46px;color:var(--navy);">Why users choose this website</h3>
+      <div class="planner-grid">
+        <div class="planner-box"><h4>Age-smart destination engine</h4><p>Child, youth, official traveller, mature and senior travellers ke liye different city suggestions.</p></div>
+        <div class="planner-box"><h4>Station to hotel comfort</h4><p>Arrival ke baad pickup, stay cluster, nightlife ya calm options ek jagah par.</p></div>
+        <div class="planner-box"><h4>Booking + planning together</h4><p>Sirf ticket nahi — map, videos, nearby feel and route insight bhi milta hai.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer footer-live">
+    <div class="footer-ticker-wrap">
+      <div class="footer-ticker" id="footerTicker"></div>
+    </div>
+    <div class="container footer-live-inner">
+      <div class="footer-brand-col">
+        <div class="footer-brand-badge">✈</div>
+        <h4>EasyTravel Pro</h4>
+        <p>Looking to explore India better? Ham booking ke saath destination discovery, age-smart suggestions, station pickup ideas aur local package planning bhi dikhate hain.</p>
+        <p class="footer-contact">WhatsApp / Call: <strong>7366930984</strong></p>
+        <img src="/assets/whatsapp-qr-enhanced.png" alt="WhatsApp QR Code" class="footer-qr-inline" />
+      </div>
+      <div>
+        <h4>Popular Destinations</h4>
+        <div class="footer-links-list" id="popularDestinationsList"></div>
+      </div>
+      <div>
+        <h4>Latest Travel Updates</h4>
+        <div class="footer-posts" id="footerPosts"></div>
+      </div>
+      <div>
+        <h4>We accept the following</h4>
+        <div class="pay-badges">
+          <span>VISA</span><span>Paytm</span><span>UPI</span><span>GPay</span>
+        </div>
+      </div>
+    </div>
+</footer>
+
+  <script src="/data.js"></script>
+  <script src="/auth-helper.js"></script>
+  <script src="/app.js"></script>
+  <script src="/review-feature.js"></script>
+</body>
+</html>
