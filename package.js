@@ -635,21 +635,25 @@ async function startCashfreeCheckout(paymentSessionId) {
       pageSource: 'package-page'
     };
 
-    const enqRes = await fetch(API_BASE + '/api/enquiries', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(enquiryPayload)
-    });
+    const enqRes = await fetch(API_BASE + '/api/packages', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(enquiryPayload)
+});
 
-    let pkgData = {};
     let enqData = {};
-    try { pkgData = await pkgRes.json(); } catch (e) {}
-    try { enqData = await enqRes.json(); } catch (e) {}
 
-    if (!pkgRes.ok || !enqRes.ok) {
-      throw new Error(pkgData.message || enqData.message || 'Package enquiry save failed');
-    }
-  }
+try {
+  enqData = await enqRes.json();
+} catch (e) {
+  console.error("JSON parse error:", e);
+}
+
+if (!enqRes.ok) {
+  throw new Error(enqData.message || "Enquiry save failed");
+}
+
+console.log("Enquiry success:", enqData);
 
   if (reviewBtn) {
     reviewBtn.addEventListener('click', function () {
@@ -720,7 +724,7 @@ async function startCashfreeCheckout(paymentSessionId) {
       setPayButtonState();
     } catch (error) {
       console.error('Review save error:', error);
-      showPackageMsg('Review / enquiry save nahi ho pa raha. Backend 5055 aur MongoDB connection check karo. ' + (error.message || ''), true);
+      showPackageMsg('Enquiry save nahi ho pa raha. Please try again.' + (error.message || ''), true);
       showToast('Review submit failed. Please try again.', true);
     } finally {
       if (enquireBtn) {
