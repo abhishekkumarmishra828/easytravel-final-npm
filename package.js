@@ -654,6 +654,7 @@ if (!enqRes.ok) {
 }
 
 console.log("Enquiry success:", enqData);
+  }
 
   if (reviewBtn) {
     reviewBtn.addEventListener('click', function () {
@@ -781,4 +782,4 @@ if (confirmPaymentBtn) {
   });
 setPayButtonState();
 renderPackage(cityNameFromInput(destinationInput.value));
-};
+})();
