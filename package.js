@@ -6,7 +6,7 @@
     return;
   }
 
-  const API_BASE = window.EASYTRAVEL_API_BASE || '';
+  const API_BASE = window.EASYTRAVEL_API_BASE || 'https://easytravel-backend.onrender.com';
   const CASHFREE_MODE = 'sandbox';
   const API_TIMEOUT_MESSAGE = 'Backend/Cashfree se response nahi mila. backend server aur .env keys check karo.';
   const data = window.EASYTRAVEL_DATA || {};
@@ -634,12 +634,11 @@ async function startCashfreeCheckout(paymentSessionId) {
       message: `${formData.packageTitle} | Destination: ${formData.destination} | Days: ${formData.days} | Budget: ${formData.budget} | Arrival: ${formData.arrivalMode} | Query: ${formData.specialRequest}`,
       pageSource: 'package-page'
     };
-
-    const pkgRes = await fetch(API_BASE + '/api/packages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    const enqRes = await fetch(API_BASE + '/api/packages', {
+    method: 'POST',
+     headers: { 'Content-Type': 'application/json' },
+     body: JSON.stringify(enquiryPayload)
+     });
 
     const enqRes = await fetch(API_BASE + '/api/enquiries', {
       method: 'POST',
@@ -737,9 +736,44 @@ async function startCashfreeCheckout(paymentSessionId) {
   });
 
 if (payNowBtn) {
-  payNowBtn.addEventListener('click', function () {
-    openPaymentModal();
+  payNowBtn.addEventListener('click', async function () {
+    try {
+      payNowBtn.disabled = true;
+      payNowBtn.textContent = "Processing...";
+
+      const res = await fetch(API_BASE + "/api/payments/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          amount: 499,
+          customerName: "Abhishek Kumar",
+          customerEmail: "test@gmail.com",
+          customerPhone: "9999999999"
+        })
+      });
+
+      const data = await res.json();
+      console.log("Payment response:", data);
+
+      const link = data.payment_link || data.paymentLink || data.url;
+
+      if (link) {
+        window.location.href = link;
+      } else {
+        alert("Payment link not received");
+      }
+
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Payment failed");
+    } finally {
+      payNowBtn.disabled = false;
+      payNowBtn.textContent = "Pay Now";
+    }
   });
+
   setPayButtonState();
 }
 
