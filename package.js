@@ -779,7 +779,6 @@ if (confirmPaymentBtn) {
       el.addEventListener('change', () => renderPackage(cityNameFromInput(destinationInput.value)));
     }
   });
-
-  setPayButtonState();
-  renderPackage(cityNameFromInput(destinationInput.value));
-  })();
+setPayButtonState();
+renderPackage(cityNameFromInput(destinationInput.value));
+})();
