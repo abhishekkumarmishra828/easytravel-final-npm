@@ -735,12 +735,28 @@ console.log("Enquiry success:", enqData);
     }
   });
 
-if (payNowBtn) {
-  payNowBtn.addEventListener('click', function () {
-    openPaymentModal();
-  });
-  setPayButtonState();
-}
+payNowBtn.addEventListener('click', async function () {
+  console.log("Pay Now clicked");
+
+  try {
+    const formData = getFormData();
+
+    if (!formData.fullName || !formData.email || !formData.phone) {
+      alert("Please fill traveller details first");
+      return;
+    }
+
+    const reviewData = buildReviewSummary();
+
+    const paymentData = await createCashfreeOrder(reviewData);
+
+    await startCashfreeCheckout(paymentData.paymentSessionId);
+
+  } catch (error) {
+    console.error("Payment error:", error);
+    alert("Payment start failed");
+  }
+});
 
 if (closePaymentModal) {
   closePaymentModal.addEventListener('click', closePayment);
