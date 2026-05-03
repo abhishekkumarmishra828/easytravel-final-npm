@@ -782,4 +782,4 @@ if (confirmPaymentBtn) {
 
   setPayButtonState();
   renderPackage(cityNameFromInput(destinationInput.value));
-};
+  })();
