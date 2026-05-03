@@ -634,11 +634,6 @@ async function startCashfreeCheckout(paymentSessionId) {
       message: `${formData.packageTitle} | Destination: ${formData.destination} | Days: ${formData.days} | Budget: ${formData.budget} | Arrival: ${formData.arrivalMode} | Query: ${formData.specialRequest}`,
       pageSource: 'package-page'
     };
-    const enqRes = await fetch(API_BASE + '/api/packages', {
-    method: 'POST',
-     headers: { 'Content-Type': 'application/json' },
-     body: JSON.stringify(enquiryPayload)
-     });
 
     const enqRes = await fetch(API_BASE + '/api/enquiries', {
       method: 'POST',
