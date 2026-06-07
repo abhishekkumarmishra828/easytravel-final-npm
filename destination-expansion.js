@@ -54,6 +54,38 @@
     { key: 'statue-of-unity', display: 'Statue of Unity', state: 'Gujarat', coords: [21.838, 73.7191], image: img('Statue_of_Unity.jpg'), places: ['Statue of Unity', 'Valley of Flowers Kevadia', 'Sardar Sarovar Dam', 'Jungle Safari Kevadia', 'Ekta Cruise'] }
   ];
 
+  const imageSets = {
+    'Kedarnath Yatra': [img('Kedarnath_Temple.jpg'), img('Kedarnath_Temple_in_Rainy_season.jpg'), img('Kedarnath_valley.jpg')],
+    'Badrinath Yatra': [img('Badrinath_Temple.jpg'), img('Badrinath_temple,_Uttarakhand.jpg'), img('Badrinath_Temple_and_Neelkanth_peak.jpg')],
+    'Amarnath Yatra': [img('Cave_Temple_of_Lord_Amarnath.jpg'), img('Amarnath_Cave.jpg'), img('Sheshnag_Lake.jpg')],
+    'Vaishno Devi Yatra': [img('Vaishno_Devi_Bhavan.jpg'), img('Vaishno_Devi_Temple.jpg'), img('Katra_Vaishno_Devi.jpg')],
+    'Jaisalmer': [img('Jaisalmer_Fort_from_Gadisar_Lake.jpg'), img('Jaisalmer_Fort_Rajasthan.jpg'), img('Sam_Sand_Dunes_Jaisalmer.jpg')],
+    'Udaipur': [img('Lake_Palace_Udaipur.jpg'), img('City_Palace_Udaipur.jpg'), img('Lake_Pichola_Udaipur.jpg')],
+    'Jammu & Kashmir': [img('Dal_Lake_Srinagar.jpg'), img('Gulmarg_Valley.jpg'), img('Pahalgam_Valley.jpg')],
+    'Ladakh': [img('Pangong_Tso_lake.jpg'), img('Leh_Palace.jpg'), img('Nubra_Valley_Ladakh.jpg')],
+    'Agra': [img('Taj_Mahal_in_March_2004.jpg'), img('Agra_Fort_India.jpg'), img('Mehtab_Bagh_Agra.jpg')],
+    'Lucknow': [img('Bara_Imambara_Lucknow.jpg'), img('Rumi_Darwaza_Lucknow.jpg'), img('Ambedkar_Memorial_Park_Lucknow.jpg')],
+    'Ujjain': [img('Mahakaleshwar_Jyotirlinga_Temple.jpg'), img('Ram_Ghat_Ujjain.jpg'), img('Kal_Bhairav_Temple_Ujjain.jpg')],
+    'Chennai': [img('Marina_Beach_Chennai.jpg'), img('Kapaleeshwarar_Temple_Chennai.jpg'), img('San_Thome_Basilica_Chennai.jpg')],
+    'Bengaluru': [img('Lalbagh_Bangalore.jpg'), img('Bangalore_Palace.jpg'), img('Vidhana_Soudha_Bangalore.jpg')],
+    'Kanyakumari': [img('Vivekananda_Rock_Memorial_Kanyakumari.jpg'), img('Thiruvalluvar_Statue_Kanyakumari.jpg'), img('Kanyakumari_sunset.jpg')],
+    'Ahmedabad': [img('Sabarmati_Ashram_Ahmedabad.jpg'), img('Adalaj_Stepwell.jpg'), img('Kankaria_Lake_Ahmedabad.jpg')],
+    'Manali': [img('Solang_Valley_Manali.jpg'), img('Hadimba_Temple_Manali.jpg'), img('Mall_Road_Manali.jpg')],
+    'Shimla': [img('The_Ridge_Shimla.jpg'), img('Mall_Road_Shimla.jpg'), img('Jakhoo_Temple_Shimla.jpg')],
+    'Ooty': [img('Ooty_Lake.jpg'), img('Botanical_Gardens_Ooty.jpg'), img('Doddabetta_peak_Ooty.jpg')],
+    'Hyderabad': [img('Charminar_Hyderabad.jpg'), img('Golconda_Fort_Hyderabad.jpg'), img('Hussain_Sagar_Lake_Hyderabad.jpg')],
+    'Dehradun': [img('Robbers_Cave_Dehradun.jpg'), img('Forest_Research_Institute_Dehradun.jpg'), img('Sahastradhara_Dehradun.jpg')],
+    'Shillong': [img('Umiam_Lake_Meghalaya.jpg'), img('Elephant_Falls_Shillong.jpg'), img('Shillong_Peak.jpg')],
+    'Arunachal Pradesh': [img('Tawang_Monastery_Arunachal_Pradesh.jpg'), img('Sela_Pass.jpg'), img('Ziro_Valley.jpg')],
+    'Amritsar': [img('Golden_Temple_Amritsar.jpg'), img('Jallianwala_Bagh_Amritsar.jpg'), img('Wagah_Border_ceremony.jpg')],
+    'Puducherry': [img('Promenade_Beach_Pondicherry.jpg'), img('Auroville_Matrimandir.jpg'), img('Paradise_Beach_Puducherry.jpg')],
+    'Rajgir': [img('Vishwa_Shanti_Stupa_Rajgir.jpg'), img('Rajgir_Ropeway.jpg'), img('Rajgir_hot_springs.jpg')],
+    'Lonavala': [img('Tiger_Point_Lonavala.jpg'), img('Bhushi_Dam_Lonavala.jpg'), img('Karla_Caves.jpg')],
+    'Mussoorie': [img('Kempty_Falls_Mussoorie.jpg'), img('Gun_Hill_Mussoorie.jpg'), img('Mall_Road_Mussoorie.jpg')],
+    'Goa': [img('Calangute_Beach_Goa.jpg'), img('Fort_Aguada_Goa.jpg'), img('Basilica_of_Bom_Jesus_Goa.jpg')],
+    'Delhi': [img('India_Gate_in_New_Delhi_03-2016.jpg'), img('Red_Fort_in_Delhi_03-2016_img3.jpg'), img('Qutb_Minar_2011.jpg')]
+  };
+
   const bands = ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60+'];
 
   function ageBandsFor(places) {
@@ -70,6 +102,7 @@
   function placeCard(city, place, index) {
     const lat = city.coords[0] + (index % 3) * 0.006;
     const lon = city.coords[1] + (index % 4) * 0.006;
+    const placeImage = (city.images && city.images[index % city.images.length]) || city.image;
     return {
       name: place,
       city: city.display,
@@ -80,7 +113,7 @@
       wiki: wiki(place),
       google: google(place, city.display),
       maps: maps(place, city.display),
-      image: city.image,
+      image: placeImage,
       videos: [
         { title: `${place} travel guide`, desc: `${city.display} me ${place} ka realistic travel preview.`, url: youtube(place, city.display) },
         { title: `${city.display} itinerary`, desc: 'Route, stay aur local movement planning video search.', url: youtube(city.display, city.state) }
@@ -89,6 +122,8 @@
   }
 
   function installCity(city) {
+    city.images = imageSets[city.display] || city.images || [city.image];
+    city.image = city.images[0] || city.image;
     const places = {};
     city.places.forEach((place, index) => {
       places[place] = placeCard(city, place, index);
@@ -102,12 +137,25 @@
     data.heroCities[city.key] = {
       title: `${city.display} package, yatra aur local travel support`,
       subtitle: `${city.state} ke liye realistic place images, age-based recommendations, local transport guidance aur package flow.`,
-      slides: [city.image],
+      slides: city.images,
       landmarks: city.places.slice(0, 5).map(name => ({ name, wiki: wiki(name) }))
     };
   }
 
   additions.forEach(installCity);
+
+  Object.entries(imageSets).forEach(([cityName, images]) => {
+    const destination = data.destinations && data.destinations[cityName];
+    if (!destination || !destination.places) return;
+    Object.values(destination.places).forEach((place, index) => {
+      place.image = images[index % images.length];
+    });
+    const key = data.cityKeyFromValue ? data.cityKeyFromValue(cityName) : cityName.toLowerCase();
+    if (data.heroCities && data.heroCities[key]) {
+      data.heroCities[key].slides = images;
+    }
+  });
+
   const keyToDisplay = {};
   additions.forEach(city => {
     keyToDisplay[city.key] = city.display;

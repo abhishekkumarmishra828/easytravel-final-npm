@@ -8,10 +8,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(135deg,#edf2fb,#dfe7f7);color:#1a2d55}
+    body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(135deg,rgba(10,20,42,.48),rgba(232,238,249,.82)),url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=80') center/cover fixed;color:#1a2d55}
     .wrap{min-height:100vh;display:grid;place-items:center;padding:20px}
-    .card{width:min(980px,100%);display:grid;grid-template-columns:1.1fr .9fr;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(25,45,85,.16)}
-    .left{padding:42px;background:linear-gradient(135deg,#1f355f,#405a8f);color:#fff}
+    .card{width:min(1080px,100%);display:grid;grid-template-columns:1.08fr .92fr;background:rgba(255,255,255,.94);border-radius:30px;overflow:hidden;box-shadow:0 24px 80px rgba(12,24,52,.24);backdrop-filter:blur(8px)}
+    .left{position:relative;padding:48px;background:linear-gradient(135deg,rgba(15,32,65,.82),rgba(23,55,98,.72)),url('https://commons.wikimedia.org/wiki/Special:FilePath/Kedarnath_Temple.jpg?width=1400') center/cover;color:#fff}
+    .left::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,16,35,.12),rgba(6,16,35,.54));pointer-events:none}
+    .left>*{position:relative;z-index:1}
     .left h1{font-size:54px;line-height:1.05;margin:0 0 16px}
     .left p{font-size:18px;line-height:1.6;opacity:.92}
     .right{padding:34px}
@@ -33,9 +35,9 @@
 <div class="wrap">
   <div class="card">
     <div class="left">
-      <div style="font-size:14px;font-weight:800;margin-bottom:12px;opacity:.9">EasyTravel Pro • User Login</div>
-      <h1>Pehle register karo, phir login karke travel explore karo.</h1>
-      <p>Registration mandatory hai. Pehle account banao, fir login karo. Login ke bina traveller website explore, booking, package aur destination pages access nahi kar paega. User data MongoDB me save hoga aur admin dashboard me dikhega.</p>
+      <div style="font-size:14px;font-weight:800;margin-bottom:12px;opacity:.9">EasyTravel Pro - User Login</div>
+      <h1>Create your account, then explore India with confidence.</h1>
+      <p>Sign up once to unlock travel results, destination packages, local transport support, maps, videos, and booking guidance for India trips and yatra routes.</p>
       <a href="/" style="display:inline-block;margin-top:22px;padding:12px 18px;border-radius:14px;background:#fff;color:#1a2d55;font-weight:800">Go to home</a>
     </div>
     <div class="right">
@@ -66,7 +68,7 @@
         <div class="msg" id="msg"></div>
       </form>
 
-      <p class="muted" style="margin-top:16px">Step 1: Register • Step 2: Login • Step 3: Explore tours and packages. Admin banana ho to backend `.env` me `ADMIN_EMAIL` same email set kar do.</p>
+      <p class="muted" style="margin-top:16px">Step 1: Register - Step 2: Login - Step 3: Explore tours, packages, maps, local transport, and yatra guidance.</p>
     </div>
   </div>
 </div>
