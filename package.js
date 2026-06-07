@@ -14,6 +14,7 @@
   const params = new URLSearchParams(window.location.search);
 
   const to = params.get('to') || 'Delhi';
+  const from = params.get('from') || 'Patna Junction (PNBE)';
   const ageFromUrl = Number(params.get('age') || 28);
   const modeFromUrl = (params.get('mode') || 'train').toLowerCase();
 
@@ -47,8 +48,9 @@
 
   const PACKAGE_RULES = {
     Premium: {
-      perDayPerPerson: 8500,
-      coupon: 200,
+      basePerDay: 3600,
+      distanceRate: 1.15,
+      firstUserCoupon: 900,
       stayText: 'Premium hotel stay with pickup and drop',
       features: [
         'Breakfast included',
@@ -62,8 +64,9 @@
       ]
     },
     Comfort: {
-      perDayPerPerson: 5500,
-      coupon: 100,
+      basePerDay: 2300,
+      distanceRate: 0.72,
+      firstUserCoupon: 650,
       stayText: 'Comfort stay with breakfast and dinner',
       features: [
         'Breakfast included',
@@ -73,8 +76,9 @@
       ]
     },
     Budget: {
-      perDayPerPerson: 3500,
-      coupon: 0,
+      basePerDay: 1350,
+      distanceRate: 0.42,
+      firstUserCoupon: 500,
       stayText: 'Budget stay package with 2 days and 3 nights rule',
       features: [
         'Only stay facility provided',
@@ -251,15 +255,72 @@ const pkgDB = {
     return '₹' + Number(value || 0).toLocaleString('en-IN');
   }
 
-  function computeHeaderPrices(pack, budget, days) {
-    const baseNew = parseInr(pack.newPrice || '11100') || 11100;
-    const budgetMultiplier = { Budget: 0.78, Comfort: 1.0, Premium: 1.34 };
-    const dayMultiplier = Math.max(1, Number(days || 3)) / 3;
-    const newValue = Math.round(baseNew * (budgetMultiplier[budget] || 1) * dayMultiplier / 100) * 100;
-    const oldValue = Math.round(newValue * 1.42 / 100) * 100;
-    return { oldPrice: formatInr(oldValue), newPrice: formatInr(newValue) };
+  function routeKmForPricing(source, destination) {
+    const sourceKey = data.cityKeyFromValue ? data.cityKeyFromValue(source || from) : '';
+    const destinationKey = data.cityKeyFromValue ? data.cityKeyFromValue(destination || to) : '';
+    const sourceName = data.destinationNameFromKey ? data.destinationNameFromKey(sourceKey) : sourceKey;
+    const destinationName = data.destinationNameFromKey ? data.destinationNameFromKey(destinationKey) : destinationKey;
+    const sourceData = data.destinations && data.destinations[sourceName];
+    const destinationData = data.destinations && data.destinations[destinationName];
+    const a = sourceData && sourceData.mapCenter;
+    const b = destinationData && destinationData.mapCenter;
+    if (!a || !b) return 650;
+    const rad = Math.PI / 180;
+    const dLat = (b[0] - a[0]) * rad;
+    const dLon = (b[1] - a[1]) * rad;
+    const lat1 = a[0] * rad;
+    const lat2 = b[0] * rad;
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+    return Math.round(6371 * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h)));
   }
 
+  function affordablePriceEngine(formData) {
+    const budgetName = (formData.budget || 'Comfort').trim();
+    const rules = PACKAGE_RULES[budgetName] || PACKAGE_RULES.Comfort;
+    const people = Math.max(1, Number(formData.numberOfPeople || 1));
+    const requestedDays = Math.max(1, Number(formData.days || 3));
+    const finalDays = budgetName === 'Budget' ? Math.min(2, requestedDays) : requestedDays;
+    const routeKm = routeKmForPricing(from, formData.destination || cityNameFromInput(destinationInput.value));
+    const distanceSlab = Math.min(1800, Math.max(250, Math.round(routeKm * rules.distanceRate)));
+    const modeDiscount = { train: 300, bus: 450, hotel: 150, flight: 0 }[(formData.arrivalMode || '').toLowerCase()] || 250;
+    const groupDiscount = people >= 5 ? 0.12 : people >= 3 ? 0.08 : people === 2 ? 0.04 : 0;
+    const seasonalDiscount = /june|july|august|september/i.test(formData.travelMonth || '') ? 0.06 : 0.03;
+    const baseBeforeDiscount = (rules.basePerDay * finalDays * people) + distanceSlab;
+    const firstUserCoupon = rules.firstUserCoupon || 0;
+    const discountAmount = Math.round((baseBeforeDiscount * (groupDiscount + seasonalDiscount)) + firstUserCoupon + modeDiscount);
+    const floor = { Budget: 1999, Comfort: 3499, Premium: 5999 }[budgetName] || 3499;
+    const finalPrice = Math.max(floor, Math.round((baseBeforeDiscount - discountAmount) / 50) * 50);
+    const oldPrice = Math.round((finalPrice * 1.38 + firstUserCoupon) / 100) * 100;
+    return {
+      budgetName,
+      people,
+      days: finalDays,
+      nights: budgetName === 'Budget' ? 3 : Math.max(1, finalDays - 1),
+      routeKm,
+      distanceSlab,
+      baseBeforeDiscount,
+      discountAmount,
+      firstUserCoupon,
+      modeDiscount,
+      groupDiscountPercent: Math.round(groupDiscount * 100),
+      seasonalDiscountPercent: Math.round(seasonalDiscount * 100),
+      finalPrice,
+      oldPrice,
+      rules
+    };
+  }
+
+  function computeHeaderPrices(pack, budget, days) {
+    const pricing = affordablePriceEngine({
+      destination: cityNameFromInput(destinationInput.value),
+      numberOfPeople: peopleInput.value || '1',
+      budget,
+      days,
+      travelMonth: monthInput.value || 'April',
+      arrivalMode: modeInput.value || modeFromUrl
+    });
+    return { oldPrice: formatInr(pricing.oldPrice), newPrice: formatInr(pricing.finalPrice), pricing };
+  }
   function packageTemplate(cityName) {
     return {
       title: `${cityName} curated travel package`,
@@ -342,6 +403,7 @@ const pkgDB = {
     const budget = budgetInput.value || 'Comfort';
     const days = Number(daysInput.value || 3);
     const computedPrices = computeHeaderPrices(pack, budget, days);
+    const pricing = computedPrices.pricing;
     titleEl.textContent = pack.title;
     oldPriceEl.textContent = computedPrices.oldPrice;
     newPriceEl.textContent = computedPrices.newPrice;
@@ -372,11 +434,11 @@ const pkgDB = {
       <div class="planner-box">
         <div class="recommend-header" style="margin-bottom:10px;"><div class="hero-kicker" style="color:var(--navy);background:#edf3ff;border-color:#dbe4f6;">Package snapshot</div></div>
         <div class="chip-row">${chips}</div>
-        <p class="recommend-note" style="margin-top:14px;">Selected plan: <strong>${budget}</strong> · Visible package price: <strong>${computedPrices.newPrice}</strong> · Preference: <strong>${pref}</strong></p>
+        <p class="recommend-note" style="margin-top:14px;">Selected plan: <strong>${budget}</strong> · Visible package price: <strong>${computedPrices.newPrice}</strong> · First user coupon: <strong>₹${Number(pricing.firstUserCoupon).toLocaleString('en-IN')}</strong> · Smart discount: <strong>₹${Number(pricing.discountAmount).toLocaleString('en-IN')}</strong></p>
         <h3 style="font-size:54px;line-height:1.05;margin:24px 0 12px;color:var(--navy);">Highlights –</h3>
         <ul style="font-size:20px;line-height:1.8;margin-top:0;">${highlights}</ul>
-        <p style="font-size:28px;font-weight:800;color:var(--navy);margin:24px 0 8px;">Route – ${Math.max(days,3)-1} Nights and ${Math.max(days,3)} Days</p>
-        <p style="font-size:22px;margin:0 0 16px;"><strong>Duration –</strong> Arrival → ${cityName} sightseeing → Departure</p>
+        <p style="font-size:28px;font-weight:800;color:var(--navy);margin:24px 0 8px;">Route – ${pricing.nights} Nights and ${pricing.days} Days</p>
+        <p style="font-size:22px;margin:0 0 16px;"><strong>Cheap price logic –</strong> approx ${pricing.routeKm} km route slab + ${budget} stay plan + group/season discount + first user coupon.</p>
         <h3 style="font-size:54px;line-height:1.05;margin:32px 0 12px;color:var(--navy);">Short Itinerary –</h3>
         <ul style="font-size:20px;line-height:1.8;margin-top:0;">${itinerary}</ul>
         ${toursHtml}
@@ -417,21 +479,13 @@ const pkgDB = {
   }
 
   function estimateAmount(formData) {
-    const people = Math.max(1, Number(formData.numberOfPeople || 1));
-    const budgetName = (formData.budget || 'Comfort').trim();
-    const rules = PACKAGE_RULES[budgetName] || PACKAGE_RULES.Comfort;
-    const finalDays = budgetName === 'Budget' ? 2 : Math.max(1, Number(formData.days || 3));
-    const amount = (people * finalDays * rules.perDayPerPerson) - (rules.coupon || 0);
-    return Math.max(amount, 1500);
+    return affordablePriceEngine(formData).finalPrice;
   }
 
   function buildReviewSummary() {
     const formData = getFormData();
     const budgetName = (formData.budget || 'Comfort').trim();
-    const rules = PACKAGE_RULES[budgetName] || PACKAGE_RULES.Comfort;
-    const finalDays = budgetName === 'Budget' ? 2 : Math.max(1, Number(formData.days || 3));
-    const finalNights = budgetName === 'Budget' ? 3 : Math.max(1, finalDays - 1);
-    const finalPrice = estimateAmount(formData);
+    const pricing = affordablePriceEngine(formData);
     return {
       traveller: formData.fullName || 'Not entered',
       email: formData.email || 'Not entered',
@@ -440,14 +494,19 @@ const pkgDB = {
       age: formData.age || 'Not entered',
       people: formData.numberOfPeople || '1',
       budget: budgetName,
-      days: finalDays,
-      nights: finalNights,
+      days: pricing.days,
+      nights: pricing.nights,
       arrivalMode: formData.arrivalMode || 'Not entered',
       travelMonth: formData.travelMonth || 'Not entered',
       specialRequest: formData.specialRequest || 'No special request',
-      coupon: rules.coupon || 0,
-      finalPrice,
-      rules
+      coupon: pricing.firstUserCoupon,
+      discountAmount: pricing.discountAmount,
+      routeKm: pricing.routeKm,
+      distanceSlab: pricing.distanceSlab,
+      oldPrice: pricing.oldPrice,
+      finalPrice: pricing.finalPrice,
+      pricing,
+      rules: pricing.rules
     };
   }
 
@@ -476,12 +535,14 @@ const pkgDB = {
       </div>
       <div style="margin-top:14px;padding:14px;border-radius:16px;background:#fff7e8;border:1px solid #ffe0a0;">
         <div><strong>Stay rule:</strong> ${r.rules.stayText}</div>
-        <div><strong>Coupon:</strong> ${r.coupon ? '₹' + r.coupon + ' off' : 'No coupon'}</div>
+        <div><strong>First user coupon:</strong> ${r.coupon ? '₹' + r.coupon + ' off' : 'No coupon'}</div>
+        <div><strong>Smart discount:</strong> ₹${Number(r.discountAmount).toLocaleString('en-IN')} off</div>
+        <div><strong>Route pricing:</strong> approx ${r.routeKm} km, distance slab ₹${Number(r.distanceSlab).toLocaleString('en-IN')}</div>
         <div style="font-size:24px;font-weight:900;margin-top:8px;color:#1f3c73;">Final payable price: ₹${Number(r.finalPrice).toLocaleString('en-IN')}</div>
       </div>
     `;
     if (newPriceEl) newPriceEl.textContent = `₹${Number(r.finalPrice).toLocaleString('en-IN')}`;
-    if (oldPriceEl) oldPriceEl.textContent = `₹${Number(r.finalPrice + 1800).toLocaleString('en-IN')}`;
+    if (oldPriceEl) oldPriceEl.textContent = `₹${Number(r.oldPrice).toLocaleString('en-IN')}`;
     return r;
   }
 
@@ -498,7 +559,9 @@ const pkgDB = {
       <div><strong>Package</strong><br>${summary.budget}</div>
       <div><strong>Arrival mode</strong><br>${summary.arrivalMode}</div>
       <div style="grid-column:1 / -1"><strong>Included features</strong><br>${summary.rules.features.join(', ')}</div>
-      <div><strong>Coupon</strong><br>${summary.coupon ? '₹' + summary.coupon + ' off' : 'No coupon'}</div>
+      <div><strong>First user coupon</strong><br>${summary.coupon ? '₹' + summary.coupon + ' off' : 'No coupon'}</div>
+      <div><strong>Smart discount</strong><br>₹${Number(summary.discountAmount).toLocaleString('en-IN')} off</div>
+      <div><strong>Route price logic</strong><br>${summary.routeKm} km route slab included</div>
       <div><strong>Amount</strong><br><span style="font-size:28px;font-weight:900;color:#1a2d55">₹${Number(summary.finalPrice).toLocaleString('en-IN')}</span></div>
       <div style="grid-column:1 / -1;color:#53698e"><strong>Stay rule</strong><br>${summary.rules.stayText}</div>
     </div>
@@ -829,7 +892,7 @@ if (confirmPaymentBtn) {
     }
   });
 }
-  [destinationInput, ageInput, modeInput, daysInput, budgetInput, monthInput, prefInput].forEach(el => {
+  [destinationInput, ageInput, modeInput, peopleInput, daysInput, budgetInput, monthInput, prefInput].forEach(el => {
     if (el) {
       el.addEventListener('change', () => renderPackage(cityNameFromInput(destinationInput.value)));
     }
