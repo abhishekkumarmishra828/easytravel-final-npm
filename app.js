@@ -221,7 +221,7 @@ function citySpecificPlaceImage(city) {
     const popularList = document.getElementById('popularDestinationsList');
     const footerPosts = document.getElementById('footerPosts');
     if (!ticker || !popularList || !footerPosts) return;
-    const fallback = ['Varanasi','Goa','Dwarka','Haridwar','Kanyakumari','Guwahati','Shillong','Delhi','Mumbai','Udaipur','Jaisalmer','Leh Ladakh'];
+    const fallback = ['Kedarnath Yatra','Badrinath Yatra','Vaishno Devi Yatra','Amarnath Yatra','Ayodhya','Varanasi','Puri','Goa','Dwarka','Haridwar','Kanyakumari','Guwahati','Shillong','Delhi','Mumbai','Udaipur','Jaisalmer','Leh Ladakh','Kochi','Munnar','Darjeeling','Gangtok','Hampi','Mysuru'];
     popularList.innerHTML = '';
     fallback.forEach(name => {
       const a = document.createElement('a');

@@ -231,6 +231,7 @@ const pkgDB = {
     if (data.cityKeyFromValue) {
       const key = data.cityKeyFromValue(raw);
       if (key) {
+        if (data.destinationNameFromKey) return data.destinationNameFromKey(key);
         const proper = capitalize(key);
         if (data.destinations && data.destinations[proper] && data.destinations[proper].display) {
           return data.destinations[proper].display;
@@ -271,7 +272,16 @@ const pkgDB = {
   }
 
   function getImageSet(cityName) {
-    return imagePools[cityName] || imagePools.default;
+    if (imagePools[cityName]) return imagePools[cityName];
+    const key = data.cityKeyFromValue ? data.cityKeyFromValue(cityName) : '';
+    const proper = capitalize(key);
+    const resolvedName = data.destinationNameFromKey ? data.destinationNameFromKey(key) : proper;
+    const cityData = data.destinations && (data.destinations[cityName] || data.destinations[resolvedName] || data.destinations[proper]);
+    if (cityData && cityData.places) {
+      const images = Object.values(cityData.places).map(place => place.image).filter(Boolean);
+      if (images.length) return [...new Set(images)].slice(0, 4);
+    }
+    return imagePools.default;
   }
 
   function getScrapedTourNames(region) {
@@ -313,7 +323,8 @@ const pkgDB = {
 
     const key = data.cityKeyFromValue ? data.cityKeyFromValue(cityName) : cityName.toLowerCase();
     const proper = capitalize(key);
-    const cityData = (data.destinations && (data.destinations[cityName] || data.destinations[proper])) || (data.destinations ? data.destinations.Delhi : null);
+    const resolvedName = data.destinationNameFromKey ? data.destinationNameFromKey(key) : proper;
+    const cityData = (data.destinations && (data.destinations[cityName] || data.destinations[resolvedName] || data.destinations[proper])) || (data.destinations ? data.destinations.Delhi : null);
     const ageValue = Number(ageInput.value || ageFromUrl || 28);
     const band = data.ageBand ? data.ageBand(ageValue) : '20-29';
     const picks = cityData ? ((cityData.ageBands && (cityData.ageBands[band] || cityData.ageBands['20-29'])) || cityData.landmarks || []) : [];

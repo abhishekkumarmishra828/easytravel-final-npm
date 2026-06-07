@@ -21,7 +21,8 @@
   const linksEl = document.getElementById('transportLinks');
   const backToResults = document.getElementById('backToResults');
 
-  const cityNames = transport.cityNames || [];
+  const data = window.EASYTRAVEL_DATA || {};
+  const cityNames = [...new Set([...(transport.cityNames || []), ...Object.keys(data.destinations || {})])].sort();
   cityNames.forEach(city => {
     const option = document.createElement('option');
     option.value = city;

@@ -62,7 +62,7 @@ function citySpecificPlaceImage(city) {
   const localTransportBtn = document.getElementById('localTransportBtn');
 
   const cityKey = data.cityKeyFromValue(to);
-  const cityName = cityKey.charAt(0).toUpperCase() + cityKey.slice(1);
+  const cityName = data.destinationNameFromKey ? data.destinationNameFromKey(cityKey) : cityKey.charAt(0).toUpperCase() + cityKey.slice(1);
   const cityData = data.destinations[cityName] || data.destinations.Delhi;
   const selectedAgeBand = data.ageBand(age);
   const recommendedNames = cityData.ageBands[selectedAgeBand] || cityData.ageBands['20-29'] || [];
