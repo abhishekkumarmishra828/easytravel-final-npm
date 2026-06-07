@@ -241,30 +241,46 @@ textarea{width:100%;padding:16px 18px;border-radius:18px;border:1px solid var(--
 @media (max-width: 980px){.package-showcase{grid-template-columns:1fr}.package-main-title{font-size:40px}}
 
 
-.footer-live{background:#cfe8c8;color:#091019;margin-top:48px;overflow:hidden}
-.footer-live h4{color:#000;margin:0 0 18px;font-size:24px}
-.footer-live p,.footer-live a{color:#0b0f12}
-.footer-ticker-wrap{background:#b7dcb0;border-top:1px solid rgba(0,0,0,.05);border-bottom:1px solid rgba(0,0,0,.05);overflow:hidden}
+.footer-live{background:#1f1f1f;color:#fff;margin-top:48px;overflow:hidden}
+.footer-live h4{color:#ff6648;margin:0 0 18px;font-size:24px;text-transform:uppercase;letter-spacing:.02em}
+.footer-live p,.footer-live a{color:#f7f7f7}
+.footer-ticker-wrap{background:#151515;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);overflow:hidden}
 .footer-ticker{white-space:nowrap;overflow:hidden}
-.ticker-track{display:inline-flex;gap:28px;padding:14px 0;min-width:200%;animation:footerTicker 26s linear infinite;font-weight:800}
+.ticker-track{display:inline-flex;gap:28px;padding:14px 0;min-width:200%;animation:footerTicker 26s linear infinite;font-weight:800;color:#f6f6f6}
 .ticker-track span{display:inline-flex;align-items:center;gap:8px}
-.ticker-track span::before{content:'•';color:#5f8f40}
+.ticker-track span::before{content:'>';color:#ff6648}
 @keyframes footerTicker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.footer-live-inner{display:grid;grid-template-columns:1.1fr 1fr 1.2fr .9fr;gap:34px;padding:44px 0 56px}
-.footer-brand-badge{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#78d53d;color:#fff;font-size:24px;font-weight:900;box-shadow:var(--shadow);margin-bottom:14px}
-.footer-contact{font-size:18px;margin-top:18px}
-.footer-links-list{display:grid;gap:12px}
-.footer-links-list a{text-decoration:none;font-weight:800;font-size:18px}
-.footer-links-list a:hover{text-decoration:underline}
-.footer-posts{display:grid;gap:16px}
-.footer-post{display:grid;grid-template-columns:82px 1fr;gap:14px;align-items:center;text-decoration:none}
-.footer-post-thumb{width:82px;height:82px;border-radius:12px;background:linear-gradient(135deg,#6db5ff,#4ed3a0);display:grid;place-items:center;color:#fff;font-size:28px;font-weight:900;box-shadow:var(--shadow)}
-.footer-post h5{margin:0 0 6px;font-size:18px;color:#071019}
-.footer-post p{margin:0;color:#314b39;font-size:14px}
-.pay-badges{display:flex;gap:10px;flex-wrap:wrap}
-.pay-badges span{display:inline-flex;align-items:center;justify-content:center;min-width:86px;height:42px;border-radius:10px;background:#fff;border:1px solid rgba(0,0,0,.08);font-weight:900;color:#537bb8}
-@media (max-width:1180px){.footer-live-inner{grid-template-columns:1fr 1fr}.footer-post{grid-template-columns:64px 1fr}.footer-post-thumb{width:64px;height:64px}}
-@media (max-width:780px){.footer-live-inner{grid-template-columns:1fr}.ticker-track{animation-duration:34s}}
+.footer-live-inner{display:grid;grid-template-columns:1.15fr .95fr 1.15fr 1fr;gap:54px;padding:58px 0 34px;align-items:start}
+.footer-logo-lockup{display:flex;gap:14px;align-items:center;margin-bottom:18px}
+.footer-brand-badge{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#ff6648;color:#fff;font-size:20px;font-weight:900;box-shadow:0 16px 36px rgba(255,102,72,.26);border:3px solid rgba(255,255,255,.9)}
+.footer-small{color:#bcbcbc !important;font-size:16px;line-height:1.5;margin:0 0 18px}
+.footer-brand-col>p{color:#f2f2f2;line-height:1.55;font-size:17px;margin:0 0 18px}
+.footer-contact-list{display:grid;gap:10px;margin:18px 0}
+.footer-contact-list a{font-weight:800;text-decoration:none;font-size:17px;color:#fff}
+.footer-contact-list a:hover,.footer-links-list a:hover,.footer-post:hover h5{text-decoration:underline}
+.footer-links-list{display:grid;gap:10px;max-height:430px;overflow:auto;padding-right:8px}
+.footer-links-list a{text-decoration:none;font-weight:700;font-size:17px;line-height:1.25;color:#fff}
+.footer-links-list::-webkit-scrollbar{width:6px}
+.footer-links-list::-webkit-scrollbar-thumb{background:#444;border-radius:999px}
+.footer-posts{display:grid;gap:14px}
+.footer-post{display:grid;grid-template-columns:54px 1fr;gap:14px;align-items:center;text-decoration:none;padding:10px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+.footer-post-thumb{width:54px;height:54px;border-radius:12px;background:linear-gradient(135deg,#ff744f,#ffb35f);display:grid;place-items:center;color:#fff;font-size:22px;font-weight:900;box-shadow:0 14px 30px rgba(255,102,72,.18)}
+.footer-post h5{margin:0 0 5px;font-size:16px;line-height:1.2;color:#fff}
+.footer-post p{margin:0;color:#bdbdbd;font-size:13px}
+.footer-subscribe{display:grid;gap:12px;margin:12px 0 28px}
+.footer-subscribe input{width:100%;height:48px;border:0;border-radius:4px;background:#fff;color:#111;padding:0 14px;font-size:15px;outline:none}
+.footer-subscribe-row{display:grid;grid-template-columns:1fr 62px}
+.footer-subscribe-row input{border-radius:4px 0 0 4px}
+.footer-subscribe-row button{border:0;border-radius:0 4px 4px 0;background:#ff6648;color:#fff;font-size:22px;font-weight:900;cursor:pointer}
+.footer-pay-block{margin-top:22px}
+.footer-pay-block h4{font-size:20px;margin-bottom:12px}
+.pay-badges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pay-badges span{display:inline-flex;align-items:center;justify-content:center;min-width:86px;height:42px;border-radius:10px;background:#fff;border:1px solid rgba(255,255,255,.08);font-weight:900;color:#537bb8}
+.footer-socials{display:flex;gap:10px;margin-top:18px}
+.footer-socials a{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#1f1f1f;font-weight:900;text-decoration:none;text-transform:uppercase}
+.footer-bottom{display:flex;justify-content:space-between;gap:20px;padding:18px 0 28px;border-top:1px solid rgba(255,255,255,.08);color:#bdbdbd;font-size:14px}
+@media (max-width:1180px){.footer-live-inner{grid-template-columns:1fr 1fr}.footer-post{grid-template-columns:54px 1fr}}
+@media (max-width:780px){.footer-live-inner{grid-template-columns:1fr}.ticker-track{animation-duration:34s}.footer-bottom{flex-direction:column}}
 
 
 .hero-slide{
