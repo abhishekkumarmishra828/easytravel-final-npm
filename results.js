@@ -220,16 +220,47 @@ if (img) {
     const band = selectedAgeBand;
     const budget = age < 22 ? 'Budget' : age < 35 ? 'Comfort' : 'Premium';
     const days = age < 22 ? 2 : age < 40 ? 3 : 2;
+    const transport = localTransportPlan(city, budget);
     packagePreview.innerHTML = `
       <div class="package-badge">${days}-day smart package</div>
       <h4>${city} ${budget.toLowerCase()} package</h4>
       <p>Recommended around ${selectedPlace.name}. Age band ${band}. Includes stay suggestions, local transfer idea, and sightseeing flow.</p>
+      <div class="local-transport-box">
+        <span>Local transport in ${city}</span>
+        <strong>${transport.primary}</strong>
+        <small>${transport.note}</small>
+      </div>
       <ul>
         <li>Arrival pickup concept from station / bus stop</li>
+        <li>${transport.included}</li>
         <li>${days} day city exploration around ${selectedPlace.name}</li>
         <li>${budget === 'Budget' ? 'Launch saver offer 5% off' : budget === 'Comfort' ? 'Combo offer 8% off' : 'Premium package benefit 12% off'} </li>
       </ul>`;
     packageBtn.href = `/package.html?from=${encodeURIComponent(from)}&to=${encodeURIComponent(cityName)}&date=${encodeURIComponent(date)}&age=${encodeURIComponent(age)}&mode=${encodeURIComponent(mode)}&place=${encodeURIComponent(selectedPlace.name)}`;
+  }
+
+  function localTransportPlan(city, budget) {
+    const plans = {
+      Delhi: ['Metro + AC cab combo', 'Nearest metro pickup, last-mile cab, and Old Delhi e-rickshaw support', 'Metro pass guidance + station/bus stop pickup option'],
+      Jaipur: ['Private cab + e-rickshaw for old city', 'Amber Fort cab route with Hawa Mahal and Bapu Bazaar e-rickshaw support', 'City cab route + market e-rickshaw option'],
+      Varanasi: ['E-rickshaw + ghat walk + boat point drop', 'Temple lane e-rickshaw, Assi/Dashashwamedh Ghat drop, and boat point coordination', 'Ghat-side e-rickshaw transfer + boat point guidance'],
+      Guwahati: ['Cab + ferry point transfer', 'Kamakhya Temple cab, Umananda ferry point drop, and Brahmaputra riverfront transfer', 'Temple cab route + ferry point transfer option'],
+      Goa: ['Self-drive scooter/cab option', 'Beach-hopping scooter guidance, family cab option, and airport/station pickup support', 'Scooter rental guidance + cab pickup option'],
+      Rameshwaram: ['Cab + auto transfer', 'Temple corridor cab, Pamban Bridge stop, and Dhanushkodi local cab option', 'Temple cab route + local auto support'],
+      Dwarka: ['Cab + Bet Dwarka boat point transfer', 'Dwarkadhish Temple cab, Nageshwar route, and Bet Dwarka jetty drop support', 'Temple cab route + boat point transfer'],
+      Mumbai: ['Local train + cab combo', 'Suburban train guidance, Colaba cab drop, and Marine Drive local transfer', 'Local train guidance + last-mile cab option'],
+      Haridwar: ['Auto/e-rickshaw + ropeway point drop', 'Har Ki Pauri transfer, Mansa Devi ropeway point drop, and evening aarti return plan', 'Ghat e-rickshaw transfer + ropeway point drop'],
+      Rishikesh: ['Auto + local cab for bridges/ghats', 'Ram Jhula/Lakshman Jhula auto transfer, Triveni Ghat drop, and rafting point cab option', 'Bridge auto route + ghat transfer option']
+    };
+    const fallback = [`${city} local cab + auto plan`, `Station/bus stop pickup, ${city} sightseeing cab route, and local market transfer`, 'Local cab/auto pickup option according to city route'];
+    const selected = plans[city] || fallback;
+    if (budget === 'Budget') {
+      return { primary: selected[0], note: selected[2], included: `Local transport option: ${selected[2]}` };
+    }
+    if (budget === 'Premium') {
+      return { primary: selected[0], note: `${selected[1]} with priority pickup coordination`, included: `Local transport option: ${selected[1]} with priority assistance` };
+    }
+    return { primary: selected[0], note: selected[1], included: `Local transport option: ${selected[1]}` };
   }
 
   function osmEmbed(lat, lon) {

@@ -178,6 +178,10 @@ button, input, select { font: inherit; }
 .package-preview p,.package-preview li{color:var(--muted);line-height:1.6;}
 .package-preview ul{margin:0;padding-left:18px;}
 .package-badge{display:inline-flex;width:max-content;padding:8px 12px;background:#fff2ed;color:var(--brand-dark);font-weight:800;border-radius:999px;}
+.local-transport-box{display:grid;gap:5px;margin:2px 0 4px;padding:12px 14px;background:#fff;border:1px solid #dfe8f6;border-left:4px solid var(--brand);border-radius:14px;}
+.local-transport-box span{font-size:13px;font-weight:900;color:#ef5a32;text-transform:uppercase;letter-spacing:.04em;}
+.local-transport-box strong{color:var(--navy);font-size:18px;line-height:1.25;}
+.local-transport-box small{color:var(--muted);font-size:15px;line-height:1.45;}
 .package-form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:end;}
 @media (max-width: 900px){.package-form-grid{grid-template-columns:1fr;}}
 .video-open{background:var(--brand);}
