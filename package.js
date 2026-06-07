@@ -272,16 +272,32 @@ const pkgDB = {
   }
 
   function getImageSet(cityName) {
+    const topUpImages = (items) => {
+      const clean = [...new Set((items || []).filter(Boolean))];
+      const fallback = window.EASYTRAVEL_IMAGE_FALLBACK
+        ? [
+            window.EASYTRAVEL_IMAGE_FALLBACK(cityName, cityName),
+            window.EASYTRAVEL_IMAGE_FALLBACK(cityName, 'tourism'),
+            window.EASYTRAVEL_IMAGE_FALLBACK(cityName, 'travel places')
+          ]
+        : [];
+      return [...new Set([...clean, ...fallback])].slice(0, 4);
+    };
     if (imagePools[cityName]) return imagePools[cityName];
     const key = data.cityKeyFromValue ? data.cityKeyFromValue(cityName) : '';
     const proper = capitalize(key);
     const resolvedName = data.destinationNameFromKey ? data.destinationNameFromKey(key) : proper;
+    const sharedSets = window.EASYTRAVEL_IMAGE_SETS || {};
+    if (sharedSets[cityName]) return topUpImages(sharedSets[cityName]);
+    if (sharedSets[resolvedName]) return topUpImages(sharedSets[resolvedName]);
+    if (/uttarakhand/i.test(cityName)) return topUpImages(sharedSets.Uttarakhand || imagePools.default);
+    if (/rajasthan/i.test(cityName)) return topUpImages(sharedSets.Rajasthan || imagePools.default);
     const cityData = data.destinations && (data.destinations[cityName] || data.destinations[resolvedName] || data.destinations[proper]);
     if (cityData && cityData.places) {
       const images = Object.values(cityData.places).map(place => place.image).filter(Boolean);
-      if (images.length) return [...new Set(images)].slice(0, 4);
+      if (images.length) return topUpImages(images);
     }
-    return imagePools.default;
+    return topUpImages(imagePools.default);
   }
 
   function getScrapedTourNames(region) {
@@ -303,9 +319,12 @@ const pkgDB = {
 
   function renderGallery(cityName, images) {
     if (!galleryEl) return;
+    const fallback = window.EASYTRAVEL_IMAGE_FALLBACK
+      ? window.EASYTRAVEL_IMAGE_FALLBACK(cityName, cityName)
+      : '/package-assets/fort_real.jpg';
     galleryEl.innerHTML = images.map((src, i) => `
       <div class="gallery-item ${i === 0 ? 'big' : ''}">
-        <img src="${src}" alt="${cityName} view" loading="eager" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='/package-assets/fort_real.jpg'">
+        <img src="${src}" alt="${cityName} view" loading="eager" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${fallback}'">
       </div>
     `).join('');
   }

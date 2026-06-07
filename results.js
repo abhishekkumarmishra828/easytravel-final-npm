@@ -168,10 +168,13 @@ function citySpecificPlaceImage(city) {
     const img = document.getElementById('placeImage');
 if (img) {
   const resolvedImage = place.image || (typeof placeImage === 'function' ? placeImage(place.city || place.destination || '', place.name || '') : '/assets/hero-show-1.png');
-  img.onerror = () => { img.src = '/assets/hero-show-1.png'; };
+  const fallbackImage = window.EASYTRAVEL_IMAGE_FALLBACK
+    ? window.EASYTRAVEL_IMAGE_FALLBACK(place.city || cityName, place.name)
+    : '/assets/hero-show-1.png';
+  img.onerror = () => { img.onerror = null; img.src = fallbackImage; };
   img.src = resolvedImage;
   if (resultHeroImage) {
-    resultHeroImage.onerror = () => { resultHeroImage.src = '/assets/hero-show-1.png'; };
+    resultHeroImage.onerror = () => { resultHeroImage.onerror = null; resultHeroImage.src = fallbackImage; };
     resultHeroImage.src = resolvedImage;
   }
 }

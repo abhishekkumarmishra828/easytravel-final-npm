@@ -3,6 +3,7 @@
   if (!data) return;
 
   const img = (file) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=1400`;
+  const unsplash = (query) => `https://source.unsplash.com/featured/1400x900/?${encodeURIComponent(query)}`;
   const wiki = (name) => `https://en.wikipedia.org/wiki/${encodeURIComponent(name).replace(/%20/g, '_')}`;
   const maps = (place, city) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place + ', ' + city + ', India')}`;
   const google = (place, city) => `https://www.google.com/search?q=${encodeURIComponent(place + ' ' + city + ' travel')}`;
@@ -60,7 +61,11 @@
     'Amarnath Yatra': [img('Cave_Temple_of_Lord_Amarnath.jpg'), img('Amarnath_Cave.jpg'), img('Sheshnag_Lake.jpg')],
     'Vaishno Devi Yatra': [img('Vaishno_Devi_Bhavan.jpg'), img('Vaishno_Devi_Temple.jpg'), img('Katra_Vaishno_Devi.jpg')],
     'Jaisalmer': [img('Jaisalmer_Fort_from_Gadisar_Lake.jpg'), img('Jaisalmer_Fort_Rajasthan.jpg'), img('Sam_Sand_Dunes_Jaisalmer.jpg')],
+    'Rajasthan': [img('Hawa_Mahal_2011.jpg'), img('City_Palace_Udaipur.jpg'), img('Jaisalmer_Fort_Rajasthan.jpg'), img('Mehrangarh_Fort_Jodhpur.jpg')],
+    'Uttarakhand': [img('Kedarnath_Temple.jpg'), img('Badrinath_Temple.jpg'), img('Har_Ki_Pauri_Haridwar.jpg'), img('Naini_Lake_Nainital.jpg')],
     'Udaipur': [img('Lake_Palace_Udaipur.jpg'), img('City_Palace_Udaipur.jpg'), img('Lake_Pichola_Udaipur.jpg')],
+    'Kolkata': [img('Victoria_Memorial,_Kolkata.jpg'), img('Howrah_Bridge_Kolkata.jpg'), img('Dakshineswar_Kali_Temple.jpg'), img('Indian_Museum_Kolkata.jpg')],
+    'Kochi': [img('Chinese_fishing_nets,_Kochi.jpg'), img('Fort_Kochi_Beach.jpg'), img('Mattancherry_Palace.jpg'), img('Marine_Drive_Kochi.jpg')],
     'Jammu & Kashmir': [img('Dal_Lake_Srinagar.jpg'), img('Gulmarg_Valley.jpg'), img('Pahalgam_Valley.jpg')],
     'Ladakh': [img('Pangong_Tso_lake.jpg'), img('Leh_Palace.jpg'), img('Nubra_Valley_Ladakh.jpg')],
     'Agra': [img('Taj_Mahal_in_March_2004.jpg'), img('Agra_Fort_India.jpg'), img('Mehtab_Bagh_Agra.jpg')],
@@ -84,6 +89,15 @@
     'Mussoorie': [img('Kempty_Falls_Mussoorie.jpg'), img('Gun_Hill_Mussoorie.jpg'), img('Mall_Road_Mussoorie.jpg')],
     'Goa': [img('Calangute_Beach_Goa.jpg'), img('Fort_Aguada_Goa.jpg'), img('Basilica_of_Bom_Jesus_Goa.jpg')],
     'Delhi': [img('India_Gate_in_New_Delhi_03-2016.jpg'), img('Red_Fort_in_Delhi_03-2016_img3.jpg'), img('Qutb_Minar_2011.jpg')]
+  };
+  const fallbackQueries = {
+    'Kochi': 'kochi kerala backwaters fort kochi',
+    'Kolkata': 'kolkata victoria memorial howrah bridge',
+    'Uttarakhand': 'uttarakhand himalayas kedarnath badrinath',
+    'Rajasthan': 'rajasthan fort desert palace',
+    'Kedarnath Yatra': 'kedarnath temple himalayas',
+    'Badrinath Yatra': 'badrinath temple uttarakhand',
+    'Jaisalmer': 'jaisalmer fort sam sand dunes'
   };
 
   const bands = ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60+'];
@@ -122,7 +136,12 @@
   }
 
   function installCity(city) {
-    city.images = imageSets[city.display] || city.images || [city.image];
+    city.images = imageSets[city.display] || city.images || [
+      city.image,
+      unsplash(`${city.display} ${city.state} tourism`),
+      unsplash(`${city.places[0]} ${city.display}`),
+      unsplash(`${city.places[1]} ${city.state} travel`)
+    ];
     city.image = city.images[0] || city.image;
     const places = {};
     city.places.forEach((place, index) => {
@@ -155,6 +174,12 @@
       data.heroCities[key].slides = images;
     }
   });
+
+  window.EASYTRAVEL_IMAGE_SETS = imageSets;
+  window.EASYTRAVEL_IMAGE_FALLBACK = function imageFallback(city, place) {
+    const key = fallbackQueries[city] || fallbackQueries[place] || `${place || city || 'India travel'} realistic travel`;
+    return unsplash(key);
+  };
 
   const keyToDisplay = {};
   additions.forEach(city => {
