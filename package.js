@@ -191,12 +191,14 @@ const pkgDB = {
   };
 
   const regionAliases = {
-    srinagar: 'Kashmir',
-    jammu: 'Kashmir',
-    gulmarg: 'Kashmir',
-    pahalgam: 'Kashmir',
-    sonmarg: 'Kashmir',
-    kashmir: 'Kashmir',
+    srinagar: 'Jammu & Kashmir',
+    jammu: 'Jammu & Kashmir',
+    gulmarg: 'Jammu & Kashmir',
+    pahalgam: 'Jammu & Kashmir',
+    sonmarg: 'Jammu & Kashmir',
+    kashmir: 'Jammu & Kashmir',
+    'jammu and kashmir': 'Jammu & Kashmir',
+    'jammu & kashmir': 'Jammu & Kashmir',
     leh: 'Leh Ladakh',
     ladakh: 'Leh Ladakh',
     'leh ladakh': 'Leh Ladakh',
@@ -219,6 +221,11 @@ const pkgDB = {
     udaipur: 'Udaipur',
     jodhpur: 'Jodhpur',
     kanyakumari: 'Kanyakumari',
+    ranchi: 'Ranchi',
+    jamshedpur: 'Jamshedpur',
+    tatanagar: 'Jamshedpur',
+    'tata nagar': 'Jamshedpur',
+    jharkhand: 'Ranchi',
     goa: 'Goa',
     varanasi: 'Varanasi'
   };
@@ -366,6 +373,7 @@ const pkgDB = {
     if (/jaisalmer|rajasthan|jaipur|jodhpur|udaipur|ajmer|pushkar|mount abu/.test(name)) return '/package-assets/fort_real.jpg';
     if (/kanyakumari/.test(name)) return '/package-assets/sunset_real.jpg';
     if (/chandigarh|garden/.test(name)) return '/package-assets/garden_real.jpg';
+    if (/ranchi|jamshedpur|jharkhand|tatanagar|tata nagar/.test(name)) return '/package-assets/river_real.jpg';
     if (/goa|kochi|alleppey|andaman|lakshadweep|dwarka|rameshwaram/.test(name)) return '/package-assets/river_real.jpg';
     if (/kedarnath|badrinath|amarnath|vaishno|uttarakhand|himalaya|shimla|manali|ladakh|kashmir|darjeeling|gangtok/.test(name)) return '/package-assets/hill_real.jpg';
     return '/package-assets/building_real.jpg';

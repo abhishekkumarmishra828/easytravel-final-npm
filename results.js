@@ -21,6 +21,7 @@ function stableTravelImageFallback(city) {
   if (/jaisalmer|rajasthan|jaipur|jodhpur|udaipur|ajmer|pushkar|mount abu/.test(name)) return '/package-assets/fort_real.jpg';
   if (/kanyakumari/.test(name)) return '/package-assets/sunset_real.jpg';
   if (/chandigarh|garden/.test(name)) return '/package-assets/garden_real.jpg';
+  if (/ranchi|jamshedpur|jharkhand|tatanagar|tata nagar/.test(name)) return '/package-assets/river_real.jpg';
   if (/goa|kochi|alleppey|andaman|lakshadweep|dwarka|rameshwaram/.test(name)) return '/package-assets/river_real.jpg';
   if (/kedarnath|badrinath|amarnath|vaishno|uttarakhand|himalaya|shimla|manali|ladakh|kashmir|darjeeling|gangtok/.test(name)) return '/package-assets/hill_real.jpg';
   return '/package-assets/building_real.jpg';

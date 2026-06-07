@@ -53,6 +53,8 @@
     { key: 'jim-corbett', display: 'Jim Corbett', state: 'Uttarakhand', coords: [29.53, 78.7747], image: img('Jim_Corbett_National_Park.jpg'), places: ['Corbett Safari Zone', 'Dhikala Zone', 'Garjiya Devi Temple', 'Corbett Falls', 'Ramnagar stay'] },
     { key: 'dwarkadhish-somnath', display: 'Somnath', state: 'Gujarat', coords: [20.888, 70.4012], image: img('Somnath_Temple.jpg'), places: ['Somnath Temple', 'Triveni Sangam Somnath', 'Bhalka Tirth', 'Somnath Beach', 'Gir day trip'] },
     { key: 'statue-of-unity', display: 'Statue of Unity', state: 'Gujarat', coords: [21.838, 73.7191], image: img('Statue_of_Unity.jpg'), places: ['Statue of Unity', 'Valley of Flowers Kevadia', 'Sardar Sarovar Dam', 'Jungle Safari Kevadia', 'Ekta Cruise'] }
+    ,{ key: 'ranchi', display: 'Ranchi', state: 'Jharkhand', coords: [23.3441, 85.3096], image: img('Evening_at_Jonha_Falls.jpg'), places: ['Jonha Falls', 'Dassam Falls', 'Patratu Valley', 'Jagannath Temple Ranchi', 'Rock Garden Ranchi'] }
+    ,{ key: 'jamshedpur', display: 'Jamshedpur', state: 'Jharkhand', coords: [22.8046, 86.2029], image: img('A_green_oasis_in_city_of_steel_Jamshedpur_01.jpg'), places: ['Jubilee Park Jamshedpur', 'Dimna Lake', 'Dalma Wildlife Sanctuary', 'Tata Steel Zoological Park', 'Hudco Lake'] }
   ];
 
   const imageSets = {
@@ -66,7 +68,8 @@
     'Udaipur': [img('Lake_Palace_Udaipur.jpg'), img('City_Palace_Udaipur.jpg'), img('Lake_Pichola_Udaipur.jpg')],
     'Kolkata': [img('Victoria_Memorial,_Kolkata.jpg'), img('Howrah_Bridge_Kolkata.jpg'), img('Dakshineswar_Kali_Temple.jpg'), img('Indian_Museum_Kolkata.jpg')],
     'Kochi': [img('Chinese_fishing_nets,_Kochi.jpg'), img('Fort_Kochi_Beach.jpg'), img('Mattancherry_Palace.jpg'), img('Marine_Drive_Kochi.jpg')],
-    'Jammu & Kashmir': [img('Dal_Lake_Srinagar.jpg'), img('Gulmarg_Valley.jpg'), img('Pahalgam_Valley.jpg')],
+    'Jammu & Kashmir': [img('Dal_Lake_Srinagar.jpg'), img('Nishat_Bagh_Srinagar.jpg'), img('Gulmarg_Valley.jpg'), img('Pahalgam_Valley.jpg')],
+    'Kashmir': [img('Dal_Lake_Srinagar.jpg'), img('Nishat_Bagh_Srinagar.jpg'), img('Gulmarg_Valley.jpg'), img('Pahalgam_Valley.jpg')],
     'Ladakh': [img('Pangong_Tso_lake.jpg'), img('Leh_Palace.jpg'), img('Nubra_Valley_Ladakh.jpg')],
     'Agra': [img('Taj_Mahal_in_March_2004.jpg'), img('Agra_Fort_India.jpg'), img('Mehtab_Bagh_Agra.jpg')],
     'Lucknow': [img('Bara_Imambara_Lucknow.jpg'), img('Rumi_Darwaza_Lucknow.jpg'), img('Ambedkar_Memorial_Park_Lucknow.jpg')],
@@ -89,7 +92,9 @@
     'Lonavala': [img('Tiger_Point_Lonavala.jpg'), img('Bhushi_Dam_Lonavala.jpg'), img('Karla_Caves.jpg')],
     'Mussoorie': [img('Kempty_Falls_Mussoorie.jpg'), img('Gun_Hill_Mussoorie.jpg'), img('Mall_Road_Mussoorie.jpg')],
     'Goa': [img('Calangute_Beach_Goa.jpg'), img('Fort_Aguada_Goa.jpg'), img('Basilica_of_Bom_Jesus_Goa.jpg')],
-    'Delhi': [img('India_Gate_in_New_Delhi_03-2016.jpg'), img('Red_Fort_in_Delhi_03-2016_img3.jpg'), img('Qutb_Minar_2011.jpg')]
+    'Delhi': [img('India_Gate_in_New_Delhi_03-2016.jpg'), img('Red_Fort_in_Delhi_03-2016_img3.jpg'), img('Qutb_Minar_2011.jpg')],
+    'Ranchi': [img('Evening_at_Jonha_Falls.jpg'), img('Jonha_falls_01.jpg'), img('Dassam_fall,_ranchi.jpg'), img('Jagannath_Temple_Ranchi.jpg')],
+    'Jamshedpur': [img('A_green_oasis_in_city_of_steel_Jamshedpur_01.jpg'), img('A_view_of_jamshedpur_jubilee_park.jpg'), img('Dimna_Lake.jpg'), img('Jamshedpur_green_City.jpg')]
   };
   const fallbackQueries = {
     'Kochi': 'kochi kerala backwaters fort kochi',
@@ -100,7 +105,11 @@
     'Badrinath Yatra': 'badrinath temple uttarakhand',
     'Jaisalmer': 'jaisalmer fort sam sand dunes',
     'Kanyakumari': 'kanyakumari vivekananda rock memorial sunrise',
-    'Chandigarh': 'chandigarh rock garden sukhna lake'
+    'Chandigarh': 'chandigarh rock garden sukhna lake',
+    'Jammu & Kashmir': 'srinagar dal lake gulmarg pahalgam',
+    'Kashmir': 'srinagar dal lake gulmarg pahalgam',
+    'Ranchi': 'ranchi jonha falls patratu valley',
+    'Jamshedpur': 'jamshedpur jubilee park dimna lake dalma'
   };
 
   const bands = ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60+'];
@@ -190,6 +199,11 @@
   });
 
   const originalCityKeyFromValue = data.cityKeyFromValue || ((value) => String(value || 'delhi').toLowerCase());
+  const originalDisplayByKey = {};
+  Object.keys(data.destinations || {}).forEach(name => {
+    const key = originalCityKeyFromValue(name);
+    if (key && !originalDisplayByKey[key]) originalDisplayByKey[key] = name;
+  });
   const aliasMap = {};
   additions.forEach(city => {
     aliasMap[city.key] = city.key;
@@ -222,7 +236,12 @@
     'bodh gaya': 'bodh-gaya',
     'corbett': 'jim-corbett',
     'jim corbett': 'jim-corbett',
-    'mount abu': 'mount-abu'
+    'mount abu': 'mount-abu',
+    'jharkhand': 'ranchi',
+    'ranchi': 'ranchi',
+    'jamshedpur': 'jamshedpur',
+    'tatanagar': 'jamshedpur',
+    'tata nagar': 'jamshedpur'
   });
 
   data.cityKeyFromValue = function cityKeyFromExpandedValue(value) {
@@ -234,7 +253,7 @@
     return originalCityKeyFromValue(value);
   };
   data.destinationNameFromKey = function destinationNameFromKey(key) {
-    return keyToDisplay[key] || (String(key || '').charAt(0).toUpperCase() + String(key || '').slice(1));
+    return keyToDisplay[key] || originalDisplayByKey[key] || (String(key || '').charAt(0).toUpperCase() + String(key || '').slice(1));
   };
 
   const extraStations = [
@@ -252,7 +271,9 @@
     'Mysuru Junction (MYS)',
     'Madurai Junction (MDU)',
     'Shirdi Sainagar (SNSI)',
-    'Bodh Gaya access via Gaya Junction'
+    'Bodh Gaya access via Gaya Junction',
+    'Ranchi Junction (RNC)',
+    'Tatanagar Junction (TATA)'
   ];
   data.stations = [...new Set([...(data.stations || []), ...extraStations])];
 })();
