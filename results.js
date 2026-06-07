@@ -16,6 +16,16 @@ function citySpecificPlaceImage(city) {
   return map[city] || '/assets/hero-show-1.png';
 }
 
+function stableTravelImageFallback(city) {
+  const name = String(city || '').toLowerCase();
+  if (/jaisalmer|rajasthan|jaipur|jodhpur|udaipur|ajmer|pushkar|mount abu/.test(name)) return '/package-assets/fort_real.jpg';
+  if (/kanyakumari/.test(name)) return '/package-assets/sunset_real.jpg';
+  if (/chandigarh|garden/.test(name)) return '/package-assets/garden_real.jpg';
+  if (/goa|kochi|alleppey|andaman|lakshadweep|dwarka|rameshwaram/.test(name)) return '/package-assets/river_real.jpg';
+  if (/kedarnath|badrinath|amarnath|vaishno|uttarakhand|himalaya|shimla|manali|ladakh|kashmir|darjeeling|gangtok/.test(name)) return '/package-assets/hill_real.jpg';
+  return '/package-assets/building_real.jpg';
+}
+
 
 (function requireAuthForExplore(){
   const current = window.location.pathname.split('/').pop() || 'index.html';
@@ -168,9 +178,7 @@ function citySpecificPlaceImage(city) {
     const img = document.getElementById('placeImage');
 if (img) {
   const resolvedImage = place.image || (typeof placeImage === 'function' ? placeImage(place.city || place.destination || '', place.name || '') : '/assets/hero-show-1.png');
-  const fallbackImage = window.EASYTRAVEL_IMAGE_FALLBACK
-    ? window.EASYTRAVEL_IMAGE_FALLBACK(place.city || cityName, place.name)
-    : '/assets/hero-show-1.png';
+  const fallbackImage = stableTravelImageFallback(place.city || cityName);
   img.onerror = () => { img.onerror = null; img.src = fallbackImage; };
   img.src = resolvedImage;
   if (resultHeroImage) {

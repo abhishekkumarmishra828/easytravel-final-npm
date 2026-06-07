@@ -300,6 +300,16 @@ const pkgDB = {
     return topUpImages(imagePools.default);
   }
 
+  function localImageFallback(cityName) {
+    const name = String(cityName || '').toLowerCase();
+    if (/jaisalmer|rajasthan|jaipur|jodhpur|udaipur|ajmer|pushkar|mount abu/.test(name)) return '/package-assets/fort_real.jpg';
+    if (/kanyakumari/.test(name)) return '/package-assets/sunset_real.jpg';
+    if (/chandigarh|garden/.test(name)) return '/package-assets/garden_real.jpg';
+    if (/goa|kochi|alleppey|andaman|lakshadweep|dwarka|rameshwaram/.test(name)) return '/package-assets/river_real.jpg';
+    if (/kedarnath|badrinath|amarnath|vaishno|uttarakhand|himalaya|shimla|manali|ladakh|kashmir|darjeeling|gangtok/.test(name)) return '/package-assets/hill_real.jpg';
+    return '/package-assets/building_real.jpg';
+  }
+
   function getScrapedTourNames(region) {
     const a = (scraped.tourBuckets && scraped.tourBuckets[region]) || [];
     const b = (scraped.tourLinks || []).filter(x => x.Region === region).map(x => x.Package);
@@ -319,9 +329,7 @@ const pkgDB = {
 
   function renderGallery(cityName, images) {
     if (!galleryEl) return;
-    const fallback = window.EASYTRAVEL_IMAGE_FALLBACK
-      ? window.EASYTRAVEL_IMAGE_FALLBACK(cityName, cityName)
-      : '/package-assets/fort_real.jpg';
+    const fallback = localImageFallback(cityName);
     galleryEl.innerHTML = images.map((src, i) => `
       <div class="gallery-item ${i === 0 ? 'big' : ''}">
         <img src="${src}" alt="${cityName} view" loading="eager" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${fallback}'">

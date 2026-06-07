@@ -46,7 +46,7 @@
     { key: 'gwalior', display: 'Gwalior', state: 'Madhya Pradesh', coords: [26.2183, 78.1828], image: img('Gwalior_Fort.jpg'), places: ['Gwalior Fort', 'Jai Vilas Palace', 'Sas Bahu Temple', 'Tansen Tomb', 'Sun Temple Gwalior'] },
     { key: 'andaman', display: 'Andaman', state: 'Andaman and Nicobar Islands', coords: [11.7401, 92.6586], image: img('Radhanagar_Beach_Havelock_Island.jpg'), places: ['Radhanagar Beach', 'Cellular Jail', 'Havelock Island', 'Neil Island', 'Ross Island'] },
     { key: 'lakshadweep', display: 'Lakshadweep', state: 'Lakshadweep', coords: [10.5667, 72.6417], image: img('Bangaram_Island_Lakshadweep.jpg'), places: ['Bangaram Island', 'Agatti Island', 'Minicoy Island', 'Kadmat Island', 'Kavaratti Lagoon'] },
-    { key: 'chandigarh', display: 'Chandigarh', state: 'Chandigarh', coords: [30.7333, 76.7794], image: img('Rock_Garden,_Chandigarh.jpg'), places: ['Rock Garden Chandigarh', 'Sukhna Lake', 'Rose Garden Chandigarh', 'Capitol Complex', 'Sector 17 Plaza'] },
+    { key: 'chandigarh', display: 'Chandigarh', state: 'Chandigarh', coords: [30.7333, 76.7794], image: '/package-assets/garden_real.jpg', places: ['Rock Garden Chandigarh', 'Sukhna Lake', 'Rose Garden Chandigarh', 'Capitol Complex', 'Sector 17 Plaza'] },
     { key: 'patna', display: 'Patna', state: 'Bihar', coords: [25.5941, 85.1376], image: img('Golghar_Patna.jpg'), places: ['Golghar', 'Takht Sri Patna Sahib', 'Bihar Museum', 'Ganga Ghat Patna', 'Patna Sahib Gurudwara'] },
     { key: 'bodh-gaya', display: 'Bodh Gaya', state: 'Bihar', coords: [24.6961, 84.9913], image: img('Mahabodhi_Temple_Bodh_Gaya.jpg'), places: ['Mahabodhi Temple', 'Bodhi Tree', 'Great Buddha Statue', 'Thai Monastery Bodh Gaya', 'Dungeshwari Caves'] },
     { key: 'nainital', display: 'Nainital', state: 'Uttarakhand', coords: [29.3919, 79.4542], image: img('Nainital_lake.jpg'), places: ['Naini Lake', 'Naina Devi Temple', 'Snow View Point', 'Mall Road Nainital', 'Eco Cave Gardens'] },
@@ -60,7 +60,7 @@
     'Badrinath Yatra': [img('Badrinath_Temple.jpg'), img('Badrinath_temple,_Uttarakhand.jpg'), img('Badrinath_Temple_and_Neelkanth_peak.jpg')],
     'Amarnath Yatra': [img('Cave_Temple_of_Lord_Amarnath.jpg'), img('Amarnath_Cave.jpg'), img('Sheshnag_Lake.jpg')],
     'Vaishno Devi Yatra': [img('Vaishno_Devi_Bhavan.jpg'), img('Vaishno_Devi_Temple.jpg'), img('Katra_Vaishno_Devi.jpg')],
-    'Jaisalmer': [img('Jaisalmer_Fort_from_Gadisar_Lake.jpg'), img('Jaisalmer_Fort_Rajasthan.jpg'), img('Sam_Sand_Dunes_Jaisalmer.jpg')],
+    'Jaisalmer': ['/package-assets/fort_real.jpg', img('Jaisalmer_Fort_Rajasthan.jpg'), img('Jaisalmer_Fort_from_Gadisar_Lake.jpg'), img('Sam_Sand_Dunes_Jaisalmer.jpg')],
     'Rajasthan': [img('Hawa_Mahal_2011.jpg'), img('City_Palace_Udaipur.jpg'), img('Jaisalmer_Fort_Rajasthan.jpg'), img('Mehrangarh_Fort_Jodhpur.jpg')],
     'Uttarakhand': [img('Kedarnath_Temple.jpg'), img('Badrinath_Temple.jpg'), img('Har_Ki_Pauri_Haridwar.jpg'), img('Naini_Lake_Nainital.jpg')],
     'Udaipur': [img('Lake_Palace_Udaipur.jpg'), img('City_Palace_Udaipur.jpg'), img('Lake_Pichola_Udaipur.jpg')],
@@ -73,7 +73,8 @@
     'Ujjain': [img('Mahakaleshwar_Jyotirlinga_Temple.jpg'), img('Ram_Ghat_Ujjain.jpg'), img('Kal_Bhairav_Temple_Ujjain.jpg')],
     'Chennai': [img('Marina_Beach_Chennai.jpg'), img('Kapaleeshwarar_Temple_Chennai.jpg'), img('San_Thome_Basilica_Chennai.jpg')],
     'Bengaluru': [img('Lalbagh_Bangalore.jpg'), img('Bangalore_Palace.jpg'), img('Vidhana_Soudha_Bangalore.jpg')],
-    'Kanyakumari': [img('Vivekananda_Rock_Memorial_Kanyakumari.jpg'), img('Thiruvalluvar_Statue_Kanyakumari.jpg'), img('Kanyakumari_sunset.jpg')],
+    'Kanyakumari': ['https://www.kanyakumaritourism.in/images/places-to-visit/headers/vivekananda-rock-memorial-kanyakumari-tourism-entry-fee-timings-holidays-reviews-header.jpg', img('Vivekananda_Rock_Memorial,_Kanyakumari.jpg'), img('Thiruvalluvar_Statue_Kanyakumari.jpg'), '/package-assets/sunset_real.jpg'],
+    'Chandigarh': ['/package-assets/garden_real.jpg', img('Rock_Garden_of_Chandigarh.jpg'), img('Sukhna_Lake_Chandigarh.jpg'), img('Capitol_Complex_Chandigarh.jpg')],
     'Ahmedabad': [img('Sabarmati_Ashram_Ahmedabad.jpg'), img('Adalaj_Stepwell.jpg'), img('Kankaria_Lake_Ahmedabad.jpg')],
     'Manali': [img('Solang_Valley_Manali.jpg'), img('Hadimba_Temple_Manali.jpg'), img('Mall_Road_Manali.jpg')],
     'Shimla': [img('The_Ridge_Shimla.jpg'), img('Mall_Road_Shimla.jpg'), img('Jakhoo_Temple_Shimla.jpg')],
@@ -97,7 +98,9 @@
     'Rajasthan': 'rajasthan fort desert palace',
     'Kedarnath Yatra': 'kedarnath temple himalayas',
     'Badrinath Yatra': 'badrinath temple uttarakhand',
-    'Jaisalmer': 'jaisalmer fort sam sand dunes'
+    'Jaisalmer': 'jaisalmer fort sam sand dunes',
+    'Kanyakumari': 'kanyakumari vivekananda rock memorial sunrise',
+    'Chandigarh': 'chandigarh rock garden sukhna lake'
   };
 
   const bands = ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60+'];
