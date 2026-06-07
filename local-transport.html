@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyTravel Local Transport Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo-badge">ET</div>
+        <div>
+          <h1>EasyTravel Pro</h1>
+          <p>Local transport support</p>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a id="backToResults" href="/results.html">Back to results</a>
+        <a href="/package.html">Packages</a>
+      </nav>
+      <a class="nav-cta" href="/">New search</a>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container transport-hero">
+      <div>
+        <div class="hero-kicker" style="color:var(--navy);background:#edf3ff;border-color:#dbe4f6;">Cab + metro + bus + local support</div>
+        <h2 id="transportTitle">Local transport support</h2>
+        <p id="transportSummary">Destination city ke hisaab se authentic booking redirects aur practical local guidance.</p>
+      </div>
+      <div class="transport-selector">
+        <label for="transportCity">City</label>
+        <select id="transportCity"></select>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container transport-layout">
+      <div class="transport-main-card">
+        <h3>Easy booking guidance</h3>
+        <div class="transport-step-list" id="transportSteps"></div>
+      </div>
+      <div class="transport-booking-panel">
+        <h3>Book / redirect</h3>
+        <p class="recommend-note">Cab private companies se book hoga. Metro aur bus me jahan official city/state site available hai, user authentic portal par redirect hoga.</p>
+        <div class="transport-link-groups" id="transportLinks"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="container planner-card">
+      <h3 style="margin:0;font-size:34px;color:var(--navy);">How user ko support milega</h3>
+      <div class="planner-grid">
+        <div class="planner-box"><h4>1. City select</h4><p>User destination city choose karega ya results page se direct city ke saath aayega.</p></div>
+        <div class="planner-box"><h4>2. Mode choose</h4><p>Cab, metro/local transit, local bus ya auto/e-rickshaw guidance compare karega.</p></div>
+        <div class="planner-box"><h4>3. Official booking</h4><p>Button se Ola/Uber, metro official portal, ya state transport booking page open hoga.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div><h4>EasyTravel Pro</h4><p>Ticket ke baad local movement bhi planned.</p></div>
+      <div><h4>Cab</h4><p>Ola/Uber redirect</p></div>
+      <div><h4>Metro</h4><p>Official city transit redirects</p></div>
+      <div><h4>Bus</h4><p>State transport support</p></div>
+    </div>
+  </footer>
+
+  <script src="/local-transport-data.js"></script>
+  <script src="/local-transport.js"></script>
+</body>
+</html>

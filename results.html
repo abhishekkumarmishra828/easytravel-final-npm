@@ -22,6 +22,7 @@
       <nav class="nav-links">
         <a href="/">Home</a>
         <a href="#tickets">Results</a>
+        <a href="#localTransportCard">Local transport</a>
         <a href="#placeExplorer">Place explorer</a>
       </nav>
       <a class="nav-cta" href="/">New search</a>
@@ -61,11 +62,20 @@
 
   <section class="section" id="tickets">
     <div class="container result-layout">
+      <div class="result-primary-column">
       <div class="ticket-list">
         <h3 id="ticketHeading" style="margin:0;font-size:34px;">Suggested routes</h3>
         <p class="recommend-note" id="routeInsight"></p>
         <div id="ticketListWrap"></div>
         <div class="notice" id="irctcNotice">Train mode me “Book on IRCTC” official redirect button diya gaya hai. Is website ka main advantage planning, age-based destination discovery, station-arrival comfort aur city intelligence hai.</div>
+      </div>
+        <div class="local-transport-card" id="localTransportCard">
+          <div class="hero-kicker" style="color:var(--navy);background:#edf3ff;border-color:#dbe4f6;">City local support</div>
+          <h3>Local transport guidance</h3>
+          <p class="recommend-note" id="localTransportSummary">City ke cab, metro, auto aur bus support ko separate page par easy steps me dekhein.</p>
+          <div class="transport-mode-grid" id="localTransportModes"></div>
+          <a id="localTransportBtn" class="secondary-btn transport-support-btn">Open local transport support</a>
+        </div>
       </div>
       <div style="display:grid;gap:24px;">
         <div class="recommend-card">
@@ -142,6 +152,7 @@
   </footer>
 
   <script src="/data.js"></script>
+  <script src="/local-transport-data.js"></script>
   <script src="/results.js"></script>
   <script src="/review-feature.js"></script>
 </body>
