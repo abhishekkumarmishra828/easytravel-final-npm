@@ -68,6 +68,7 @@ function stableTravelImageFallback(city) {
   const irctcNotice = document.getElementById('irctcNotice');
   const packageBtn = document.getElementById('packageBtn');
   const packagePreview = document.getElementById('packagePreview');
+  const cultureCard = document.getElementById('cultureCard');
   const localTransportSummary = document.getElementById('localTransportSummary');
   const localTransportModes = document.getElementById('localTransportModes');
   const localTransportBtn = document.getElementById('localTransportBtn');
@@ -102,6 +103,7 @@ function stableTravelImageFallback(city) {
   renderRecommendationChips();
   renderPlace(selectedPlace);
   renderPackage();
+  renderCultureGuide();
   renderLocalTransport();
 
   bookNowTop.addEventListener('click', async () => {
@@ -165,6 +167,7 @@ function stableTravelImageFallback(city) {
         renderRecommendationChips();
         renderPlace(place);
         renderPackage();
+        renderCultureGuide();
         renderLocalTransport();
       });
       placeChips.appendChild(chip);
@@ -247,6 +250,40 @@ if (img) {
         <li>${budget === 'Budget' ? 'Launch saver offer 5% off' : budget === 'Comfort' ? 'Combo offer 8% off' : 'Premium package benefit 12% off'} </li>
       </ul>`;
     packageBtn.href = `/package.html?from=${encodeURIComponent(from)}&to=${encodeURIComponent(cityName)}&date=${encodeURIComponent(date)}&age=${encodeURIComponent(age)}&mode=${encodeURIComponent(mode)}&place=${encodeURIComponent(selectedPlace.name)}`;
+  }
+
+  function renderCultureGuide() {
+    if (!cultureCard) return;
+    const culture = window.EASYTRAVEL_CULTURE;
+    const plan = culture ? culture.getPlan(cityName) : null;
+    if (!plan) {
+      cultureCard.innerHTML = '';
+      return;
+    }
+    const hot = plan.foods[0];
+    const foods = plan.foods.map(item => `
+      <div class="culture-food-row">
+        <div>
+          <strong>${item.dish}</strong>
+          <span>${item.caption}</span>
+          <small>${item.restaurant} · ${item.area} · ${item.since}</small>
+        </div>
+        <a href="${item.mapUrl}" target="_blank" rel="noopener">Locate</a>
+      </div>
+    `).join('');
+    const articles = plan.articles.map(item => `
+      <a href="${item.mapUrl}" target="_blank" rel="noopener">
+        <strong>${item.item}</strong>
+        <span>${item.place} · ${item.note}</span>
+      </a>
+    `).join('');
+    cultureCard.innerHTML = `
+      <div class="culture-hot-caption">Hot local pick: ${hot.dish}</div>
+      <h4>${plan.city} famous food and shopping</h4>
+      <p>Package book karne se pehle yahan ka old/popular food, restaurant aur local article idea dekh lo.</p>
+      <div class="culture-food-list">${foods}</div>
+      <div class="culture-article-grid">${articles}</div>
+    `;
   }
 
   function renderLocalTransport() {

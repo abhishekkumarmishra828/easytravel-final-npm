@@ -673,6 +673,96 @@ textarea{width:100%;padding:16px 18px;border-radius:18px;border:1px solid var(--
 .ticket-card{transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;}
 .ticket-card:hover{transform:translateY(-3px);box-shadow:0 18px 32px rgba(29,46,84,.12);border-color:#cad8f5;}
 .recommend-card{background:linear-gradient(180deg,#ffffff,#fbfdff);}
+.food-culture-card{
+  margin-top:18px;
+  padding:18px;
+  border-radius:22px;
+  border:1px solid #ffe0ce;
+  background:linear-gradient(180deg,#fff8f3,#ffffff);
+  box-shadow:0 16px 34px rgba(255,109,74,.08);
+}
+.culture-hot-caption{
+  display:inline-flex;
+  padding:8px 12px;
+  border-radius:999px;
+  background:#ff6d4a;
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+.food-culture-card h4{
+  margin:0 0 8px;
+  color:var(--navy);
+  font-size:24px;
+  line-height:1.15;
+}
+.food-culture-card p{
+  margin:0 0 14px;
+  color:#5c6f90;
+  font-size:15px;
+  line-height:1.5;
+}
+.culture-food-list{
+  display:grid;
+  gap:12px;
+}
+.culture-food-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:center;
+  padding:12px;
+  border-radius:16px;
+  background:#fff;
+  border:1px solid #eef2fa;
+}
+.culture-food-row strong,
+.culture-article-grid strong{
+  display:block;
+  color:var(--navy);
+  font-size:16px;
+}
+.culture-food-row span,
+.culture-article-grid span{
+  display:block;
+  color:#61718f;
+  font-size:13px;
+  line-height:1.35;
+  margin-top:4px;
+}
+.culture-food-row small{
+  display:block;
+  color:#8390a6;
+  font-size:12px;
+  margin-top:5px;
+}
+.culture-food-row a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:72px;
+  height:38px;
+  border-radius:999px;
+  background:#edf3ff;
+  color:var(--navy);
+  font-weight:900;
+  text-decoration:none;
+}
+.culture-article-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+.culture-article-grid a{
+  text-decoration:none;
+  padding:12px;
+  border-radius:16px;
+  background:#f6f9ff;
+  border:1px solid #e2eafa;
+}
 .explorer-card{background:linear-gradient(180deg,#ffffff,#fbfdff);}
 .explorer-top{padding-bottom:8px;border-bottom:1px solid #e5ecfa;}
 .place-photo{height:360px;box-shadow:0 16px 36px rgba(29,46,84,.12);}
@@ -688,4 +778,6 @@ textarea{width:100%;padding:16px 18px;border-radius:18px;border:1px solid var(--
   .result-mini-stats{grid-template-columns:1fr;}
   .result-subtitle{font-size:18px;}
   .visual-caption h3{font-size:28px;}
+  .culture-article-grid{grid-template-columns:1fr;}
+  .culture-food-row{grid-template-columns:1fr;}
 }
