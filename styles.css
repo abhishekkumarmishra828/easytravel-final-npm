@@ -708,6 +708,47 @@ textarea{width:100%;padding:16px 18px;border-radius:18px;border:1px solid var(--
   display:grid;
   gap:12px;
 }
+.culture-legacy-box{
+  display:grid;
+  gap:6px;
+  padding:14px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#17284f,#273f76);
+  color:#fff;
+  margin:0 0 12px;
+  box-shadow:0 18px 34px rgba(23,40,79,.18);
+}
+.culture-legacy-box span{
+  color:#ffd6c8;
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+.culture-legacy-box strong{
+  font-size:21px;
+  line-height:1.1;
+}
+.culture-legacy-box small,
+.culture-legacy-box p{
+  color:rgba(255,255,255,.82);
+  font-size:13px;
+  line-height:1.4;
+  margin:0;
+}
+.culture-legacy-box a{
+  justify-self:start;
+  margin-top:4px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:36px;
+  padding:0 12px;
+  border-radius:999px;
+  background:#fff;
+  color:var(--navy);
+  font-weight:900;
+  text-decoration:none;
+}
 .culture-food-row{
   display:grid;
   grid-template-columns:1fr auto;
@@ -756,6 +797,39 @@ textarea{width:100%;padding:16px 18px;border-radius:18px;border:1px solid var(--
   gap:10px;
   margin-top:12px;
 }
+.culture-product-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+.culture-product-grid a{
+  text-decoration:none;
+  padding:13px;
+  border-radius:16px;
+  background:#fff4ed;
+  border:1px solid #ffd9c8;
+}
+.culture-product-grid span{
+  display:block;
+  color:#ef5537;
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  margin-bottom:5px;
+}
+.culture-product-grid strong{
+  display:block;
+  color:var(--navy);
+  font-size:16px;
+  line-height:1.2;
+}
+.culture-product-grid small{
+  display:block;
+  color:#66758f;
+  margin-top:5px;
+  line-height:1.35;
+}
 .culture-article-grid a{
   text-decoration:none;
   padding:12px;
@@ -779,5 +853,6 @@ textarea{width:100%;padding:16px 18px;border-radius:18px;border:1px solid var(--
   .result-subtitle{font-size:18px;}
   .visual-caption h3{font-size:28px;}
   .culture-article-grid{grid-template-columns:1fr;}
+  .culture-product-grid{grid-template-columns:1fr;}
   .culture-food-row{grid-template-columns:1fr;}
 }

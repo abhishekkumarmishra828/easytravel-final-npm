@@ -261,6 +261,8 @@ if (img) {
       return;
     }
     const hot = plan.foods[0];
+    const legacy = plan.legacy;
+    const products = plan.products;
     const foods = plan.foods.map(item => `
       <div class="culture-food-row">
         <div>
@@ -281,7 +283,26 @@ if (img) {
       <div class="culture-hot-caption">Hot local pick: ${hot.dish}</div>
       <h4>${plan.city} famous food and shopping</h4>
       <p>Package book karne se pehle yahan ka old/popular food, restaurant aur local article idea dekh lo.</p>
+      <div class="culture-legacy-box">
+        <span>40-50+ years legacy style pick</span>
+        <strong>${legacy.name}</strong>
+        <small>${legacy.dish} · ${legacy.area} · ${legacy.age}</small>
+        <p>${legacy.note}</p>
+        <a href="${legacy.mapUrl}" target="_blank" rel="noopener">Locate legacy restaurant</a>
+      </div>
       <div class="culture-food-list">${foods}</div>
+      <div class="culture-product-grid">
+        <a href="${products.edibleMapUrl}" target="_blank" rel="noopener">
+          <span>Edible product</span>
+          <strong>${products.edible}</strong>
+          <small>${products.ediblePlace}</small>
+        </a>
+        <a href="${products.wearableMapUrl}" target="_blank" rel="noopener">
+          <span>Cloth / article</span>
+          <strong>${products.wearable}</strong>
+          <small>${products.wearablePlace}</small>
+        </a>
+      </div>
       <div class="culture-article-grid">${articles}</div>
     `;
   }

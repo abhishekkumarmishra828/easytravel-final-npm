@@ -139,6 +139,36 @@
     Tatanagar: 'Jamshedpur'
   };
 
+  const legacyRestaurants = {
+    Delhi: { name: 'Moti Mahal', dish: 'Butter chicken', area: 'Daryaganj', age: '1947 legacy', note: 'Delhi food history ka classic stop.' },
+    Kolkata: { name: 'Nizam\'s Restaurant', dish: 'Kathi roll', area: 'New Market', age: '1932 legacy', note: 'Kolkata roll culture ka original-style landmark.' },
+    Varanasi: { name: 'Ram Bhandar', dish: 'Kachori sabzi', area: 'Thatheri Bazaar', age: 'old city legacy', note: 'Banaras breakfast trail ka trusted stop.' },
+    Jaipur: { name: 'Rawat Misthan Bhandar', dish: 'Pyaaz kachori', area: 'Sindhi Camp', age: 'local legacy', note: 'Jaipur snack stop tourists easily locate kar sakte hain.' },
+    'Jammu & Kashmir': { name: 'Ahdoos', dish: 'Kashmiri wazwan', area: 'Srinagar', age: '1918 legacy', note: 'Srinagar ka century-old food landmark.' },
+    Ranchi: { name: 'Kaveri Restaurant', dish: 'Dhuska with ghugni', area: 'Main Road Ranchi', age: 'long-running local favourite', note: 'Family-friendly local food stop.' },
+    Jamshedpur: { name: 'Anand Restaurant', dish: 'Dosa and local meals', area: 'Bistupur', age: 'old local favourite', note: 'Steel city travellers ke liye easy food stop.' },
+    Ahmedabad: { name: 'Chandravilas', dish: 'Fafda jalebi', area: 'Old Ahmedabad', age: 'since 1900', note: 'Ahmedabad heritage food stop.' },
+    Kanyakumari: { name: 'Hotel Saravana', dish: 'South Indian meals', area: 'Kanyakumari', age: 'pilgrim favourite', note: 'Temple/coast route par simple trusted meal.' },
+    Goa: { name: 'Viva Panjim', dish: 'Goan curry', area: 'Fontainhas', age: 'heritage dining', note: 'Old Goan neighbourhood dining feel.' },
+    Amritsar: { name: 'Kesar Da Dhaba', dish: 'Dal makhani', area: 'Chowk Passian', age: '1916 legacy', note: 'Amritsar ka iconic old dhaba.' },
+    Mumbai: { name: 'Britannia & Co.', dish: 'Berry pulao', area: 'Ballard Estate', age: '1923 legacy', note: 'Mumbai Parsi food heritage stop.' }
+  };
+
+  const productMarkets = {
+    Delhi: { edible: 'Old Delhi spices and namkeen', ediblePlace: 'Khari Baoli', wearable: 'Silver jewellery', wearablePlace: 'Dariba Kalan' },
+    Kolkata: { edible: 'Mishti and bakery items', ediblePlace: 'New Market', wearable: 'Baluchari saree', wearablePlace: 'Biswa Bangla Store' },
+    Varanasi: { edible: 'Banarasi paan and sweets', ediblePlace: 'Godowlia', wearable: 'Banarasi silk saree', wearablePlace: 'Peeli Kothi silk market' },
+    Jaipur: { edible: 'Ghewar and kachori', ediblePlace: 'Johari Bazaar / Rawat', wearable: 'Lac bangles and block print cloth', wearablePlace: 'Johari Bazaar' },
+    'Jammu & Kashmir': { edible: 'Kahwa and dry fruits', ediblePlace: 'Lal Chowk', wearable: 'Pashmina shawl', wearablePlace: 'Lal Chowk' },
+    Ranchi: { edible: 'Thekua and local snacks', ediblePlace: 'Main Road Ranchi', wearable: 'Tussar silk', wearablePlace: 'Jharcraft Ranchi' },
+    Jamshedpur: { edible: 'Litti chokha and local sweets', ediblePlace: 'Sakchi market', wearable: 'Tribal handicrafts', wearablePlace: 'Bistupur / state emporium' },
+    Ahmedabad: { edible: 'Fafda jalebi and khakhra', ediblePlace: 'Chandravilas / old city', wearable: 'Ghaghra choli and Bandhani', wearablePlace: 'Law Garden Night Market' },
+    Kanyakumari: { edible: 'Banana chips and coastal snacks', ediblePlace: 'Beach market', wearable: 'Pearl jewellery', wearablePlace: 'Kanyakumari local shops' },
+    Goa: { edible: 'Cashew and bebinca', ediblePlace: 'Panjim market', wearable: 'Azulejo tiles and beachwear', wearablePlace: 'Fontainhas / Panjim market' },
+    Amritsar: { edible: 'Papad wadiyan and pinni', ediblePlace: 'Hall Bazaar', wearable: 'Phulkari dupatta and Punjabi jutti', wearablePlace: 'Hall Bazaar' },
+    Mumbai: { edible: 'Chikki and farsan', ediblePlace: 'Crawford Market', wearable: 'Kolhapuri chappal and street fashion', wearablePlace: 'Colaba Causeway' }
+  };
+
   const defaultGuide = {
     foods: [
       { dish: 'Local thali', caption: 'Destination ke state-wise authentic thali ko try karein.', restaurant: 'Top rated local restaurant', area: 'city centre', since: 'local favourite' },
@@ -148,6 +178,13 @@
       { item: 'State handloom', place: 'government emporium', note: 'safe shopping idea' },
       { item: 'Local handicraft', place: 'old city market', note: 'souvenir pick' }
     ]
+  };
+
+  const defaultProducts = {
+    edible: 'Regional snacks and sweets',
+    ediblePlace: 'old city market',
+    wearable: 'State handloom and handicraft',
+    wearablePlace: 'government emporium'
   };
 
   function resolve(city) {
@@ -167,8 +204,26 @@
     getPlan(city) {
       const resolved = resolve(city);
       const guide = cityGuides[resolved] || defaultGuide;
+      const legacy = legacyRestaurants[resolved] || {
+        name: guide.foods[0].restaurant,
+        dish: guide.foods[0].dish,
+        area: guide.foods[0].area,
+        age: guide.foods[0].since,
+        note: guide.foods[0].caption
+      };
+      const products = productMarkets[resolved] || defaultProducts;
       return {
         city: resolved,
+        legacy: {
+          ...legacy,
+          mapUrl: maps(`${legacy.name} ${legacy.dish}`, resolved),
+          searchUrl: google(`${legacy.name} ${legacy.dish}`, resolved)
+        },
+        products: {
+          ...products,
+          edibleMapUrl: maps(`${products.edible} ${products.ediblePlace}`, resolved),
+          wearableMapUrl: maps(`${products.wearable} ${products.wearablePlace}`, resolved)
+        },
         foods: guide.foods.map(item => withLinks(item, resolved)),
         articles: guide.articles.map(item => ({
           ...item,
