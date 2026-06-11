@@ -43,7 +43,7 @@ function createChallenge(email, purpose, otp) {
 async function sendOtpEmail(email, otp, purpose, name) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    return { setupRequired: true };
+    return { setupRequired: true, demoOtp: otp };
   }
   const from = process.env.OTP_FROM_EMAIL || 'EasyTravel Pro <onboarding@resend.dev>';
   const subject = `EasyTravel Pro ${purpose === 'register' ? 'registration' : 'login'} OTP`;
@@ -93,10 +93,12 @@ module.exports = async function handler(req, res) {
     const sent = await sendOtpEmail(email, otp, purpose, name);
 
     if (sent.setupRequired) {
-      json(res, 500, {
-        success: false,
+      json(res, 200, {
+        success: true,
+        challenge,
         setupRequired: true,
-        message: 'RESEND_API_KEY env variable required for email OTP.'
+        demoOtp: sent.demoOtp,
+        message: 'Email OTP provider is not configured yet. Use the temporary OTP shown on screen.'
       });
       return;
     }

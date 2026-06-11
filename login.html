@@ -136,7 +136,7 @@
 
   function authErrorText(data, fallback) {
     if (data && data.setupRequired) {
-      return "OTP email service abhi configure nahi hai. Vercel me RESEND_API_KEY, OTP_SECRET aur OTP_FROM_EMAIL env add karna hoga.";
+      return "Email OTP provider abhi connect nahi hai. Temporary OTP screen par show hoga.";
     }
     return (data && data.message) || fallback;
   }
@@ -260,7 +260,11 @@
         otpEmail = payload.email;
         otpRow.style.display = "block";
         submitBtn.textContent = "Verify OTP";
-        showMsg(data.message || "OTP email par send ho gaya. 10 minute ke andar verify karo.");
+        if (data.demoOtp) {
+          showMsg(`Temporary registration OTP: ${data.demoOtp}. Email provider connect karne ke baad OTP email par aayega.`);
+        } else {
+          showMsg(data.message || "OTP email par send ho gaya. 10 minute ke andar verify karo.");
+        }
         otpInput.focus();
         return;
       }
