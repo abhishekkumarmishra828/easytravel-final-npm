@@ -20,6 +20,9 @@
     .tabs{display:flex;gap:12px;margin-bottom:20px}
     .tab{padding:12px 16px;border-radius:14px;border:1px solid #d8e2f5;background:#f8faff;font-weight:800;cursor:pointer}
     .tab.active{background:#ff7b57;color:#fff;border-color:#ff7b57}
+    .auth-help{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:center;margin:0 0 18px;padding:14px;border-radius:18px;background:#f4f8ff;border:1px solid #dbe6f8}
+    .auth-help b{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#1a2d55;color:#fff}
+    .auth-help p{margin:0;color:#5d708f;font-size:14px;line-height:1.45}
     .field{margin-bottom:14px}
     label{display:block;font-weight:700;margin-bottom:8px}
     input{width:100%;padding:14px 16px;border-radius:14px;border:1px solid #d8e2f5;font:inherit}
@@ -27,10 +30,6 @@
     button.submit:disabled{opacity:.8;cursor:wait}
     .muted{color:#617494;font-size:14px}
     .msg{margin-top:14px;padding:12px 14px;border-radius:12px;background:#f5f8ff;border:1px solid #d8e2f5;color:#243b67;display:none}
-    .otp-help{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:center;margin:0 0 18px;padding:14px;border-radius:18px;background:#f4f8ff;border:1px solid #dbe6f8}
-    .otp-help b{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#1a2d55;color:#fff}
-    .otp-help p{margin:0;color:#5d708f;font-size:14px;line-height:1.45}
-    .otp-row{display:none}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     a{text-decoration:none;color:inherit}
     @media (max-width:800px){.card{grid-template-columns:1fr}.left h1{font-size:42px}}
@@ -50,9 +49,9 @@
         <button class="tab active" id="loginTab" type="button">Login</button>
         <button class="tab" id="registerTab" type="button">Register</button>
       </div>
-      <div class="otp-help">
-        <b>OTP</b>
-        <p>Registration ke time email par 6 digit OTP aayega. Login simple password se hoga taaki repeat users jaldi enter kar sakein.</p>
+      <div class="auth-help">
+        <b>✓</b>
+        <p>Register once with email and password. After that, login directly and start exploring trips.</p>
       </div>
 
       <form id="authForm">
@@ -68,60 +67,37 @@
           <input id="email" type="email" placeholder="Enter email" required />
         </div>
 
-        <div class="field otp-row" id="otpRow">
-          <label>Enter OTP</label>
-          <input id="otp" inputmode="numeric" maxlength="6" placeholder="6 digit OTP" />
-        </div>
-
-        <div class="field" id="passwordRow">
+        <div class="field">
           <label>Password</label>
-          <input id="password" type="password" placeholder="Enter password" />
+          <input id="password" type="password" placeholder="Enter password" required />
         </div>
 
         <button class="submit" id="submitBtn" type="submit">Login now</button>
         <div class="msg" id="msg"></div>
       </form>
 
-      <p class="muted" style="margin-top:16px">Register: email OTP verify karo. Login: email + password se direct explore karo.</p>
+      <p class="muted" style="margin-top:16px">Step 1: Register - Step 2: Login - Step 3: Explore tours, packages, maps, local transport, and yatra guidance.</p>
     </div>
   </div>
 </div>
 
 <script src="/config.js"></script>
-
 <script>
   const API_BASE = window.EASYTRAVEL_API_BASE || "https://easytravel-backend.onrender.com";
-
   const loginTab = document.getElementById("loginTab");
   const registerTab = document.getElementById("registerTab");
   const nameRow = document.getElementById("nameRow");
   const form = document.getElementById("authForm");
   const msg = document.getElementById("msg");
   const submitBtn = document.getElementById("submitBtn");
-  const otpRow = document.getElementById("otpRow");
-  const otpInput = document.getElementById("otp");
-  const passwordRow = document.getElementById("passwordRow");
-  const passwordInput = document.getElementById("password");
-  const forgotToggle = document.getElementById("forgotToggle");
-  const forgotWrap = document.getElementById("forgotWrap");
-  const forgotBtn = document.getElementById("forgotBtn");
-
   let mode = "login";
-  let otpChallenge = "";
-  let otpEmail = "";
 
   function setMode(nextMode) {
     mode = nextMode;
-    otpChallenge = "";
-    otpEmail = "";
     loginTab.classList.toggle("active", mode === "login");
     registerTab.classList.toggle("active", mode === "register");
     nameRow.style.display = mode === "register" ? "grid" : "none";
-    otpRow.style.display = "none";
-    passwordRow.style.display = "block";
-    otpInput.value = "";
-    passwordInput.value = "";
-    submitBtn.textContent = mode === "register" ? "Send registration OTP" : "Login now";
+    submitBtn.textContent = mode === "register" ? "Create account" : "Login now";
     msg.style.display = "none";
   }
 
@@ -130,74 +106,12 @@
     msg.textContent = text;
   }
 
-  function otpApiBase() {
-    return window.location.origin || "";
-  }
-
-  function authErrorText(data, fallback) {
-    if (data && data.setupRequired) {
-      return "Email OTP service abhi connect nahi hai. Admin ko Vercel me RESEND_API_KEY add karna hoga.";
-    }
-    return (data && data.message) || fallback;
-  }
-
-  async function requestOtp(payload) {
-    const res = await fetch(otpApiBase() + "/api/auth/request-otp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.success) {
-      const error = new Error(authErrorText(data, "OTP send nahi ho pa raha."));
-      error.setupRequired = data && data.setupRequired;
-      throw error;
-    }
-    return data;
-  }
-
   function validPassword(password) {
     return /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{5,}$/.test(password);
   }
 
-  async function verifyOtp(payload) {
-    const res = await fetch(otpApiBase() + "/api/auth/verify-otp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.success) {
-      throw new Error(authErrorText(data, "OTP verify nahi ho pa raha."));
-    }
-    return data;
-  }
-
   loginTab.addEventListener("click", () => setMode("login"));
   registerTab.addEventListener("click", () => setMode("register"));
-  forgotToggle && forgotToggle.addEventListener("click", () => {
-    forgotWrap.style.display = forgotWrap.style.display === "none" ? "block" : "none";
-  });
-
-  forgotBtn && forgotBtn.addEventListener("click", async () => {
-    const email = document.getElementById("forgotEmail").value.trim();
-    if (!email) {
-      showMsg("Registered email enter karo.");
-      return;
-    }
-    try {
-      const res = await fetch(API_BASE + "/api/auth/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-      });
-      const data = await res.json();
-      showMsg(data.message || "Request sent");
-    } catch (error) {
-      console.error(error);
-      showMsg("Forget password request send nahi ho pa raha.");
-    }
-  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -205,8 +119,12 @@
 
     const payload = {
       email: document.getElementById("email").value.trim().toLowerCase(),
-      purpose: mode
+      password: document.getElementById("password").value.trim()
     };
+    if (!payload.password) {
+      showMsg("Password enter karo.");
+      return;
+    }
 
     if (mode === "register") {
       payload.name = document.getElementById("name").value.trim();
@@ -214,93 +132,52 @@
         showMsg("Register karne ke liye full name required hai.");
         return;
       }
-    }
-
-    try {
-      submitBtn.disabled = true;
-      if (mode === "login") {
-        const password = passwordInput.value.trim();
-        if (!password) {
-          showMsg("Password enter karo.");
-          return;
-        }
-        submitBtn.textContent = "Logging in...";
-        const endpoint = "/api/auth/login";
-        const res = await fetch(API_BASE + endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...payload, password })
-        });
-        const data = await res.json();
-        showMsg(data.message || "Done");
-        if (data.success && data.token) {
-          localStorage.setItem("easytravel_token", data.token);
-          localStorage.setItem("easytravel_user", JSON.stringify(data.user));
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 700);
-        }
-        return;
-      }
-
-      const password = passwordInput.value.trim();
-      if (!password) {
-        showMsg("Register karne ke liye password required hai.");
-        return;
-      }
-      if (!validPassword(password)) {
+      if (!validPassword(payload.password)) {
         showMsg("Password me minimum 5 characters, 1 Capital letter aur 1 Special symbol required hai.");
         return;
       }
+    }
 
-      if (!otpChallenge || otpEmail !== payload.email) {
-        submitBtn.textContent = "Sending OTP...";
-        const data = await requestOtp({ ...payload, password });
-        otpChallenge = data.challenge;
-        otpEmail = payload.email;
-        otpRow.style.display = "block";
-        submitBtn.textContent = "Verify OTP";
-        showMsg(data.message || "OTP email par send ho gaya. 10 minute ke andar verify karo.");
-        otpInput.focus();
-        return;
-      }
+    const endpoint = mode === "register" ? "/api/auth/register" : "/api/auth/login";
+    try {
+      submitBtn.disabled = true;
+      submitBtn.textContent = mode === "register" ? "Creating..." : "Logging in...";
+      const res = await fetch(API_BASE + endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
 
-      const otp = otpInput.value.trim();
-      if (!/^\d{6}$/.test(otp)) {
-        showMsg("6 digit OTP enter karo.");
-        return;
-      }
-      submitBtn.textContent = "Verifying OTP...";
-      const data = await verifyOtp({ ...payload, password, otp, challenge: otpChallenge });
-      if (data.success) {
-        submitBtn.textContent = "Creating account...";
-        const registerRes = await fetch(API_BASE + "/api/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: payload.name, email: payload.email, password })
-        });
-        const registerData = await registerRes.json();
-        if (!registerData.success) {
-          showMsg(registerData.message || "OTP verified, lekin registration save nahi ho pa raha.");
+      if (mode === "register") {
+        if (data.success) {
+          showMsg("Registration successful. Ab password se login karo.");
+          form.reset();
+          setMode("login");
+          document.getElementById("email").value = payload.email;
           return;
         }
-        showMsg("Registration successful. Ab password se login karo.");
-        form.reset();
-        setMode("login");
-        document.getElementById("email").value = payload.email;
+        showMsg(data.message || "Registration failed");
+        return;
+      }
+
+      showMsg(data.message || "Done");
+      if (data.success && data.token) {
+        localStorage.setItem("easytravel_token", data.token);
+        localStorage.setItem("easytravel_user", JSON.stringify(data.user));
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 700);
       }
     } catch (error) {
       console.error("Auth error:", error);
-      showMsg(error.message || "OTP server error. Thodi der baad fir try karo.");
+      showMsg("Server error. Backend check karke fir try karo.");
     } finally {
       submitBtn.disabled = false;
-      submitBtn.textContent = mode === "login"
-        ? "Login now"
-        : (otpChallenge ? "Verify OTP" : "Send registration OTP");
+      submitBtn.textContent = mode === "register" ? "Create account" : "Login now";
     }
   });
 </script>
-
-  <script src="/review-feature.js"></script>
+<script src="/review-feature.js"></script>
 </body>
 </html>
