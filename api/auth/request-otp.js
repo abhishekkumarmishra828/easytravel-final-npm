@@ -43,7 +43,7 @@ function createChallenge(email, purpose, otp) {
 async function sendOtpEmail(email, otp, purpose, name) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    return { setupRequired: true, demoOtp: otp };
+    return { setupRequired: true };
   }
   const from = process.env.OTP_FROM_EMAIL || 'EasyTravel Pro <onboarding@resend.dev>';
   const subject = `EasyTravel Pro ${purpose === 'register' ? 'registration' : 'login'} OTP`;
@@ -93,12 +93,10 @@ module.exports = async function handler(req, res) {
     const sent = await sendOtpEmail(email, otp, purpose, name);
 
     if (sent.setupRequired) {
-      json(res, 200, {
-        success: true,
-        challenge,
+      json(res, 503, {
+        success: false,
         setupRequired: true,
-        demoOtp: sent.demoOtp,
-        message: 'Email OTP provider is not configured yet. Use the temporary OTP shown on screen.'
+        message: 'Email OTP service is not connected yet. Add RESEND_API_KEY in Vercel environment variables.'
       });
       return;
     }
