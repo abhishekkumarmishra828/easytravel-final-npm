@@ -77,15 +77,14 @@ function citySpecificPlaceImage(city) {
       { name: 'Meghalaya', wiki: 'https://en.wikipedia.org/wiki/Meghalaya' }
     ],
     slides: [
-      '/assets/hero-show-1.png',
-      '/assets/hero-show-2.png',
-      '/assets/hero-show-3.png',
-      '/assets/hero-show-4.png',
-      '/assets/hero-show-5.png',
-      '/assets/hero-show-6.png',
-      '/assets/hero-show-7.png',
-      '/assets/hero-show-8.png',
-      '/assets/hero-show-9.png'
+      '/place-assets/dwarka-main.jpg',
+      '/place-assets/rameshwaram-sea.jpg',
+      '/place-assets/guwahati-river-view.jpg',
+      '/place-assets/varanasi-kashi-main.jpg',
+      '/place-assets/rishikesh-main.jpg',
+      '/place-assets/dwarka-sunset-birds.jpg',
+      '/place-assets/mumbai-main.jpg',
+      '/place-assets/haridwar-main.jpg'
     ]
   };
 
