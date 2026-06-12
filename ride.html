@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyTravel Ride Desk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="ride-page">
+  <header class="topbar">
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo-badge"><img src="/assets/title-tree.png" alt="EasyTravel logo" /></div>
+        <div>
+          <h1>EasyTravel Ride</h1>
+          <p>Local bike, auto and cab support for travellers</p>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="/">Travel planner</a>
+        <a href="/local-transport.html">Local transport</a>
+        <a href="/results.html?mode=train&from=Patna%20Junction%20(PNBE)&to=Delhi&date=2026-04-04&age=28">Demo results</a>
+      </nav>
+      <a class="nav-cta" href="#rideDesk">Get quote</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="ride-hero">
+      <div class="container ride-hero-inner">
+        <div>
+          <span class="section-kicker">College project monetization layer</span>
+          <h2>Local ride booking desk for station, hotel and sightseeing pickup.</h2>
+          <p>Bike, auto aur cab ka quick fare estimate. Real app me ye driver partner panel + payment + live tracking se connect hoga; demo me lead request and trusted fallback links diye gaye hain.</p>
+          <div class="ride-trust-row">
+            <span>Lower quote demo</span>
+            <span>WhatsApp request</span>
+            <span>Aggregator fallback</span>
+          </div>
+        </div>
+        <div class="ride-hero-card">
+          <span>Starting demo fare</span>
+          <strong>₹29</strong>
+          <p>Bike rides for short city transfers. Estimate city, distance and ride mode ke hisaab se update hota hai.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="rideDesk">
+      <div class="container ride-desk-layout">
+        <div class="ride-form-card">
+          <span class="section-kicker">Book your local ride</span>
+          <h3>Quick ride quote</h3>
+          <form id="rideForm">
+            <div class="ride-form-grid">
+              <div class="field">
+                <label>Pickup</label>
+                <input id="ridePickup" placeholder="Station / hotel / current location" value="Patna Junction" required />
+              </div>
+              <div class="field">
+                <label>Drop</label>
+                <input id="rideDrop" placeholder="Destination / tourist spot" value="Hotel near city centre" required />
+              </div>
+              <div class="field">
+                <label>City</label>
+                <input id="rideCity" placeholder="Delhi, Patna, Varanasi..." value="Delhi" required />
+              </div>
+              <div class="field">
+                <label>Distance</label>
+                <input id="rideDistance" type="number" min="1" max="80" value="6" required />
+              </div>
+              <div class="field">
+                <label>Ride type</label>
+                <select id="rideType">
+                  <option value="bike">Bike</option>
+                  <option value="auto">Auto</option>
+                  <option value="cab">Cab</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Travellers</label>
+                <input id="ridePeople" type="number" min="1" max="6" value="1" required />
+              </div>
+            </div>
+            <button class="primary-btn ride-submit" type="submit">Calculate ride fare</button>
+          </form>
+        </div>
+
+        <div class="ride-quote-card" id="rideQuoteCard">
+          <span class="section-kicker">Smart quote</span>
+          <h3 id="rideQuoteTitle">Bike ride estimate</h3>
+          <div class="ride-price-row">
+            <small id="rideMarketPrice">Market ₹89</small>
+            <strong id="rideOurPrice">₹79</strong>
+          </div>
+          <p id="rideQuoteText">Approx lower quote for short local transfer.</p>
+          <div class="ride-saving-pill" id="rideSavingPill">You save ₹10</div>
+          <div class="ride-actions">
+            <a id="rideWhatsapp" class="primary-btn" target="_blank" rel="noopener">Request on WhatsApp</a>
+            <a id="rideMaps" class="secondary-btn" target="_blank" rel="noopener">Open route map</a>
+          </div>
+          <div class="ride-fallback">
+            <h4>Need instant official booking?</h4>
+            <a href="https://www.uber.com/in/en/ride/" target="_blank" rel="noopener">Uber</a>
+            <a href="https://www.olacabs.com/" target="_blank" rel="noopener">Ola</a>
+            <a href="https://www.rapido.bike/" target="_blank" rel="noopener">Rapido</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container ride-info-band">
+        <div>
+          <h3>How this becomes real business later</h3>
+          <p>College demo me quote + lead request hai. Production me driver onboarding, KYC, admin dispatch, payment, refund policy, safety contacts, live tracking aur support dashboard add karna hoga.</p>
+        </div>
+        <a class="secondary-btn" href="/">Back to travel planner</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="/ride.js"></script>
+</body>
+</html>
