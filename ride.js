@@ -1,14 +1,13 @@
 (function () {
-  const popover = document.getElementById('ridePopover');
+  const popupRoot = document.getElementById('ridePopover');
   const closeBtn = document.getElementById('ridePopoverClose');
-  if (popover) {
-    const dismissed = sessionStorage.getItem('easytravel_ride_popover_closed');
-    if (!dismissed) {
-      setTimeout(() => popover.classList.add('show'), 900);
-    }
+  if (popupRoot) {
+    setTimeout(() => popupRoot.classList.add('show'), 700);
     closeBtn && closeBtn.addEventListener('click', () => {
-      popover.classList.remove('show');
-      sessionStorage.setItem('easytravel_ride_popover_closed', '1');
+      popupRoot.classList.remove('show');
+    });
+    popupRoot.addEventListener('click', (event) => {
+      if (event.target === popupRoot) popupRoot.classList.remove('show');
     });
   }
 
@@ -21,16 +20,50 @@
     cab: { base: 64, perKm: 21, min: 89, label: 'Cab' }
   };
 
+  const pickupInput = document.getElementById('ridePickup');
+  const pickupLabel = document.getElementById('ridePickupLabel');
+  const locationStatus = document.getElementById('rideLocationStatus');
+  const useLocationBtn = document.getElementById('useLocationBtn');
+  const rideTypeInput = document.getElementById('rideType');
+  const vehicleCards = document.querySelectorAll('.ride-vehicle-card');
+
   function rupee(value) {
-    return `₹${Math.max(0, Math.round(value)).toLocaleString('en-IN')}`;
+    return `Rs ${Math.max(0, Math.round(value)).toLocaleString('en-IN')}`;
+  }
+
+  function setPickup(text, detail) {
+    pickupInput.value = text;
+    pickupLabel.textContent = text;
+    locationStatus.textContent = detail;
+    calculateQuote();
+  }
+
+  function requestLocation() {
+    if (!navigator.geolocation) {
+      setPickup('City centre pickup', 'Geolocation supported nahi hai, city centre fallback use ho raha hai.');
+      return;
+    }
+    pickupLabel.textContent = 'Fetching your device location...';
+    locationStatus.textContent = 'Browser location permission allow karo.';
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude.toFixed(5);
+        const lng = position.coords.longitude.toFixed(5);
+        setPickup(`Current location (${lat}, ${lng})`, 'Device location fetched. Driver pickup map link me coordinates use honge.');
+      },
+      () => {
+        setPickup('City centre pickup', 'Location permission nahi mila, city centre fallback use ho raha hai.');
+      },
+      { enableHighAccuracy: true, timeout: 9000, maximumAge: 60000 }
+    );
   }
 
   function calculateQuote() {
-    const pickup = document.getElementById('ridePickup').value.trim() || 'Pickup';
+    const pickup = pickupInput.value || 'Current location';
     const drop = document.getElementById('rideDrop').value.trim() || 'Drop';
     const city = document.getElementById('rideCity').value.trim() || 'your city';
     const distance = Number(document.getElementById('rideDistance').value || 1);
-    const type = document.getElementById('rideType').value;
+    const type = rideTypeInput.value || 'bike';
     const people = Number(document.getElementById('ridePeople').value || 1);
     const rate = pricing[type] || pricing.bike;
     const capacityCharge = type === 'bike' ? Math.max(0, people - 1) * 16 : Math.max(0, people - 3) * 18;
@@ -44,21 +77,32 @@
     document.getElementById('rideQuoteText').textContent = `${pickup} to ${drop}, ${city}. Approx ${distance} km local transfer for ${people} traveller${people > 1 ? 's' : ''}.`;
     document.getElementById('rideSavingPill').textContent = `You save ${rupee(market - ours)}`;
 
-    const message = `EasyTravel Ride Request%0AType: ${rate.label}%0ACity: ${city}%0APickup: ${pickup}%0ADrop: ${drop}%0ADistance: ${distance} km%0ATravellers: ${people}%0AQuote: ${rupee(ours)}`;
+    const message = `EasyTravel Ride Request%0AType: ${rate.label}%0ACity: ${city}%0APickup: ${pickup}%0ADestination: ${drop}%0ADistance: ${distance} km%0ATravellers: ${people}%0AQuote: ${rupee(ours)}`;
     document.getElementById('rideWhatsapp').href = `https://wa.me/917366930984?text=${message}`;
-    document.getElementById('rideMaps').href = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(pickup + ', ' + city)}&destination=${encodeURIComponent(drop + ', ' + city)}`;
+    document.getElementById('rideMaps').href = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(pickup)}&destination=${encodeURIComponent(drop + ', ' + city)}`;
   }
+
+  vehicleCards.forEach((card) => {
+    card.addEventListener('click', () => {
+      vehicleCards.forEach(item => item.classList.remove('active'));
+      card.classList.add('active');
+      rideTypeInput.value = card.dataset.rideType || 'bike';
+      calculateQuote();
+    });
+  });
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     calculateQuote();
   });
 
-  ['ridePickup', 'rideDrop', 'rideCity', 'rideDistance', 'rideType', 'ridePeople'].forEach(id => {
+  ['rideDrop', 'rideCity', 'rideDistance', 'ridePeople'].forEach(id => {
     const input = document.getElementById(id);
     input && input.addEventListener('input', calculateQuote);
     input && input.addEventListener('change', calculateQuote);
   });
 
+  useLocationBtn && useLocationBtn.addEventListener('click', requestLocation);
+  requestLocation();
   calculateQuote();
 })();

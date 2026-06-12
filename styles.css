@@ -1049,24 +1049,36 @@ textarea{width:100%;padding:16px 18px;border-radius:18px;border:1px solid var(--
 }
 
 /* Local ride monetization layer */
-.ride-popover{
+.ride-popover-backdrop{
   position:fixed;
-  right:22px;
-  bottom:24px;
   z-index:60;
+  inset:0;
+  display:grid;
+  place-items:start end;
+  padding:96px 28px 28px;
+  background:rgba(10,23,48,.18);
+  backdrop-filter:blur(4px);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .28s ease;
+}
+.ride-popover-backdrop.show{
+  opacity:1;
+  pointer-events:auto;
+}
+.ride-popover{
+  position:relative;
   width:min(340px,calc(100vw - 28px));
   padding:18px;
   border-radius:24px;
   background:linear-gradient(145deg,#ffffff,#f7fbff);
   border:1px solid #dce6f7;
   box-shadow:0 28px 80px rgba(10,23,48,.22);
-  transform:translateX(120%);
-  opacity:0;
-  transition:transform .35s ease, opacity .35s ease;
+  transform:translateY(-14px) scale(.98);
+  transition:transform .28s ease;
 }
-.ride-popover.show{
-  transform:translateX(0);
-  opacity:1;
+.ride-popover-backdrop.show .ride-popover{
+  transform:translateY(0) scale(1);
 }
 .ride-popover-close{
   position:absolute;
@@ -1222,6 +1234,84 @@ textarea{width:100%;padding:16px 18px;border-radius:18px;border:1px solid var(--
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:14px;
 }
+.ride-location-card{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:14px;
+  align-items:center;
+  margin:4px 0 16px;
+  padding:16px;
+  border-radius:22px;
+  background:linear-gradient(135deg,#eef5ff,#ffffff);
+  border:1px solid #dbe7f8;
+}
+.ride-location-card span{
+  display:block;
+  color:#6b7f9f;
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+.ride-location-card strong{
+  display:block;
+  margin:5px 0;
+  color:var(--navy);
+  font-size:20px;
+  line-height:1.2;
+}
+.ride-location-card small{
+  color:#61718f;
+  line-height:1.4;
+}
+.ride-location-card .secondary-btn{
+  height:48px;
+  padding:0 16px;
+  white-space:nowrap;
+}
+.ride-vehicle-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin:16px 0 12px;
+}
+.ride-vehicle-card{
+  border:1px solid #dce6f7;
+  border-radius:20px;
+  padding:0;
+  overflow:hidden;
+  background:#fff;
+  cursor:pointer;
+  text-align:left;
+  box-shadow:0 14px 30px rgba(25,44,84,.08);
+  transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.ride-vehicle-card:hover,
+.ride-vehicle-card.active{
+  transform:translateY(-3px);
+  border-color:#ff967b;
+  box-shadow:0 18px 36px rgba(255,109,74,.15);
+}
+.ride-vehicle-card img{
+  width:100%;
+  height:112px;
+  object-fit:cover;
+}
+.ride-vehicle-card span,
+.ride-vehicle-card small{
+  display:block;
+  padding:0 12px;
+}
+.ride-vehicle-card span{
+  margin-top:12px;
+  color:var(--navy);
+  font-size:18px;
+  font-weight:900;
+}
+.ride-vehicle-card small{
+  padding-bottom:13px;
+  color:#66758f;
+  line-height:1.35;
+}
 .ride-submit{
   width:100%;
   margin-top:8px;
@@ -1308,12 +1398,14 @@ textarea{width:100%;padding:16px 18px;border-radius:18px;border:1px solid var(--
   }
 }
 @media (max-width:680px){
-  .ride-popover{
-    right:14px;
-    bottom:14px;
+  .ride-popover-backdrop{
+    place-items:end center;
+    padding:14px;
   }
   .ride-form-grid,
-  .ride-actions{
+  .ride-actions,
+  .ride-location-card,
+  .ride-vehicle-grid{
     grid-template-columns:1fr;
   }
   .ride-hero-card strong,

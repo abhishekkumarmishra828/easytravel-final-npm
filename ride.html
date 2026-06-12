@@ -21,6 +21,7 @@
       </div>
       <nav class="nav-links">
         <a href="/">Travel planner</a>
+        <a href="/ride.html">Book your rides</a>
         <a href="/local-transport.html">Local transport</a>
         <a href="/results.html?mode=train&from=Patna%20Junction%20(PNBE)&to=Delhi&date=2026-04-04&age=28">Demo results</a>
       </nav>
@@ -33,18 +34,18 @@
       <div class="container ride-hero-inner">
         <div>
           <span class="section-kicker">College project monetization layer</span>
-          <h2>Local ride booking desk for station, hotel and sightseeing pickup.</h2>
-          <p>Bike, auto aur cab ka quick fare estimate. Real app me ye driver partner panel + payment + live tracking se connect hoga; demo me lead request and trusted fallback links diye gaye hain.</p>
+          <h2>Book your local ride from your current location.</h2>
+          <p>Pickup device location se auto fetch hoga. User ko sirf destination select karna hai, phir bike, auto ya cab image card choose karke quick quote mil jayega.</p>
           <div class="ride-trust-row">
+            <span>Location pickup</span>
             <span>Lower quote demo</span>
             <span>WhatsApp request</span>
-            <span>Aggregator fallback</span>
           </div>
         </div>
         <div class="ride-hero-card">
           <span>Starting demo fare</span>
-          <strong>₹29</strong>
-          <p>Bike rides for short city transfers. Estimate city, distance and ride mode ke hisaab se update hota hai.</p>
+          <strong>Rs 29</strong>
+          <p>Bike rides for short city transfers. Estimate city, destination, distance and ride mode ke hisaab se update hota hai.</p>
         </div>
       </div>
     </section>
@@ -55,35 +56,64 @@
           <span class="section-kicker">Book your local ride</span>
           <h3>Quick ride quote</h3>
           <form id="rideForm">
+            <div class="ride-location-card">
+              <div>
+                <span>Pickup location</span>
+                <strong id="ridePickupLabel">Fetching your device location...</strong>
+                <small id="rideLocationStatus">Browser permission allow karo. Agar permission deny hua to city centre pickup use hoga.</small>
+              </div>
+              <button class="secondary-btn" id="useLocationBtn" type="button">Use my location</button>
+            </div>
+            <input id="ridePickup" type="hidden" value="Current location" />
+
             <div class="ride-form-grid">
               <div class="field">
-                <label>Pickup</label>
-                <input id="ridePickup" placeholder="Station / hotel / current location" value="Patna Junction" required />
-              </div>
-              <div class="field">
-                <label>Drop</label>
-                <input id="rideDrop" placeholder="Destination / tourist spot" value="Hotel near city centre" required />
+                <label>Destination</label>
+                <input list="rideDestinations" id="rideDrop" placeholder="Select drop destination" value="India Gate" required />
+                <datalist id="rideDestinations">
+                  <option value="India Gate"></option>
+                  <option value="Railway Station"></option>
+                  <option value="Airport"></option>
+                  <option value="Hotel near city centre"></option>
+                  <option value="Kashi Vishwanath Temple"></option>
+                  <option value="Assi Ghat"></option>
+                  <option value="Gateway of India"></option>
+                  <option value="Baga Beach"></option>
+                  <option value="Kedarnath base point"></option>
+                  <option value="Vaishno Devi Katra"></option>
+                </datalist>
               </div>
               <div class="field">
                 <label>City</label>
                 <input id="rideCity" placeholder="Delhi, Patna, Varanasi..." value="Delhi" required />
               </div>
               <div class="field">
-                <label>Distance</label>
+                <label>Approx distance km</label>
                 <input id="rideDistance" type="number" min="1" max="80" value="6" required />
-              </div>
-              <div class="field">
-                <label>Ride type</label>
-                <select id="rideType">
-                  <option value="bike">Bike</option>
-                  <option value="auto">Auto</option>
-                  <option value="cab">Cab</option>
-                </select>
               </div>
               <div class="field">
                 <label>Travellers</label>
                 <input id="ridePeople" type="number" min="1" max="6" value="1" required />
               </div>
+            </div>
+
+            <input id="rideType" type="hidden" value="bike" />
+            <div class="ride-vehicle-grid" aria-label="Choose ride type">
+              <button class="ride-vehicle-card active" type="button" data-ride-type="bike">
+                <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=600&q=80" alt="Bike ride" />
+                <span>Bike</span>
+                <small>Fast solo pickup</small>
+              </button>
+              <button class="ride-vehicle-card" type="button" data-ride-type="auto">
+                <img src="https://images.unsplash.com/photo-1600320254374-ce2d293c324e?auto=format&fit=crop&w=600&q=80" alt="Auto ride" />
+                <span>Auto</span>
+                <small>Budget city ride</small>
+              </button>
+              <button class="ride-vehicle-card" type="button" data-ride-type="cab">
+                <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=600&q=80" alt="Cab ride" />
+                <span>Cab</span>
+                <small>Comfort ride</small>
+              </button>
             </div>
             <button class="primary-btn ride-submit" type="submit">Calculate ride fare</button>
           </form>
@@ -93,11 +123,11 @@
           <span class="section-kicker">Smart quote</span>
           <h3 id="rideQuoteTitle">Bike ride estimate</h3>
           <div class="ride-price-row">
-            <small id="rideMarketPrice">Market ₹89</small>
-            <strong id="rideOurPrice">₹79</strong>
+            <small id="rideMarketPrice">Market Rs 89</small>
+            <strong id="rideOurPrice">Rs 79</strong>
           </div>
           <p id="rideQuoteText">Approx lower quote for short local transfer.</p>
-          <div class="ride-saving-pill" id="rideSavingPill">You save ₹10</div>
+          <div class="ride-saving-pill" id="rideSavingPill">You save Rs 10</div>
           <div class="ride-actions">
             <a id="rideWhatsapp" class="primary-btn" target="_blank" rel="noopener">Request on WhatsApp</a>
             <a id="rideMaps" class="secondary-btn" target="_blank" rel="noopener">Open route map</a>

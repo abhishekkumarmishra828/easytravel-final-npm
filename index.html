@@ -23,6 +23,7 @@
         <a href="#discover">Discover</a>
         <a href="#states">Popular states</a>
         <a href="#why">Why us</a>
+        <a href="/ride.html">Book your rides</a>
         <a href="/results.html?mode=train&from=Patna%20Junction%20(PNBE)&to=Delhi&date=2026-04-04&age=28">Demo results</a>
       </nav>
       <a href="/login.html" style="font-weight:800;color:var(--navy)">Login</a>
@@ -285,18 +286,20 @@
     </div>
   </footer>
 
-  <aside class="ride-popover" id="ridePopover" aria-label="Local ride offer">
-    <button class="ride-popover-close" id="ridePopoverClose" type="button" aria-label="Close ride offer">x</button>
-    <div class="ride-popover-badge">New local ride</div>
-    <h3>Book your local ride</h3>
-    <p>Station, hotel ya tourist spot ke liye bike, auto aur cab ka quick quote. Demo fare Ola/Uber/Rapido se approx 5-10 rupaye lower dikhata hai.</p>
-    <div class="ride-popover-grid">
-      <span>Bike</span>
-      <span>Auto</span>
-      <span>Cab</span>
-    </div>
-    <a class="ride-popover-cta" href="/ride.html">Open ride desk</a>
-  </aside>
+  <div class="ride-popover-backdrop" id="ridePopover" aria-label="Book your ride notification">
+    <aside class="ride-popover">
+      <button class="ride-popover-close" id="ridePopoverClose" type="button" aria-label="Close ride offer">x</button>
+      <div class="ride-popover-badge">Book your ride</div>
+      <h3>Local ride chahiye?</h3>
+      <p>Destination explore karne se pehle bike, auto ya cab ka quick quote check karo. Pickup device location se auto fetch hoga.</p>
+      <div class="ride-popover-grid">
+        <span>Bike</span>
+        <span>Auto</span>
+        <span>Cab</span>
+      </div>
+      <a class="ride-popover-cta" href="/ride.html">Book your ride</a>
+    </aside>
+  </div>
 
  <script src="/config.js"></script>
 <script src="/data.js"></script>
