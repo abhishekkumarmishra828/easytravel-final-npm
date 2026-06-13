@@ -286,18 +286,20 @@
     </div>
   </footer>
 
-  <div class="ride-popover-backdrop" id="ridePopover" aria-label="Book your ride notification">
+  <div class="ride-popover-backdrop" id="ridePopover" aria-label="Book your ride notification" role="dialog" aria-modal="true">
     <aside class="ride-popover">
       <button class="ride-popover-close" id="ridePopoverClose" type="button" aria-label="Close ride offer">x</button>
-      <div class="ride-popover-badge">Book your ride</div>
-      <h3>Local ride chahiye?</h3>
-      <p>Destination explore karne se pehle bike, auto ya cab ka quick quote check karo. Pickup device location se auto fetch hoga.</p>
+      <div class="ride-popover-icon" aria-hidden="true">Go</div>
+      <div class="ride-popover-badge">Local ride alert</div>
+      <h3>Book Your Ride</h3>
+      <p><strong>Bike, auto, cab</strong> aur outstation ride ka quick quote check karo. Pickup device location se auto fetch hoga.</p>
       <div class="ride-popover-grid">
         <span>Bike</span>
         <span>Auto</span>
         <span>Cab</span>
       </div>
-      <a class="ride-popover-cta" href="/ride.html">Book your ride</a>
+      <a class="ride-popover-cta" href="/ride.html">Check ride fare</a>
+      <small>Fast local pickup for station, hotel and destination travel.</small>
     </aside>
   </div>
 
