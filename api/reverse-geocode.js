@@ -1,6 +1,10 @@
 const { guard, json } = require('./_security');
 
 module.exports = async function handler(req, res) {
+  if (req.method !== 'GET') {
+    json(res, 405, { success: false, message: 'Method not allowed' });
+    return;
+  }
   if (!(await guard(req, res, 'reverse-geocode', 40, 60 * 1000))) return;
   const lat = Number(req.query.lat);
   const lng = Number(req.query.lng);
@@ -19,7 +23,15 @@ module.exports = async function handler(req, res) {
     });
     const data = await response.json();
     const address = data.display_name || `Current location ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-    json(res, 200, { success: true, address });
+    const parts = data.address || {};
+    json(res, 200, {
+      success: true,
+      address,
+      city: parts.city || parts.town || parts.village || parts.suburb || '',
+      state_district: parts.state_district || parts.county || '',
+      state: parts.state || '',
+      postcode: parts.postcode || ''
+    });
   } catch (error) {
     json(res, 502, { success: false, message: 'Address lookup failed.' });
   }

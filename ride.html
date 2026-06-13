@@ -26,18 +26,23 @@
       </nav>
 
       <form id="rideForm" class="ride-app-form">
+        <div class="ride-map-preview">
+          <iframe id="rideMapPreview" title="Pickup map preview" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <span id="rideMapCaption">Map will appear after location permission.</span>
+        </div>
+
         <div class="ride-input-row">
           <span>From</span>
-          <input id="ridePickupText" value="Fetching current location..." aria-label="Pickup location" readonly />
+          <input id="ridePickupText" placeholder="Fetching current location..." aria-label="Pickup location" readonly />
           <button id="useLocationBtn" type="button">Locate</button>
         </div>
-        <input id="ridePickup" type="hidden" value="Current location" />
+        <input id="ridePickup" type="hidden" value="" />
         <input id="rideLat" type="hidden" />
         <input id="rideLng" type="hidden" />
 
         <div class="ride-input-row">
           <span>To</span>
-          <input list="rideDestinations" id="rideDrop" placeholder="Search for a locality or landmark" value="India Gate" required />
+          <input list="rideDestinations" id="rideDrop" placeholder="Search for a locality or landmark" required />
           <datalist id="rideDestinations">
             <option value="India Gate"></option>
             <option value="Railway Station"></option>
@@ -65,16 +70,16 @@
         <div class="ride-app-grid">
           <div class="ride-input-row compact">
             <span>City</span>
-            <input id="rideCity" placeholder="Delhi, Patna, Varanasi..." value="Delhi" required />
+            <input id="rideCity" placeholder="Auto-filled from location" required />
           </div>
           <div class="ride-input-row compact">
             <span>Km</span>
-            <input id="rideDistance" type="number" min="1" max="250" value="6" required />
+            <input id="rideDistance" type="number" min="1" max="250" placeholder="Distance" required />
           </div>
         </div>
 
         <input id="rideType" type="hidden" value="auto" />
-        <div class="ride-location-status" id="rideLocationStatus">Location permission allow karo. Exact address milne par pickup automatically update hoga.</div>
+        <div class="ride-location-status" id="rideLocationStatus">Location permission allow karo. City aur pickup automatically fill hoga.</div>
 
         <h3 id="availableRideHeading">Available rides</h3>
         <div class="ride-options-list" id="rideOptionsList">
@@ -126,7 +131,7 @@
       <div class="ride-quote-floating" id="rideQuoteCard">
         <span id="rideQuoteTitle">Auto ride estimate</span>
         <div><small id="rideMarketPrice">Market Rs 122</small><strong id="rideOurPrice">Rs 112</strong></div>
-        <p id="rideQuoteText">Current location to India Gate, Delhi.</p>
+        <p id="rideQuoteText">Allow location, then select destination to see quote.</p>
         <b id="rideSavingPill">You save Rs 10</b>
         <div class="ride-actions">
           <a id="rideWhatsapp" class="primary-btn" target="_blank" rel="noopener">Request on WhatsApp</a>

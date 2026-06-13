@@ -50,6 +50,8 @@
   const rideTypeInput = document.getElementById('rideType');
   const rideRows = document.querySelectorAll('.ride-option-row');
   const tabs = document.querySelectorAll('.ride-tabs button');
+  const mapPreview = document.getElementById('rideMapPreview');
+  const mapCaption = document.getElementById('rideMapCaption');
   let activeTab = 'daily';
 
   function rupee(value) {
@@ -70,6 +72,7 @@
     if (coords) {
       latInput.value = coords.lat;
       lngInput.value = coords.lng;
+      updateMap(coords.lat, coords.lng);
     }
     locationStatus.textContent = detail;
     calculateQuote();
@@ -79,7 +82,20 @@
     const res = await fetch(`/api/reverse-geocode?lat=${encodeURIComponent(lat)}&lng=${encodeURIComponent(lng)}`);
     const data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.message || 'Address lookup failed');
-    return data.address;
+    return data;
+  }
+
+  function updateMap(lat, lng) {
+    if (!mapPreview) return;
+    mapPreview.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.01}%2C${lat - 0.01}%2C${lng + 0.01}%2C${lat + 0.01}&layer=mapnik&marker=${lat}%2C${lng}`;
+    if (mapCaption) mapCaption.textContent = 'Live pickup map preview';
+  }
+
+  function setCityFromAddress(data) {
+    const cityInput = document.getElementById('rideCity');
+    if (!cityInput || cityInput.value.trim()) return;
+    const city = data.city || data.town || data.village || data.state_district || data.state || '';
+    if (city) cityInput.value = city;
   }
 
   function requestLocation() {
@@ -95,11 +111,12 @@
         const lat = position.coords.latitude.toFixed(6);
         const lng = position.coords.longitude.toFixed(6);
         try {
-          const address = await reverseGeocode(lat, lng);
-          setPickup(address, 'Location fetched. Agar address thoda wrong lage to pickup field edit kar sakte ho.', { lat, lng });
+          const data = await reverseGeocode(lat, lng);
+          setCityFromAddress(data);
+          setPickup(data.address, 'Location fetched. Agar address thoda wrong lage to pickup field edit kar sakte ho.', { lat: Number(lat), lng: Number(lng) });
           pickupText.removeAttribute('readonly');
         } catch (error) {
-          setPickup(`Current location ${lat}, ${lng}`, 'Coordinates fetched, address lookup fail hua. Pickup field edit kar sakte ho.', { lat, lng });
+          setPickup(`Current location ${lat}, ${lng}`, 'Coordinates fetched, address lookup fail hua. Pickup field edit kar sakte ho.', { lat: Number(lat), lng: Number(lng) });
           pickupText.removeAttribute('readonly');
         }
       },
@@ -154,7 +171,8 @@
       document.getElementById('rideShowcaseTitle').textContent = content.title;
       document.getElementById('rideShowcaseText').textContent = content.text;
       document.getElementById('rideShowcasePanel').style.backgroundImage = `linear-gradient(90deg,rgba(9,20,44,.32),rgba(9,20,44,.52)),url('${content.hero}')`;
-      document.getElementById('rideDistance').value = content.distance;
+      const distanceInput = document.getElementById('rideDistance');
+      if (!distanceInput.value) distanceInput.value = content.distance;
       document.getElementById('availableRideHeading').textContent = activeTab === 'daily' ? 'Available rides' : activeTab === 'outstation' ? 'Outstation rides' : 'Rental packages';
       calculateQuote();
     });
@@ -186,6 +204,7 @@
 
   useLocationBtn && useLocationBtn.addEventListener('click', requestLocation);
   document.getElementById('rideShowcasePanel').style.backgroundImage = `linear-gradient(90deg,rgba(9,20,44,.32),rgba(9,20,44,.52)),url('${tabContent.daily.hero}')`;
+  if (mapCaption) mapCaption.textContent = 'Map will appear after location permission.';
   requestLocation();
   calculateQuote();
 })();
