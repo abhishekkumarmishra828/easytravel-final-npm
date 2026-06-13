@@ -23,6 +23,7 @@
     .auth-help{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:center;margin:0 0 18px;padding:14px;border-radius:18px;background:#f4f8ff;border:1px solid #dbe6f8}
     .auth-help b{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#1a2d55;color:#fff}
     .auth-help p{margin:0;color:#5d708f;font-size:14px;line-height:1.45}
+    .trust-note{margin:0 0 18px;padding:12px 14px;border-radius:16px;background:#fffaf4;border:1px solid #ffe2c5;color:#6f553f;font-size:13px;line-height:1.55}
     .field{margin-bottom:14px}
     .otp-row{display:none}
     label{display:block;font-weight:700;margin-bottom:8px}
@@ -33,7 +34,7 @@
     .msg{margin-top:14px;padding:12px 14px;border-radius:12px;background:#f5f8ff;border:1px solid #d8e2f5;color:#243b67;display:none}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     a{text-decoration:none;color:inherit}
-    @media (max-width:800px){.card{grid-template-columns:1fr}.left h1{font-size:42px}}
+    @media (max-width:800px){.wrap{padding:12px}.card{grid-template-columns:1fr;border-radius:22px}.left{padding:28px}.left h1{font-size:34px}.right{padding:22px}.row{grid-template-columns:1fr}.field[style]{grid-column:auto!important}}
   </style>
 </head>
 <body>
@@ -54,6 +55,7 @@
         <b>OTP</b>
         <p>Registration ke time email OTP verify hoga. Login simple email + password se direct rahega.</p>
       </div>
+      <p class="trust-note">Use only this official HTTPS website. EasyTravel Pro college project travel planning ke liye hai; kabhi bhi bank OTP, card PIN, ya personal account password yahan enter mat karein.</p>
 
       <form id="authForm">
         <div class="row" id="nameRow" style="display:none">

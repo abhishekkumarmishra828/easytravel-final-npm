@@ -156,15 +156,61 @@ button, input, select { font: inherit; }
   .planner-grid, .info-grid, .transport-mode-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 780px) {
-  .nav-links { display:none; }
+  .topbar{position:relative;}
+  .nav{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:12px;
+    align-items:start;
+    padding:12px 0;
+  }
+  .brand{min-width:0;}
+  .brand h1{font-size:22px;}
+  .brand p{font-size:12px;line-height:1.25;}
+  .logo-badge{width:46px;height:46px;border-radius:16px;}
+  .nav-links{
+    grid-column:1 / -1;
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    padding:4px 0 8px;
+    scrollbar-width:none;
+  }
+  .nav-links::-webkit-scrollbar{display:none;}
+  .nav-links a{
+    flex:0 0 auto;
+    padding:10px 12px;
+    border-radius:999px;
+    background:#eef4ff;
+    font-size:14px;
+  }
+  .nav > a[href="/login.html"]{justify-self:end;padding:10px 12px;border-radius:999px;background:#f5f8ff;}
+  .nav > div[style*="display:flex"]{
+    grid-column:1 / -1;
+    justify-content:space-between;
+  }
+  .nav-cta{
+    grid-column:1 / -1;
+    text-align:center;
+    border-radius:18px;
+  }
   .container { width: calc(100vw - 22px); }
-  .hero { min-height: 780px; }
-  .hero-inner { min-height: 780px; }
+  .hero { min-height: auto; border-radius:0 0 28px 28px; }
+  .hero-inner { min-height: auto; padding:34px 0 20px; }
   .form-grid, .planner-grid, .info-grid, .transport-mode-grid { grid-template-columns: 1fr; }
   .form-grid .field.mode, .form-grid .action-wrap { grid-column: auto; }
   .ticket-card { grid-template-columns: 1fr; }
-  .search-panel { padding: 18px; }
-  .hero h2 { font-size: 52px; }
+  .search-panel { padding: 16px; border-radius:22px; }
+  .hero h2 { font-size: 40px; line-height:1.03; letter-spacing:0; }
+  .hero p{font-size:18px;}
+  .hero-kicker{width:auto;font-size:14px;}
+  .field input,
+  .field select,
+  .primary-btn,
+  .secondary-btn{height:58px;border-radius:18px;font-size:16px;}
+  .mood-grid{grid-template-columns:1fr;}
+  .mood-card{min-height:260px;border-radius:22px;}
+  .mood-overlay h3{font-size:28px;}
   .recommend-card h3 { font-size: 30px; }
 }
 
@@ -1757,13 +1803,37 @@ textarea{width:100%;padding:16px 18px;border-radius:18px;border:1px solid var(--
   }
 }
 @media (max-width:620px){
+  .ride-app-shell{
+    min-height:auto;
+  }
+  .ride-booking-panel{
+    min-height:auto;
+    padding-bottom:18px;
+  }
   .ride-app-head{
     padding:14px;
+    gap:8px;
+    grid-template-columns:auto auto 1fr auto;
+  }
+  .ride-app-head strong{
+    font-size:16px;
+  }
+  .ride-map-preview{
+    min-height:190px;
   }
   .ride-tabs,
   .ride-app-form{
     padding-left:12px;
     padding-right:12px;
+  }
+  .ride-tabs{
+    gap:8px;
+    overflow-x:auto;
+  }
+  .ride-tabs button{
+    flex:0 0 auto;
+    padding:10px 12px;
+    font-size:13px;
   }
   .ride-app-grid,
   .ride-input-row{
@@ -1776,16 +1846,44 @@ textarea{width:100%;padding:16px 18px;border-radius:18px;border:1px solid var(--
   .ride-input-row span{
     padding-left:0;
   }
+  .ride-option-row{
+    grid-template-columns:58px 1fr auto;
+    gap:10px;
+    padding:12px 10px;
+  }
+  .ride-option-row img{
+    width:58px;
+    height:48px;
+  }
+  .ride-option-row strong{
+    font-size:18px;
+  }
+  .ride-option-row span{
+    font-size:13px;
+  }
+  .ride-confirm-btn{
+    min-height:58px;
+    border-radius:16px;
+  }
   .ride-showcase-copy{
     left:22px;
     right:22px;
+    top:34%;
   }
   .ride-showcase-copy h1{
-    font-size:34px;
+    font-size:32px;
+  }
+  .ride-showcase-copy p{
+    font-size:17px;
   }
   .ride-quote-floating{
     left:14px;
     right:14px;
     width:auto;
+    bottom:18px;
+    padding:16px;
+  }
+  .ride-quote-floating .ride-actions{
+    grid-template-columns:1fr;
   }
 }

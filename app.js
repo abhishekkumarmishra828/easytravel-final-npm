@@ -19,7 +19,7 @@ function citySpecificPlaceImage(city) {
 
 (function requireAuthForExplore(){
   const current = window.location.pathname.split('/').pop() || 'index.html';
-  const publicPages = ['login.html'];
+  const publicPages = ['', 'index.html', 'login.html', 'ride.html'];
   const token = localStorage.getItem('easytravel_token');
   if (!publicPages.includes(current) && !token) {
     window.location.href = '/login.html';
@@ -116,6 +116,7 @@ function citySpecificPlaceImage(city) {
         a.className = 'landmark-chip';
         a.href = item.wiki;
         a.target = '_blank';
+        a.rel = 'noopener';
         a.textContent = item.name;
         landmarkRow.appendChild(a);
       });
@@ -159,7 +160,12 @@ function citySpecificPlaceImage(city) {
     const toValue = (toInput && toInput.value.trim()) || 'Destination';
     const ageValue = (ageInput && ageInput.value) || '28';
     const modeValue = (modeInput && modeInput.value) || 'train';
-    searchStatus.innerHTML = `<strong>Live search preview:</strong> ${fromValue} → ${toValue} | ${modeValue.toUpperCase()} | age ${ageValue}. Search karte hi next page par route cards aur destination suggestions open honge.`;
+    const strong = document.createElement('strong');
+    strong.textContent = 'Live search preview:';
+    searchStatus.replaceChildren(
+      strong,
+      ` ${fromValue} -> ${toValue} | ${modeValue.toUpperCase()} | age ${ageValue}. Search karte hi next page par route cards aur destination suggestions open honge.`
+    );
   }
 
   renderHero();
@@ -196,7 +202,11 @@ function citySpecificPlaceImage(city) {
 
     if (!fromValue || !toValue || !dateValue || !ageValue) {
       renderSearchStatus();
-      searchStatus && (searchStatus.innerHTML = '<strong>Required:</strong> source, destination, date aur age fill karo.');
+      if (searchStatus) {
+        const strong = document.createElement('strong');
+        strong.textContent = 'Required:';
+        searchStatus.replaceChildren(strong, ' source, destination, date aur age fill karo.');
+      }
       return;
     }
     submitBtn && (submitBtn.textContent = 'Opening results...');
