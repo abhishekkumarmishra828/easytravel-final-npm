@@ -9,146 +9,129 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css" />
 </head>
-<body class="ride-page">
-  <header class="topbar">
-    <div class="container nav">
-      <div class="brand">
-        <div class="logo-badge"><img src="/assets/title-tree.png" alt="EasyTravel logo" /></div>
-        <div>
-          <h1>EasyTravel Ride</h1>
-          <p>Local bike, auto and cab support for travellers</p>
-        </div>
-      </div>
-      <nav class="nav-links">
-        <a href="/">Travel planner</a>
-        <a href="/ride.html">Book your rides</a>
-        <a href="/local-transport.html">Local transport</a>
-        <a href="/results.html?mode=train&from=Patna%20Junction%20(PNBE)&to=Delhi&date=2026-04-04&age=28">Demo results</a>
+<body class="ride-page ride-app-page">
+  <main class="ride-app-shell">
+    <section class="ride-booking-panel" id="rideDesk">
+      <header class="ride-app-head">
+        <a class="ride-menu-link" href="/">Menu</a>
+        <div class="ride-logo-dot"></div>
+        <strong>EasyTravel Ride</strong>
+        <a href="/login.html">Log in</a>
+      </header>
+
+      <nav class="ride-tabs" aria-label="Ride category">
+        <button class="active" type="button" data-ride-tab="daily">Daily rides</button>
+        <button type="button" data-ride-tab="outstation">Outstation</button>
+        <button type="button" data-ride-tab="rental">Rentals</button>
       </nav>
-      <a class="nav-cta" href="#rideDesk">Get quote</a>
-    </div>
-  </header>
 
-  <main>
-    <section class="ride-hero">
-      <div class="container ride-hero-inner">
-        <div>
-          <span class="section-kicker">College project monetization layer</span>
-          <h2>Book your local ride from your current location.</h2>
-          <p>Pickup device location se auto fetch hoga. User ko sirf destination select karna hai, phir bike, auto ya cab image card choose karke quick quote mil jayega.</p>
-          <div class="ride-trust-row">
-            <span>Location pickup</span>
-            <span>Lower quote demo</span>
-            <span>WhatsApp request</span>
+      <form id="rideForm" class="ride-app-form">
+        <div class="ride-input-row">
+          <span>From</span>
+          <input id="ridePickupText" value="Fetching current location..." aria-label="Pickup location" readonly />
+          <button id="useLocationBtn" type="button">Locate</button>
+        </div>
+        <input id="ridePickup" type="hidden" value="Current location" />
+        <input id="rideLat" type="hidden" />
+        <input id="rideLng" type="hidden" />
+
+        <div class="ride-input-row">
+          <span>To</span>
+          <input list="rideDestinations" id="rideDrop" placeholder="Search for a locality or landmark" value="India Gate" required />
+          <datalist id="rideDestinations">
+            <option value="India Gate"></option>
+            <option value="Railway Station"></option>
+            <option value="Airport"></option>
+            <option value="Hotel near city centre"></option>
+            <option value="Kashi Vishwanath Temple"></option>
+            <option value="Assi Ghat"></option>
+            <option value="Gateway of India"></option>
+            <option value="Baga Beach"></option>
+            <option value="Kedarnath base point"></option>
+            <option value="Vaishno Devi Katra"></option>
+          </datalist>
+        </div>
+
+        <div class="ride-input-row">
+          <span>When</span>
+          <select id="rideWhen">
+            <option value="now">Now</option>
+            <option value="30">After 30 minutes</option>
+            <option value="60">After 1 hour</option>
+            <option value="schedule">Schedule later</option>
+          </select>
+        </div>
+
+        <div class="ride-app-grid">
+          <div class="ride-input-row compact">
+            <span>City</span>
+            <input id="rideCity" placeholder="Delhi, Patna, Varanasi..." value="Delhi" required />
+          </div>
+          <div class="ride-input-row compact">
+            <span>Km</span>
+            <input id="rideDistance" type="number" min="1" max="250" value="6" required />
           </div>
         </div>
-        <div class="ride-hero-card">
-          <span>Starting demo fare</span>
-          <strong>Rs 29</strong>
-          <p>Bike rides for short city transfers. Estimate city, destination, distance and ride mode ke hisaab se update hota hai.</p>
+
+        <input id="rideType" type="hidden" value="auto" />
+        <div class="ride-location-status" id="rideLocationStatus">Location permission allow karo. Exact address milne par pickup automatically update hoga.</div>
+
+        <h3 id="availableRideHeading">Available rides</h3>
+        <div class="ride-options-list" id="rideOptionsList">
+          <button class="ride-option-row active" type="button" data-ride-type="auto">
+            <img src="https://images.unsplash.com/photo-1600320254374-ce2d293c324e?auto=format&fit=crop&w=180&q=80" alt="Auto" />
+            <div><strong>Auto</strong><span>Get an auto at your doorstep</span><small>3 min</small></div>
+            <b id="autoFare">Rs 112</b>
+          </button>
+          <button class="ride-option-row" type="button" data-ride-type="bike">
+            <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=180&q=80" alt="Bike" />
+            <div><strong>Bike</strong><span>Zip through traffic at affordable fares</span><small>4 min</small></div>
+            <b id="bikeFare">Rs 79</b>
+          </button>
+          <button class="ride-option-row" type="button" data-ride-type="mini">
+            <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=180&q=80" alt="Mini car" />
+            <div><strong>Mini</strong><span>Comfy hatchbacks at pocket-friendly fares</span><small>6 min</small></div>
+            <b id="miniFare">Rs 149</b>
+          </button>
+          <button class="ride-option-row" type="button" data-ride-type="sedan">
+            <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=180&q=80" alt="Prime sedan" />
+            <div><strong>Prime Sedan</strong><span>Sedans with comfort and top drivers</span><small>7 min</small></div>
+            <b id="sedanFare">Rs 189</b>
+          </button>
+          <button class="ride-option-row" type="button" data-ride-type="suv">
+            <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=180&q=80" alt="SUV" />
+            <div><strong>Prime SUV</strong><span>SUVs for family and luggage comfort</span><small>8 min</small></div>
+            <b id="suvFare">Rs 249</b>
+          </button>
         </div>
+
+        <button class="ride-confirm-btn" type="submit">Request selected ride</button>
+      </form>
+
+      <div class="ride-benefits" id="rideBenefits">
+        <h3>Why book with us?</h3>
+        <p>Lowest demo fares starting from Rs 8/km</p>
+        <p>Regularly-audited partner concept</p>
+        <p>24x7 support and on-road assistance idea</p>
+        <p>Family tracking and SOS support concept</p>
       </div>
     </section>
 
-    <section class="section" id="rideDesk">
-      <div class="container ride-desk-layout">
-        <div class="ride-form-card">
-          <span class="section-kicker">Book your local ride</span>
-          <h3>Quick ride quote</h3>
-          <form id="rideForm">
-            <div class="ride-location-card">
-              <div>
-                <span>Pickup location</span>
-                <strong id="ridePickupLabel">Fetching your device location...</strong>
-                <small id="rideLocationStatus">Browser permission allow karo. Agar permission deny hua to city centre pickup use hoga.</small>
-              </div>
-              <button class="secondary-btn" id="useLocationBtn" type="button">Use my location</button>
-            </div>
-            <input id="ridePickup" type="hidden" value="Current location" />
-
-            <div class="ride-form-grid">
-              <div class="field">
-                <label>Destination</label>
-                <input list="rideDestinations" id="rideDrop" placeholder="Select drop destination" value="India Gate" required />
-                <datalist id="rideDestinations">
-                  <option value="India Gate"></option>
-                  <option value="Railway Station"></option>
-                  <option value="Airport"></option>
-                  <option value="Hotel near city centre"></option>
-                  <option value="Kashi Vishwanath Temple"></option>
-                  <option value="Assi Ghat"></option>
-                  <option value="Gateway of India"></option>
-                  <option value="Baga Beach"></option>
-                  <option value="Kedarnath base point"></option>
-                  <option value="Vaishno Devi Katra"></option>
-                </datalist>
-              </div>
-              <div class="field">
-                <label>City</label>
-                <input id="rideCity" placeholder="Delhi, Patna, Varanasi..." value="Delhi" required />
-              </div>
-              <div class="field">
-                <label>Approx distance km</label>
-                <input id="rideDistance" type="number" min="1" max="80" value="6" required />
-              </div>
-              <div class="field">
-                <label>Travellers</label>
-                <input id="ridePeople" type="number" min="1" max="6" value="1" required />
-              </div>
-            </div>
-
-            <input id="rideType" type="hidden" value="bike" />
-            <div class="ride-vehicle-grid" aria-label="Choose ride type">
-              <button class="ride-vehicle-card active" type="button" data-ride-type="bike">
-                <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=600&q=80" alt="Bike ride" />
-                <span>Bike</span>
-                <small>Fast solo pickup</small>
-              </button>
-              <button class="ride-vehicle-card" type="button" data-ride-type="auto">
-                <img src="https://images.unsplash.com/photo-1600320254374-ce2d293c324e?auto=format&fit=crop&w=600&q=80" alt="Auto ride" />
-                <span>Auto</span>
-                <small>Budget city ride</small>
-              </button>
-              <button class="ride-vehicle-card" type="button" data-ride-type="cab">
-                <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=600&q=80" alt="Cab ride" />
-                <span>Cab</span>
-                <small>Comfort ride</small>
-              </button>
-            </div>
-            <button class="primary-btn ride-submit" type="submit">Calculate ride fare</button>
-          </form>
-        </div>
-
-        <div class="ride-quote-card" id="rideQuoteCard">
-          <span class="section-kicker">Smart quote</span>
-          <h3 id="rideQuoteTitle">Bike ride estimate</h3>
-          <div class="ride-price-row">
-            <small id="rideMarketPrice">Market Rs 89</small>
-            <strong id="rideOurPrice">Rs 79</strong>
-          </div>
-          <p id="rideQuoteText">Approx lower quote for short local transfer.</p>
-          <div class="ride-saving-pill" id="rideSavingPill">You save Rs 10</div>
-          <div class="ride-actions">
-            <a id="rideWhatsapp" class="primary-btn" target="_blank" rel="noopener">Request on WhatsApp</a>
-            <a id="rideMaps" class="secondary-btn" target="_blank" rel="noopener">Open route map</a>
-          </div>
-          <div class="ride-fallback">
-            <h4>Need instant official booking?</h4>
-            <a href="https://www.uber.com/in/en/ride/" target="_blank" rel="noopener">Uber</a>
-            <a href="https://www.olacabs.com/" target="_blank" rel="noopener">Ola</a>
-            <a href="https://www.rapido.bike/" target="_blank" rel="noopener">Rapido</a>
-          </div>
-        </div>
+    <section class="ride-showcase-panel" id="rideShowcasePanel">
+      <div class="ride-showcase-copy">
+        <h1 id="rideShowcaseTitle">Everyday city commute</h1>
+        <p id="rideShowcaseText">Affordable cab, auto and bike rides at your doorstep.</p>
+        <strong>#EasyTravelRide</strong>
       </div>
-    </section>
-
-    <section class="section">
-      <div class="container ride-info-band">
-        <div>
-          <h3>How this becomes real business later</h3>
-          <p>College demo me quote + lead request hai. Production me driver onboarding, KYC, admin dispatch, payment, refund policy, safety contacts, live tracking aur support dashboard add karna hoga.</p>
+      <div class="ride-quote-floating" id="rideQuoteCard">
+        <span id="rideQuoteTitle">Auto ride estimate</span>
+        <div><small id="rideMarketPrice">Market Rs 122</small><strong id="rideOurPrice">Rs 112</strong></div>
+        <p id="rideQuoteText">Current location to India Gate, Delhi.</p>
+        <b id="rideSavingPill">You save Rs 10</b>
+        <div class="ride-actions">
+          <a id="rideWhatsapp" class="primary-btn" target="_blank" rel="noopener">Request on WhatsApp</a>
+          <a id="rideMaps" class="secondary-btn" target="_blank" rel="noopener">Open map</a>
         </div>
-        <a class="secondary-btn" href="/">Back to travel planner</a>
       </div>
     </section>
   </main>

@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const { guard } = require('../_security');
 
 function json(res, status, body) {
   res.statusCode = status;
@@ -72,6 +73,7 @@ module.exports = async function handler(req, res) {
     json(res, 405, { success: false, message: 'Method not allowed' });
     return;
   }
+  if (!(await guard(req, res, 'auth-request-otp', 6, 60 * 1000))) return;
 
   try {
     const body = await readBody(req);
