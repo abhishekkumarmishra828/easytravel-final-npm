@@ -38,6 +38,7 @@
             <div class="field"><label>Budget</label><select id="budgetInput"><option>Budget</option><option>Comfort</option><option>Premium</option></select></div>
             <div class="field"><label>Arrival mode</label><select id="modeInput"><option>train</option><option>bus</option><option>hotel</option></select></div>
             <div class="field"><label>Month of travel</label><input id="monthInput" placeholder="April / May / December"></div>
+            <div class="field"><label>Travel preference</label><select id="religionInput"><option value="any">Open for all</option><option value="hindu">Hindu / temple friendly</option><option value="muslim">Muslim / halal friendly</option><option value="buddhist">Buddhist / monastery friendly</option><option value="christian">Christian / church friendly</option><option value="secular">Secular heritage + nature</option></select></div>
             <div class="field" style="grid-column:1/-1"><label>Query</label><textarea id="prefInput" rows="4" placeholder="Temple / food / official work / family / nightlife / calm stay"></textarea></div>
             <div class="package-actions">
               <button id="reviewPackageBtn" class="secondary-btn" type="button" style="background:#223f74;color:#fff;">Review package</button>
@@ -62,6 +63,7 @@
       </div>
 
       <div id="packageOutput" class="planner-card" style="margin-top:28px;display:block;"></div>
+      <div id="memoryVault" class="memory-vault-card"></div>
     </div>
   </section>
   <div id="toastMsg" style="position:fixed;right:24px;bottom:24px;z-index:9999;display:none;min-width:280px;max-width:420px;padding:16px 18px;border-radius:16px;background:#1f8f53;color:#fff;font-weight:800;box-shadow:0 14px 40px rgba(0,0,0,.18)">Form submitted successfully.</div>

@@ -18,6 +18,7 @@
   const from = params.get('from') || 'Patna Junction (PNBE)';
   const ageFromUrl = Number(params.get('age') || 28);
   const modeFromUrl = (params.get('mode') || 'train').toLowerCase();
+  const religionFromUrl = (params.get('religion') || 'any').toLowerCase();
 
   const titleEl = document.getElementById('pkgTitle');
   const oldPriceEl = document.getElementById('oldPrice');
@@ -28,6 +29,7 @@
   const msgEl = document.getElementById('packageMsg');
   const toastEl = document.getElementById('toastMsg');
   const vendorPanel = document.getElementById('vendorPanel');
+  const memoryVault = document.getElementById('memoryVault');
 
   const destinationInput = document.getElementById('destinationInput');
   const ageInput = document.getElementById('ageInput');
@@ -36,6 +38,7 @@
   const daysInput = document.getElementById('daysInput');
   const budgetInput = document.getElementById('budgetInput');
   const monthInput = document.getElementById('monthInput');
+  const religionInput = document.getElementById('religionInput');
   const prefInput = document.getElementById('prefInput');
   const nameInput = document.getElementById('travellerName');
   const emailInput = document.getElementById('emailInput');
@@ -95,7 +98,17 @@
   destinationInput.value = to;
   ageInput.value = ageFromUrl;
   modeInput.value = modeFromUrl;
+  if (religionInput) religionInput.value = religionFromUrl;
   monthInput.value = monthInput.value || 'April';
+
+  function currentUserKey() {
+    try {
+      const user = JSON.parse(localStorage.getItem('easytravel_user') || '{}');
+      return (user.email || emailInput?.value || 'guest').toLowerCase();
+    } catch {
+      return (emailInput?.value || 'guest').toLowerCase();
+    }
+  }
 
   function showToast(text, isError = false) {
     if (!toastEl) return;
@@ -318,6 +331,78 @@ const pkgDB = {
     `;
   }
 
+  function religionText(value) {
+    return {
+      any: 'Open for all travellers',
+      hindu: 'Temple-friendly route + vegetarian food options',
+      muslim: 'Halal-friendly food + mosque-nearby planning where possible',
+      buddhist: 'Peaceful Buddhist / monastery / museum friendly flow',
+      christian: 'Church, colonial heritage and calm family route flow',
+      secular: 'Heritage, nature, food and shopping without faith-specific routing'
+    }[value || 'any'] || 'Open for all travellers';
+  }
+
+  function buildDayWisePlan(cityName, picks, pack) {
+    const formData = getFormData();
+    const days = Math.max(1, Math.min(7, Number(formData.days || 3)));
+    const age = Number(formData.age || ageFromUrl || 28);
+    const preference = formData.religion || 'any';
+    const basePlaces = [...new Set([...(picks || []), ...((pack.highlights || []).map(item => String(item).split(' + ')[0]))])].filter(Boolean);
+    const fallback = [`${cityName} arrival and hotel check-in`, `${cityName} famous local market`, `${cityName} food and culture walk`, `${cityName} calm evening point`];
+    const pool = basePlaces.length ? basePlaces : fallback;
+    const pace = age >= 55 ? 'slow comfort pace' : age <= 18 ? 'family-safe short hops' : 'balanced explorer pace';
+    return Array.from({ length: days }, (_, index) => {
+      const placeA = pool[index % pool.length];
+      const placeB = pool[(index + 1) % pool.length];
+      const title = `Day ${index + 1}: ${placeA}`;
+      const detail = index === 0
+        ? `Arrival, hotel check-in, ${placeA}, and ${religionText(preference).toLowerCase()}.`
+        : `${placeA} + ${placeB} with ${pace}, local transport buffer and food stop.`;
+      return { day: index + 1, title, detail };
+    });
+  }
+
+  function renderMemoryVault(cityName) {
+    if (!memoryVault) return;
+    const key = `easytravel_memories_${currentUserKey()}_${cityNameFromInput(cityName)}`;
+    const memories = JSON.parse(localStorage.getItem(key) || '[]').slice(0, 4);
+    memoryVault.innerHTML = `
+      <div>
+        <span class="section-kicker">Travel memory vault</span>
+        <h3>Save your best 4 memories</h3>
+        <p>Trip complete hone ke baad user apne account ke naam se 4 best photos yahan save kar sakta hai. Demo me photos browser storage me save honge; phone theft recovery ke liye production me MongoDB + cloud image storage connect karna hoga.</p>
+      </div>
+      <div class="memory-grid">
+        ${[0, 1, 2, 3].map(index => `
+          <label class="memory-slot">
+            ${memories[index] ? `<img src="${memories[index]}" alt="Saved travel memory ${index + 1}">` : `<strong>Photo ${index + 1}</strong><span>Add trip photo</span>`}
+            <input type="file" accept="image/*" data-memory-index="${index}">
+          </label>
+        `).join('')}
+      </div>
+      <small>Tip: final live recovery ke liye Firebase Storage / Cloudinary / MongoDB GridFS jaisa storage add karna padega.</small>
+    `;
+    memoryVault.querySelectorAll('input[type="file"]').forEach(input => {
+      input.addEventListener('change', event => {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        if (file.size > 900000) {
+          showToast('Photo 900KB se chhota upload karo demo vault ke liye.', true);
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          const next = JSON.parse(localStorage.getItem(key) || '[]').slice(0, 4);
+          next[Number(input.dataset.memoryIndex)] = reader.result;
+          localStorage.setItem(key, JSON.stringify(next.slice(0, 4)));
+          renderMemoryVault(cityName);
+          showToast('Memory photo saved in this account browser.');
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  }
+
   function affordablePriceEngine(formData) {
     const budgetName = (formData.budget || 'Comfort').trim();
     const rules = PACKAGE_RULES[budgetName] || PACKAGE_RULES.Comfort;
@@ -472,6 +557,15 @@ const pkgDB = {
     const chips = selected.map(p => `<span class="recommend-chip">${p}</span>`).join('');
     const highlights = (pack.highlights || selected).map(h => `<li>${h}</li>`).join('');
     const itinerary = (pack.itinerary || []).map(p => `<li>${p}</li>`).join('');
+    const smartPlan = buildDayWisePlan(cityName, selected, pack);
+    const smartPlanHtml = smartPlan.map(item => `
+      <article class="day-plan-card">
+        <span>Day ${item.day}</span>
+        <strong>${item.title}</strong>
+        <p>${item.detail}</p>
+        <button type="button" data-accept-plan="${item.day}">Accept this day plan</button>
+      </article>
+    `).join('');
     const toursHtml = tours.length ? `<h3 style="font-size:34px;line-height:1.1;margin:28px 0 12px;color:var(--navy);">Popular tours from scraped data –</h3><ul style="font-size:20px;line-height:1.8;margin-top:0;">${tours.map(t => `<li>${src ? `<a href="${src}" target="_blank" rel="noopener">${t}</a>` : t}</li>`).join('')}</ul>` : '';
     const faqHtml = faqs.length ? `<h3 style="font-size:34px;line-height:1.1;margin:28px 0 12px;color:var(--navy);">Useful destination FAQs –</h3><ul style="font-size:19px;line-height:1.8;margin-top:0;">${faqs.map(f => `<li>${f}</li>`).join('')}</ul>` : '';
 
@@ -482,6 +576,14 @@ const pkgDB = {
         <p class="recommend-note" style="margin-top:14px;">Selected plan: <strong>${budget}</strong> · Visible package price: <strong>${computedPrices.newPrice}</strong> · First user coupon: <strong>₹${Number(pricing.firstUserCoupon).toLocaleString('en-IN')}</strong> · Smart discount: <strong>₹${Number(pricing.discountAmount).toLocaleString('en-IN')}</strong></p>
         <h3 style="font-size:54px;line-height:1.05;margin:24px 0 12px;color:var(--navy);">Highlights –</h3>
         <ul style="font-size:20px;line-height:1.8;margin-top:0;">${highlights}</ul>
+        <div class="smart-plan-panel">
+          <div>
+            <span class="section-kicker">Days + age + preference planner</span>
+            <h3>Recommended places by your trip days</h3>
+            <p>${ageValue} years traveller ke liye ${days} day plan. Preference: <strong>${religionText(religionInput?.value || 'any')}</strong>.</p>
+          </div>
+          <div class="day-plan-grid">${smartPlanHtml}</div>
+        </div>
         <p style="font-size:28px;font-weight:800;color:var(--navy);margin:24px 0 8px;">Route – ${pricing.nights} Nights and ${pricing.days} Days</p>
         <p style="font-size:22px;margin:0 0 16px;"><strong>Cheap price logic –</strong> approx ${pricing.routeKm} km route slab + ${budget} stay plan + group/season discount + first user coupon.</p>
         <h3 style="font-size:54px;line-height:1.05;margin:32px 0 12px;color:var(--navy);">Short Itinerary –</h3>
@@ -491,11 +593,34 @@ const pkgDB = {
       </div>
     `;
 
+    outputEl.querySelectorAll('[data-accept-plan]').forEach(button => {
+      button.addEventListener('click', () => {
+        const acceptedDay = Number(button.dataset.acceptPlan || 1);
+        const acceptedPlan = smartPlan.find(item => item.day === acceptedDay);
+        if (!acceptedPlan) return;
+        const storageKey = `easytravel_accepted_plan_${currentUserKey()}_${cityNameFromInput(cityName)}`;
+        const saved = JSON.parse(localStorage.getItem(storageKey) || '[]').filter(item => item.day !== acceptedPlan.day);
+        saved.push({
+          ...acceptedPlan,
+          city: cityNameFromInput(cityName),
+          days,
+          age: ageValue,
+          preference: religionInput?.value || 'any',
+          savedAt: new Date().toISOString()
+        });
+        localStorage.setItem(storageKey, JSON.stringify(saved.slice(-7)));
+        button.textContent = 'Accepted';
+        button.disabled = true;
+        showToast(`Day ${acceptedPlan.day} recommendation saved for your trip.`);
+      });
+    });
+
     const waText = encodeURIComponent(`Hello EasyTravel Pro, mujhe ${cityName} package ke bare me enquiry karni hai. Age: ${ageValue}, Days: ${days}, Budget: ${budget}, Preference: ${pref}`);
     if (whatsappBtn) {
       whatsappBtn.href = `https://wa.me/917366930984?text=${waText}`;
     }
     renderVendorPanel(cityName);
+    renderMemoryVault(cityName);
   }
 
 
@@ -520,6 +645,7 @@ const pkgDB = {
       days: (daysInput.value || '3').trim(),
       travelMonth: (monthInput.value || '').trim(),
       arrivalMode: (modeInput.value || '').trim(),
+      religion: (religionInput?.value || 'any').trim(),
       specialRequest: (prefInput.value || '').trim()
     };
   }
@@ -543,6 +669,7 @@ const pkgDB = {
       days: pricing.days,
       nights: pricing.nights,
       arrivalMode: formData.arrivalMode || 'Not entered',
+      religion: formData.religion || 'any',
       travelMonth: formData.travelMonth || 'Not entered',
       specialRequest: formData.specialRequest || 'No special request',
       coupon: pricing.firstUserCoupon,
@@ -571,6 +698,7 @@ const pkgDB = {
         <div><strong>People</strong><br>${r.people}</div>
         <div><strong>Selected package</strong><br>${r.budget}</div>
         <div><strong>Arrival mode</strong><br>${r.arrivalMode}</div>
+        <div><strong>Travel preference</strong><br>${religionText(r.religion)}</div>
         <div><strong>Travel month</strong><br>${r.travelMonth}</div>
         <div><strong>Tour duration</strong><br>${r.days} days / ${r.nights} nights</div>
         <div style="grid-column:1 / -1"><strong>Special request</strong><br>${r.specialRequest}</div>
@@ -657,6 +785,7 @@ async function createCashfreeOrder(reviewData) {
     days: Number(reviewData.days) || 1,
     travelMonth: reviewData.travelMonth,
     arrivalMode: reviewData.arrivalMode,
+    religion: reviewData.religion,
     specialRequest: reviewData.specialRequest,
     amount: Number(reviewData.finalPrice) || 0,
     couponAmount: Number(reviewData.coupon) || 0,
@@ -704,6 +833,7 @@ async function startCashfreeCheckout(paymentSessionId) {
       budget: formData.budget,
       days: Number(formData.days),
       travelMonth: formData.travelMonth,
+      religion: formData.religion,
       specialRequest: `PAYMENT CONFIRMED | Amount: ₹${amount} | Arrival: ${formData.arrivalMode} | Query: ${formData.specialRequest || 'NA'}`
     };
 
@@ -732,6 +862,7 @@ async function startCashfreeCheckout(paymentSessionId) {
       nights: Number(reviewData.nights) || 0,
       budget: reviewData.budget,
       arrivalMode: reviewData.arrivalMode,
+      religion: reviewData.religion,
       monthOfTravel: reviewData.travelMonth,
       query: reviewData.specialRequest,
       people: Number(reviewData.people) || 1,
@@ -771,6 +902,7 @@ async function startCashfreeCheckout(paymentSessionId) {
       budget: formData.budget,
       days: Number(formData.days),
       travelMonth: formData.travelMonth,
+      religion: formData.religion,
       specialRequest: formData.specialRequest
     };
 
@@ -778,7 +910,7 @@ async function startCashfreeCheckout(paymentSessionId) {
       name: formData.fullName,
       email: formData.email,
       phone: formData.phone,
-      message: `${formData.packageTitle} | Destination: ${formData.destination} | Days: ${formData.days} | Budget: ${formData.budget} | Arrival: ${formData.arrivalMode} | Query: ${formData.specialRequest}`,
+      message: `${formData.packageTitle} | Destination: ${formData.destination} | Days: ${formData.days} | Budget: ${formData.budget} | Arrival: ${formData.arrivalMode} | Preference: ${religionText(formData.religion)} | Query: ${formData.specialRequest}`,
       pageSource: 'package-page'
     };
 
@@ -810,6 +942,7 @@ console.log("Enquiry success:", enqData);
       ...formData,
       city: cityNameFromInput(formData.destination),
       people: formData.numberOfPeople,
+      religion: formData.religion,
       finalPrice: reviewData.finalPrice,
       assignedVendor
     };
@@ -894,6 +1027,7 @@ console.log("Enquiry success:", enqData);
       destinationInput.value = cityName;
       ageInput.value = ageFromUrl;
       modeInput.value = modeFromUrl;
+      if (religionInput) religionInput.value = religionFromUrl;
       monthInput.value = 'April';
       reviewReady = false;
       if (reviewConfirmCheck) reviewConfirmCheck.checked = false;
@@ -967,7 +1101,7 @@ if (confirmPaymentBtn) {
     }
   });
 }
-  [destinationInput, ageInput, modeInput, peopleInput, daysInput, budgetInput, monthInput, prefInput].forEach(el => {
+  [destinationInput, ageInput, modeInput, peopleInput, daysInput, budgetInput, monthInput, religionInput, prefInput].forEach(el => {
     if (el) {
       el.addEventListener('change', () => renderPackage(cityNameFromInput(destinationInput.value)));
     }

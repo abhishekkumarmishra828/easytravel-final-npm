@@ -286,6 +286,138 @@ button, input, select { font: inherit; }
 textarea{width:100%;padding:16px 18px;border-radius:18px;border:1px solid var(--line);background:#fff;color:var(--navy);outline:none}
 @media (max-width: 980px){.package-showcase{grid-template-columns:1fr}.package-main-title{font-size:40px}}
 
+.smart-plan-panel{
+  display:grid;
+  gap:18px;
+  margin:26px 0;
+  padding:22px;
+  border-radius:24px;
+  background:linear-gradient(135deg,#f8fbff,#fff7ee);
+  border:1px solid #dbe5f6;
+  box-shadow:0 18px 46px rgba(26,45,85,.08);
+}
+.smart-plan-panel h3{
+  margin:6px 0 8px;
+  color:var(--navy);
+  font-size:clamp(28px,3vw,42px);
+  line-height:1.05;
+}
+.smart-plan-panel p{
+  margin:0;
+  color:var(--muted);
+  font-size:18px;
+  line-height:1.5;
+}
+.day-plan-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.day-plan-card{
+  display:grid;
+  gap:9px;
+  padding:16px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid #dce6f7;
+  box-shadow:0 12px 28px rgba(26,45,85,.06);
+}
+.day-plan-card span{
+  width:max-content;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#edf3ff;
+  color:#203a68;
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+.day-plan-card strong{
+  color:var(--navy);
+  font-size:20px;
+  line-height:1.2;
+}
+.day-plan-card p{
+  color:var(--muted);
+  font-size:15px;
+}
+.day-plan-card button{
+  min-height:42px;
+  border:0;
+  border-radius:13px;
+  background:linear-gradient(135deg,var(--brand),#ff835d);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+.day-plan-card button:disabled{
+  background:#203a68;
+  cursor:default;
+}
+.memory-vault-card{
+  display:grid;
+  gap:18px;
+  margin:26px 0 0;
+  padding:24px;
+  border-radius:26px;
+  background:linear-gradient(135deg,#ffffff,#f4f8ff);
+  border:1px solid #dbe5f6;
+  box-shadow:var(--shadow);
+}
+.memory-vault-card h3{
+  margin:6px 0 8px;
+  color:var(--navy);
+  font-size:clamp(28px,3vw,42px);
+}
+.memory-vault-card p,
+.memory-vault-card small{
+  margin:0;
+  color:var(--muted);
+  line-height:1.55;
+}
+.memory-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+.memory-slot{
+  position:relative;
+  display:grid;
+  place-items:center;
+  gap:6px;
+  min-height:150px;
+  overflow:hidden;
+  border-radius:20px;
+  border:1px dashed #b9c8e4;
+  background:#eef5ff;
+  color:var(--navy);
+  font-weight:900;
+  cursor:pointer;
+}
+.memory-slot span{
+  color:var(--muted);
+  font-size:14px;
+}
+.memory-slot img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.memory-slot input{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  cursor:pointer;
+}
+@media (max-width:980px){
+  .day-plan-grid,.memory-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (max-width:620px){
+  .smart-plan-panel,.memory-vault-card{padding:16px;border-radius:20px;}
+  .day-plan-grid,.memory-grid{grid-template-columns:1fr;}
+  .memory-slot{min-height:190px;}
+}
+
 
 .footer-live{background:#1f1f1f;color:#fff;margin-top:48px;overflow:hidden}
 .footer-live h4{color:#ff6648;margin:0 0 18px;font-size:24px;text-transform:uppercase;letter-spacing:.02em}

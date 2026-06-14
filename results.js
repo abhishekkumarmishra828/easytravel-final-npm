@@ -47,6 +47,7 @@ function stableTravelImageFallback(city) {
   const date = params.get('date') || '2026-04-04';
   const age = Number(params.get('age') || 28);
   const mode = (params.get('mode') || 'train').toLowerCase();
+  const religion = (params.get('religion') || 'any').toLowerCase();
 
   const resultTitle = document.getElementById('resultTitle');
   const routeBadges = document.getElementById('routeBadges');
@@ -83,9 +84,9 @@ function stableTravelImageFallback(city) {
   let selectedPlace = cityData.places[recommendedNames[0]] || cityData.places[cityData.defaultPlace] || cityData.places[visiblePlaceNames[0]];
 
   resultTitle.textContent = `${age} years traveller ke liye ${cityName} me recommended famous places`;
-  if (resultSubtitle) resultSubtitle.textContent = `${cityName} ke liye age-based famous places, route planning, map access, video links aur stay ideas ek saath dikh rahe hain.`;
+  if (resultSubtitle) resultSubtitle.textContent = `${cityName} ke liye age, days aur ${religion === 'any' ? 'open travel' : religion} preference based famous places, route planning, map access, video links aur stay ideas ek saath dikh rahe hain.`;
   routeBadges.innerHTML = '';
-  [from, to, `Date: ${date}`, `Mode: ${mode}`].forEach(text => {
+  [from, to, `Date: ${date}`, `Mode: ${mode}`, `Preference: ${religion}`].forEach(text => {
     const span = document.createElement('span');
     span.textContent = text;
     routeBadges.appendChild(span);
@@ -97,7 +98,7 @@ function stableTravelImageFallback(city) {
   if (miniStatPlaces) miniStatPlaces.textContent = `${recommendedNames.length || visiblePlaceNames.length} places`;
   if (miniStatMood) miniStatMood.textContent = age < 22 ? 'Budget' : age < 35 ? 'Comfort' : 'Premium';
   if (miniStatFlow) miniStatFlow.textContent = `${mode.charAt(0).toUpperCase()+mode.slice(1)} + city`;
-  recNote.textContent = `Age-based smart picks pehle dikh rahe hain, aur ${cityName} ke aur famous places bhi neeche chips me diye gaye hain. Kisi bhi place par click karke map, video aur details dekhe ja sakte hain.`;
+  recNote.textContent = `Age + preference based smart picks pehle dikh rahe hain. ${religion === 'muslim' ? 'Halal-friendly food aur mosque-nearby flow consider karo.' : religion === 'buddhist' ? 'Peaceful monastery, museum aur calm route flow consider karo.' : religion === 'christian' ? 'Church, colonial heritage aur calm family route consider karo.' : 'Family-friendly open route consider karo.'} Kisi bhi place par click karke map, video aur details dekhe ja sakte hain.`;
 
   renderTickets();
   renderRecommendationChips();
@@ -249,7 +250,7 @@ if (img) {
         <li>${days} day city exploration around ${selectedPlace.name}</li>
         <li>${budget === 'Budget' ? 'Launch saver offer 5% off' : budget === 'Comfort' ? 'Combo offer 8% off' : 'Premium package benefit 12% off'} </li>
       </ul>`;
-    packageBtn.href = `/package.html?from=${encodeURIComponent(from)}&to=${encodeURIComponent(cityName)}&date=${encodeURIComponent(date)}&age=${encodeURIComponent(age)}&mode=${encodeURIComponent(mode)}&place=${encodeURIComponent(selectedPlace.name)}`;
+    packageBtn.href = `/package.html?from=${encodeURIComponent(from)}&to=${encodeURIComponent(cityName)}&date=${encodeURIComponent(date)}&age=${encodeURIComponent(age)}&mode=${encodeURIComponent(mode)}&religion=${encodeURIComponent(religion)}&place=${encodeURIComponent(selectedPlace.name)}`;
   }
 
   function renderCultureGuide() {

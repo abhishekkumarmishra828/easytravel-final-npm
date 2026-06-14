@@ -40,6 +40,7 @@ function citySpecificPlaceImage(city) {
   const dateInput = document.getElementById('dateInput');
   const ageInput = document.getElementById('ageInput');
   const modeInput = document.getElementById('modeInput');
+  const religionInput = document.getElementById('religionInput');
   const heroTitle = document.getElementById('heroTitle');
   const heroSubtitle = document.getElementById('heroSubtitle');
   const heroSlides = document.getElementById('heroSlides');
@@ -160,11 +161,12 @@ function citySpecificPlaceImage(city) {
     const toValue = (toInput && toInput.value.trim()) || 'Destination';
     const ageValue = (ageInput && ageInput.value) || '28';
     const modeValue = (modeInput && modeInput.value) || 'train';
+    const religionValue = (religionInput && religionInput.value) || 'any';
     const strong = document.createElement('strong');
     strong.textContent = 'Live search preview:';
     searchStatus.replaceChildren(
       strong,
-      ` ${fromValue} -> ${toValue} | ${modeValue.toUpperCase()} | age ${ageValue}. Search karte hi next page par route cards aur destination suggestions open honge.`
+      ` ${fromValue} -> ${toValue} | ${modeValue.toUpperCase()} | age ${ageValue} | preference ${religionValue}. Search karte hi next page par route cards aur destination suggestions open honge.`
     );
   }
 
@@ -178,6 +180,7 @@ function citySpecificPlaceImage(city) {
   fromInput && fromInput.addEventListener('input', renderSearchStatus);
   ageInput && ageInput.addEventListener('input', renderSearchStatus);
   modeInput && modeInput.addEventListener('change', renderSearchStatus);
+  religionInput && religionInput.addEventListener('change', renderSearchStatus);
   dateInput && dateInput.addEventListener('change', renderSearchStatus);
 
   heroPrev && heroPrev.addEventListener('click', () => {
@@ -198,6 +201,7 @@ function citySpecificPlaceImage(city) {
     const dateValue = (dateInput && dateInput.value) || '';
     const ageValue = (ageInput && ageInput.value) || '';
     const modeValue = (modeInput && modeInput.value) || 'train';
+    const religionValue = (religionInput && religionInput.value) || 'any';
     const submitBtn = this.querySelector('.primary-btn');
 
     if (!fromValue || !toValue || !dateValue || !ageValue) {
@@ -217,7 +221,8 @@ function citySpecificPlaceImage(city) {
       to: toValue,
       date: dateValue,
       age: ageValue,
-      mode: modeValue
+      mode: modeValue,
+      religion: religionValue
     });
 
     setTimeout(() => {
