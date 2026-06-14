@@ -11,6 +11,7 @@
   const API_TIMEOUT_MESSAGE = 'Backend/Cashfree se response nahi mila. backend server aur .env keys check karo.';
   const data = window.EASYTRAVEL_DATA || {};
   const scraped = window.SCRAPED_TRAVEL_DATA || {};
+  const vendorNetwork = window.EASYTRAVEL_VENDOR_NETWORK || {};
   const params = new URLSearchParams(window.location.search);
 
   const to = params.get('to') || 'Delhi';
@@ -26,6 +27,7 @@
   const outputEl = document.getElementById('packageOutput');
   const msgEl = document.getElementById('packageMsg');
   const toastEl = document.getElementById('toastMsg');
+  const vendorPanel = document.getElementById('vendorPanel');
 
   const destinationInput = document.getElementById('destinationInput');
   const ageInput = document.getElementById('ageInput');
@@ -281,6 +283,41 @@ const pkgDB = {
     return Math.round(6371 * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h)));
   }
 
+  function vendorsForCity(cityName) {
+    const exact = vendorNetwork[cityName] || vendorNetwork[cityNameFromInput(cityName)] || null;
+    if (exact && exact.length) return exact;
+    const key = Object.keys(vendorNetwork).find(name => name.toLowerCase() === String(cityName || '').toLowerCase());
+    return key ? vendorNetwork[key] : (vendorNetwork.Default || []);
+  }
+
+  function partnerWhatsApp(vendor, formData, finalPrice) {
+    const phone = String(vendor.phone || '917366930984').replace(/[^\d]/g, '');
+    const message = `Hello ${vendor.name}, EasyTravel package lead hai.\nDestination: ${formData.destination}\nTraveller: ${formData.fullName || 'Not entered'}\nPhone: ${formData.phone || 'Not entered'}\nPeople: ${formData.numberOfPeople}\nDays: ${formData.days}\nBudget: ${formData.budget}\nApprox price: Rs ${Number(finalPrice || 0).toLocaleString('en-IN')}\nRequest: ${formData.specialRequest || 'NA'}\nPlease share pickup, stay and local package quote.`;
+    return `https://wa.me/${phone || '917366930984'}?text=${encodeURIComponent(message)}`;
+  }
+
+  function renderVendorPanel(cityName) {
+    if (!vendorPanel) return;
+    const vendors = vendorsForCity(cityName);
+    const formData = getFormData();
+    const finalPrice = affordablePriceEngine(formData).finalPrice;
+    vendorPanel.innerHTML = `
+      <h3>Local partner network</h3>
+      <p>Booking ke baad admin traveller enquiry ko city ke verified transporter, stay ya local support partner ko assign karega. Final pickup, hotel aur quote partner confirmation ke baad lock hoga.</p>
+      <div class="vendor-card-grid">
+        ${vendors.map(vendor => `
+          <article class="vendor-mini-card">
+            <span>${vendor.type} · ${vendor.budget || 'Budget to Comfort'}</span>
+            <strong>${vendor.name}</strong>
+            <small>${vendor.area}</small>
+            <small>${vendor.service}</small>
+            <a href="${partnerWhatsApp(vendor, formData, finalPrice)}" target="_blank" rel="noopener">Ask quote</a>
+          </article>
+        `).join('')}
+      </div>
+    `;
+  }
+
   function affordablePriceEngine(formData) {
     const budgetName = (formData.budget || 'Comfort').trim();
     const rules = PACKAGE_RULES[budgetName] || PACKAGE_RULES.Comfort;
@@ -458,6 +495,7 @@ const pkgDB = {
     if (whatsappBtn) {
       whatsappBtn.href = `https://wa.me/917366930984?text=${waText}`;
     }
+    renderVendorPanel(cityName);
   }
 
 
@@ -765,6 +803,28 @@ if (!enqRes.ok) {
 console.log("Enquiry success:", enqData);
   }
 
+  async function saveVendorLead(formData, reviewData) {
+    const vendors = vendorsForCity(formData.destination);
+    const assignedVendor = vendors[0] ? vendors[0].name : 'EasyTravel India Partner Desk';
+    const payload = {
+      ...formData,
+      city: cityNameFromInput(formData.destination),
+      people: formData.numberOfPeople,
+      finalPrice: reviewData.finalPrice,
+      assignedVendor
+    };
+    const res = await fetch('/api/vendor-leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.success) {
+      throw new Error(data.message || 'Vendor lead save failed');
+    }
+    return data.lead;
+  }
+
   if (reviewBtn) {
     reviewBtn.addEventListener('click', function () {
       const formData = getFormData();
@@ -820,8 +880,15 @@ console.log("Enquiry success:", enqData);
     try {
       await savePackageReview(reviewData);
       await savePackageEnquiry(formData);
-      showPackageMsg('Review + enquiry submit ho gaya. MongoDB Compass me package reviews, packagebookings aur enquiries me data save ho gaya.');
-      showToast('Review and enquiry submitted successfully.');
+      let vendorLeadMessage = ' Local partner lead bhi admin panel me create ho gaya.';
+      try {
+        const lead = await saveVendorLead(formData, reviewData);
+        vendorLeadMessage = ` Local partner lead ${lead.id} admin panel me create ho gaya.`;
+      } catch (leadError) {
+        vendorLeadMessage = ' Vendor lead API save nahi ho paaya, lekin enquiry submit ho gayi.';
+      }
+      showPackageMsg('Review + enquiry submit ho gaya.' + vendorLeadMessage);
+      showToast('Review, enquiry and partner flow submitted.');
       renderPackage(cityName);
       formEl.reset();
       destinationInput.value = cityName;

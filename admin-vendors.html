@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyTravel Vendor Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <div class="brand"><div class="logo-badge"><img src="/assets/title-tree.png" alt="EasyTravel logo" /></div><div><h1>Vendor Admin</h1><p>City-wise partner network and package leads</p></div></div>
+      <nav class="nav-links"><a href="/">Home</a><a href="/package.html">Packages</a><a href="/ride.html">Rides</a></nav>
+      <a class="nav-cta" href="/admin-vendors.html">Admin panel</a>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container admin-shell">
+      <section class="admin-hero">
+        <div>
+          <span class="section-kicker">Private admin workspace</span>
+          <h2>Partner network / local vendor panel</h2>
+          <p>City ke hisaab se transporter, hotel, food support aur yatra partners manage karo. Traveller package enquiry ko local partner tak WhatsApp handoff kar sakte ho.</p>
+        </div>
+        <div class="admin-key-card">
+          <label>Admin access key</label>
+          <input id="adminKeyInput" type="password" placeholder="Vercel ADMIN_PANEL_KEY" />
+          <button id="unlockAdminBtn" type="button" class="primary-btn">Unlock panel</button>
+          <small>Vercel Environment Variables me same key set rahega. Browser me ye key sirf session ke liye store hota hai.</small>
+        </div>
+      </section>
+
+      <div id="adminStatus" class="search-status">Admin key enter karke panel unlock karo.</div>
+
+      <section class="admin-grid">
+        <div class="admin-card">
+          <h3>Add city partner</h3>
+          <form id="vendorForm" class="admin-form">
+            <input id="vendorCity" placeholder="City e.g. Delhi" required />
+            <select id="vendorType"><option>Transport</option><option>Stay</option><option>Food</option><option>Yatra</option><option>Guide</option></select>
+            <input id="vendorName" placeholder="Partner / vendor name" required />
+            <input id="vendorPhone" placeholder="WhatsApp phone with country code" required />
+            <input id="vendorArea" placeholder="Area / pickup zone" />
+            <textarea id="vendorService" rows="3" placeholder="Service details"></textarea>
+            <button class="primary-btn" type="submit">Save partner</button>
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <h3>Approved partners</h3>
+          <div id="vendorList" class="admin-list"></div>
+        </div>
+      </section>
+
+      <section class="admin-card">
+        <h3>Package leads</h3>
+        <p class="small-note">New enquiry aane ke baad yahan lead dikhegi. Partner button se assigned vendor ko WhatsApp message open hoga.</p>
+        <div id="leadList" class="admin-list lead-list"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="/vendor-network-data.js"></script>
+  <script src="/admin-vendors.js"></script>
+</body>
+</html>
