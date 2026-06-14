@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
   <title>EasyTravel Vendor Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css" />
 </head>
-<body>
+<body class="admin-page">
   <header class="topbar">
     <div class="container nav">
       <div class="brand"><div class="logo-badge"><img src="/assets/title-tree.png" alt="EasyTravel logo" /></div><div><h1>Vendor Admin</h1><p>City-wise partner network and package leads</p></div></div>
@@ -23,11 +24,22 @@
       <section class="admin-hero">
         <div>
           <span class="section-kicker">Private admin workspace</span>
-          <h2>Partner network / local vendor panel</h2>
-          <p>City ke hisaab se transporter, hotel, food support aur yatra partners manage karo. Traveller package enquiry ko local partner tak WhatsApp handoff kar sakte ho.</p>
+          <h2>Partner network control room</h2>
+          <p>City-wise transporter, hotel, food support aur yatra partners manage karo. New package booking leads ko approve karke local partner tak WhatsApp handoff karo.</p>
+          <div class="admin-trust-row">
+            <span>Key protected</span>
+            <span>Lead approval flow</span>
+            <span>City partner routing</span>
+          </div>
         </div>
         <div class="admin-key-card">
-          <label>Admin access key</label>
+          <div class="admin-lock-head">
+            <div>
+              <label>Admin access key</label>
+              <small id="adminSessionLabel">Session locked</small>
+            </div>
+            <button id="clearAdminKeyBtn" type="button">Lock</button>
+          </div>
           <input id="adminKeyInput" type="password" placeholder="Vercel ADMIN_PANEL_KEY" />
           <button id="unlockAdminBtn" type="button" class="primary-btn">Unlock panel</button>
           <small>Vercel Environment Variables me same key set rahega. Browser me ye key sirf session ke liye store hota hai.</small>
@@ -35,6 +47,18 @@
       </section>
 
       <div id="adminStatus" class="search-status">Admin key enter karke panel unlock karo.</div>
+
+      <section class="admin-metrics" aria-label="Booking dashboard metrics">
+        <article><span>Total leads</span><strong id="metricTotalLeads">0</strong></article>
+        <article><span>New approvals</span><strong id="metricNewLeads">0</strong></article>
+        <article><span>Approved</span><strong id="metricApprovedLeads">0</strong></article>
+        <article><span>City partners</span><strong id="metricVendors">0</strong></article>
+      </section>
+
+      <section class="admin-notification" id="adminNotification">
+        <strong>No live approval alerts yet.</strong>
+        <span>Panel unlock hone ke baad latest city-wise package booking leads yahan update honge.</span>
+      </section>
 
       <section class="admin-grid">
         <div class="admin-card">
@@ -57,8 +81,15 @@
       </section>
 
       <section class="admin-card">
-        <h3>Package leads</h3>
-        <p class="small-note">New enquiry aane ke baad yahan lead dikhegi. Partner button se assigned vendor ko WhatsApp message open hoga.</p>
+        <div class="admin-section-head">
+          <div>
+            <h3>Package leads</h3>
+            <p class="small-note">New enquiry aane ke baad yahan lead dikhegi. Approve karke selected city partner ko forward karo.</p>
+          </div>
+          <select id="leadCityFilter" aria-label="Filter package leads by city">
+            <option value="">All cities</option>
+          </select>
+        </div>
         <div id="leadList" class="admin-list lead-list"></div>
       </section>
     </div>
