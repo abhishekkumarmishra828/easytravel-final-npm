@@ -5,8 +5,8 @@
   const cityGuides = {
     Delhi: {
       foods: [
-        { dish: 'Paranthe wali gali paratha', caption: 'Old Delhi ka classic breakfast-lunch bite.', restaurant: 'Pandit Gaya Prasad Shiv Charan', area: 'Chandni Chowk', since: 'old market legacy' },
-        { dish: 'Butter chicken', caption: 'Delhi ka rich tandoori-style comfort food.', restaurant: 'Moti Mahal', area: 'Daryaganj', since: '1947 legacy' }
+        { dish: 'Paranthe Wali Gali Paratha', caption: 'Classic Old Delhi breakfast and lunch bite.', restaurant: 'Pandit Gaya Prasad Shiv Charan', area: 'Chandni Chowk', since: 'old market legacy' },
+        { dish: 'Butter Chicken', caption: 'Rich tandoori-style Delhi comfort food.', restaurant: 'Moti Mahal', area: 'Daryaganj', since: '1947 legacy' }
       ],
       articles: [
         { item: 'Meenakari jewellery', place: 'Dariba Kalan', note: 'Old Delhi jewellery lane' },
@@ -15,7 +15,7 @@
     },
     Kolkata: {
       foods: [
-        { dish: 'Kathi roll', caption: 'Kolkata ka iconic street-food roll.', restaurant: 'Nizam\'s Restaurant', area: 'New Market', since: 'old roll legacy' },
+        { dish: 'Kathi Roll', caption: 'Kolkata’s iconic street-food roll.', restaurant: 'Nizam\'s Restaurant', area: 'New Market', since: 'old roll legacy' },
         { dish: 'Kosha mangsho', caption: 'Bengali slow-cooked mutton favourite.', restaurant: 'Golpark 6 Ballygunge Place', area: 'Ballygunge', since: 'classic Bengali dining' }
       ],
       articles: [
@@ -25,7 +25,7 @@
     },
     Varanasi: {
       foods: [
-        { dish: 'Kachori sabzi', caption: 'Banaras ka subah wala famous local breakfast.', restaurant: 'Ram Bhandar', area: 'Thatheri Bazaar', since: 'old city favourite' },
+        { dish: 'Kachori Sabzi', caption: 'A famous morning breakfast from Banaras.', restaurant: 'Ram Bhandar', area: 'Thatheri Bazaar', since: 'old city favourite' },
         { dish: 'Malaiyyo', caption: 'Winter-season airy milk dessert.', restaurant: 'Markandey Sardar', area: 'Godowlia', since: 'Banarasi sweet legacy' }
       ],
       articles: [
@@ -35,8 +35,8 @@
     },
     Jaipur: {
       foods: [
-        { dish: 'Pyaaz kachori', caption: 'Jaipur ka most loved snack.', restaurant: 'Rawat Misthan Bhandar', area: 'Sindhi Camp', since: 'local classic' },
-        { dish: 'Rajasthani thali', caption: 'Dal baati churma aur gatte ki sabzi ek saath.', restaurant: 'Chokhi Dhani', area: 'Tonk Road side', since: 'heritage dining' }
+        { dish: 'Pyaaz Kachori', caption: 'One of Jaipur’s most loved snacks.', restaurant: 'Rawat Misthan Bhandar', area: 'Sindhi Camp', since: 'local classic' },
+        { dish: 'Rajasthani Thali', caption: 'Dal baati churma and gatte ki sabzi served together.', restaurant: 'Chokhi Dhani', area: 'Tonk Road side', since: 'heritage dining' }
       ],
       articles: [
         { item: 'Lac bangles', place: 'Johari Bazaar', note: 'traditional jewellery' },
@@ -45,7 +45,7 @@
     },
     'Jammu & Kashmir': {
       foods: [
-        { dish: 'Kashmiri wazwan', caption: 'Kashmir ka ceremonial multi-course food experience.', restaurant: 'Ahdoos', area: 'Srinagar', since: '1918 legacy' },
+        { dish: 'Kashmiri Wazwan', caption: 'Kashmir’s ceremonial multi-course food experience.', restaurant: 'Ahdoos', area: 'Srinagar', since: '1918 legacy' },
         { dish: 'Kahwa and bakery', caption: 'Cold-weather tea and local bakery stop.', restaurant: 'Mughal Darbar', area: 'Srinagar', since: 'popular local dining' }
       ],
       articles: [
@@ -55,8 +55,8 @@
     },
     Ranchi: {
       foods: [
-        { dish: 'Dhuska with ghugni', caption: 'Jharkhand ka traditional fried rice-lentil snack.', restaurant: 'Kaveri Restaurant', area: 'Main Road Ranchi', since: 'local family favourite' },
-        { dish: 'Litti chokha', caption: 'Ranchi me widely loved rustic regional food.', restaurant: 'Madhuban', area: 'Ranchi', since: 'vegetarian local dining' }
+        { dish: 'Dhuska With Ghugni', caption: 'A traditional Jharkhand fried rice-lentil snack.', restaurant: 'Kaveri Restaurant', area: 'Main Road Ranchi', since: 'local family favourite' },
+        { dish: 'Litti Chokha', caption: 'A widely loved rustic regional food in Ranchi.', restaurant: 'Madhuban', area: 'Ranchi', since: 'vegetarian local dining' }
       ],
       articles: [
         { item: 'Dokra craft', place: 'Jharcraft Ranchi', note: 'Jharkhand metal craft' },
@@ -65,8 +65,8 @@
     },
     Jamshedpur: {
       foods: [
-        { dish: 'Litti chokha', caption: 'Steel city me popular Bihari-Jharkhandi comfort food.', restaurant: 'The Madrasi Hotel / local food lanes', area: 'Sakchi', since: 'old market food belt' },
-        { dish: 'South Indian dosa', caption: 'Jamshedpur ke old market me famous quick meal.', restaurant: 'Anand Restaurant', area: 'Bistupur', since: 'local favourite' }
+        { dish: 'Litti Chokha', caption: 'Popular Bihari-Jharkhandi comfort food in the Steel City.', restaurant: 'The Madrasi Hotel / local food lanes', area: 'Sakchi', since: 'old market food belt' },
+        { dish: 'South Indian Dosa', caption: 'A famous quick meal around Jamshedpur’s old market areas.', restaurant: 'Anand Restaurant', area: 'Bistupur', since: 'local favourite' }
       ],
       articles: [
         { item: 'Tribal handicrafts', place: 'Bistupur / state emporium', note: 'Jharkhand craft' },
@@ -75,7 +75,7 @@
     },
     Ahmedabad: {
       foods: [
-        { dish: 'Gujarati thali', caption: 'Ahmedabad ka full sweet-savoury thali experience.', restaurant: 'Gordhan Thal', area: 'Satellite', since: 'classic thali stop' },
+        { dish: 'Gujarati Thali', caption: 'Ahmedabad’s full sweet-and-savoury thali experience.', restaurant: 'Gordhan Thal', area: 'Satellite', since: 'classic thali stop' },
         { dish: 'Fafda jalebi', caption: 'Morning snack strongly associated with Gujarat.', restaurant: 'Chandravilas', area: 'Old Ahmedabad', since: '1900s legacy' }
       ],
       articles: [
@@ -85,8 +85,8 @@
     },
     Kanyakumari: {
       foods: [
-        { dish: 'South Indian meals', caption: 'Coastal Tamil Nadu ka simple, filling banana-leaf meal.', restaurant: 'Hotel Saravana', area: 'Kanyakumari', since: 'pilgrim favourite' },
-        { dish: 'Fresh seafood curry', caption: 'Coastal travellers ke liye local seafood pick.', restaurant: 'Sea View Restaurant', area: 'Beach road', since: 'coastal dining' }
+        { dish: 'South Indian Meals', caption: 'A simple and filling banana-leaf meal from coastal Tamil Nadu.', restaurant: 'Hotel Saravana', area: 'Kanyakumari', since: 'pilgrim favourite' },
+        { dish: 'Fresh Seafood Curry', caption: 'A local seafood pick for coastal travellers.', restaurant: 'Sea View Restaurant', area: 'Beach road', since: 'coastal dining' }
       ],
       articles: [
         { item: 'Sea-shell articles', place: 'Beach market', note: 'souvenir pick' },
@@ -95,7 +95,7 @@
     },
     Goa: {
       foods: [
-        { dish: 'Goan fish curry rice', caption: 'Goa ka everyday coastal classic.', restaurant: 'Ritz Classic', area: 'Panjim', since: 'local seafood favourite' },
+        { dish: 'Goan Fish Curry Rice', caption: 'Goa’s everyday coastal classic.', restaurant: 'Ritz Classic', area: 'Panjim', since: 'local seafood favourite' },
         { dish: 'Pork vindaloo', caption: 'Goan-Portuguese spicy curry.', restaurant: 'Viva Panjim', area: 'Fontainhas', since: 'heritage dining' }
       ],
       articles: [
@@ -105,7 +105,7 @@
     },
     Amritsar: {
       foods: [
-        { dish: 'Amritsari kulcha', caption: 'Punjab ka crispy stuffed kulcha with chole.', restaurant: 'Kesar Da Dhaba / Kulcha Land', area: 'Amritsar', since: 'old city favourite' },
+        { dish: 'Amritsari Kulcha', caption: 'Punjab’s crispy stuffed kulcha served with chole.', restaurant: 'Kesar Da Dhaba / Kulcha Land', area: 'Amritsar', since: 'old city favourite' },
         { dish: 'Lassi', caption: 'Thick Punjabi lassi, easy tourist favourite.', restaurant: 'Ahuja Milk Bhandar', area: 'Dhab Khatikan', since: 'classic dairy stop' }
       ],
       articles: [
@@ -115,8 +115,8 @@
     },
     Mumbai: {
       foods: [
-        { dish: 'Vada pav', caption: 'Mumbai ka most famous street-food icon.', restaurant: 'Ashok Vada Pav', area: 'Dadar', since: 'street-food legend' },
-        { dish: 'Berry pulao', caption: 'Parsi food culture ka famous pick.', restaurant: 'Britannia & Co.', area: 'Ballard Estate', since: 'heritage restaurant' }
+        { dish: 'Vada Pav', caption: 'Mumbai’s most famous street-food icon.', restaurant: 'Ashok Vada Pav', area: 'Dadar', since: 'street-food legend' },
+        { dish: 'Berry Pulao', caption: 'A famous pick from Mumbai’s Parsi food culture.', restaurant: 'Britannia & Co.', area: 'Ballard Estate', since: 'heritage restaurant' }
       ],
       articles: [
         { item: 'Kolhapuri chappal', place: 'Colaba Causeway', note: 'Maharashtra footwear' },
@@ -140,17 +140,17 @@
   };
 
   const legacyRestaurants = {
-    Delhi: { name: 'Moti Mahal', dish: 'Butter chicken', area: 'Daryaganj', age: '1947 legacy', note: 'Delhi food history ka classic stop.' },
-    Kolkata: { name: 'Nizam\'s Restaurant', dish: 'Kathi roll', area: 'New Market', age: '1932 legacy', note: 'Kolkata roll culture ka original-style landmark.' },
-    Varanasi: { name: 'Ram Bhandar', dish: 'Kachori sabzi', area: 'Thatheri Bazaar', age: 'old city legacy', note: 'Banaras breakfast trail ka trusted stop.' },
-    Jaipur: { name: 'Rawat Misthan Bhandar', dish: 'Pyaaz kachori', area: 'Sindhi Camp', age: 'local legacy', note: 'Jaipur snack stop tourists easily locate kar sakte hain.' },
-    'Jammu & Kashmir': { name: 'Ahdoos', dish: 'Kashmiri wazwan', area: 'Srinagar', age: '1918 legacy', note: 'Srinagar ka century-old food landmark.' },
+    Delhi: { name: 'Moti Mahal', dish: 'Butter chicken', area: 'Daryaganj', age: '1947 legacy', note: 'A classic stop in Delhi food history.' },
+    Kolkata: { name: 'Nizam\'s Restaurant', dish: 'Kathi roll', area: 'New Market', age: '1932 legacy', note: 'Original-style landmark for Kolkata roll culture.' },
+    Varanasi: { name: 'Ram Bhandar', dish: 'Kachori sabzi', area: 'Thatheri Bazaar', age: 'old city legacy', note: 'Trusted stop on the Banaras breakfast trail.' },
+    Jaipur: { name: 'Rawat Misthan Bhandar', dish: 'Pyaaz kachori', area: 'Sindhi Camp', age: 'local legacy', note: 'Easy-to-locate Jaipur snack stop for tourists.' },
+    'Jammu & Kashmir': { name: 'Ahdoos', dish: 'Kashmiri wazwan', area: 'Srinagar', age: '1918 legacy', note: 'Century-old Srinagar food landmark.' },
     Ranchi: { name: 'Kaveri Restaurant', dish: 'Dhuska with ghugni', area: 'Main Road Ranchi', age: 'long-running local favourite', note: 'Family-friendly local food stop.' },
-    Jamshedpur: { name: 'Anand Restaurant', dish: 'Dosa and local meals', area: 'Bistupur', age: 'old local favourite', note: 'Steel city travellers ke liye easy food stop.' },
+    Jamshedpur: { name: 'Anand Restaurant', dish: 'Dosa and local meals', area: 'Bistupur', age: 'old local favourite', note: 'Easy food stop for Steel City travellers.' },
     Ahmedabad: { name: 'Chandravilas', dish: 'Fafda jalebi', area: 'Old Ahmedabad', age: 'since 1900', note: 'Ahmedabad heritage food stop.' },
-    Kanyakumari: { name: 'Hotel Saravana', dish: 'South Indian meals', area: 'Kanyakumari', age: 'pilgrim favourite', note: 'Temple/coast route par simple trusted meal.' },
+    Kanyakumari: { name: 'Hotel Saravana', dish: 'South Indian meals', area: 'Kanyakumari', age: 'pilgrim favourite', note: 'Simple trusted meal stop on temple and coast routes.' },
     Goa: { name: 'Viva Panjim', dish: 'Goan curry', area: 'Fontainhas', age: 'heritage dining', note: 'Old Goan neighbourhood dining feel.' },
-    Amritsar: { name: 'Kesar Da Dhaba', dish: 'Dal makhani', area: 'Chowk Passian', age: '1916 legacy', note: 'Amritsar ka iconic old dhaba.' },
+    Amritsar: { name: 'Kesar Da Dhaba', dish: 'Dal makhani', area: 'Chowk Passian', age: '1916 legacy', note: 'Iconic old Amritsar dhaba.' },
     Mumbai: { name: 'Britannia & Co.', dish: 'Berry pulao', area: 'Ballard Estate', age: '1923 legacy', note: 'Mumbai Parsi food heritage stop.' }
   };
 
@@ -171,8 +171,8 @@
 
   const defaultGuide = {
     foods: [
-      { dish: 'Local thali', caption: 'Destination ke state-wise authentic thali ko try karein.', restaurant: 'Top rated local restaurant', area: 'city centre', since: 'local favourite' },
-      { dish: 'Regional sweet/snack', caption: 'Har city ka ek local snack hota hai jo trip ko yaadgaar banata hai.', restaurant: 'Old market food lane', area: 'main market', since: 'traditional stop' }
+      { dish: 'Local thali', caption: 'Try an authentic state-wise thali for the destination.', restaurant: 'Top rated local restaurant', area: 'city centre', since: 'local favourite' },
+      { dish: 'Regional sweet/snack', caption: 'Every city has a local snack that makes the trip memorable.', restaurant: 'Old market food lane', area: 'main market', since: 'traditional stop' }
     ],
     articles: [
       { item: 'State handloom', place: 'government emporium', note: 'safe shopping idea' },

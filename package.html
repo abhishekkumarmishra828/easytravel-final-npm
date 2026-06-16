@@ -12,9 +12,9 @@
 <body>
   <header class="topbar">
     <div class="container nav">
-      <div class="brand"><div class="logo-badge">✈</div><div><h1>EasyTravel Pro</h1><p>Package planner</p></div></div>
-      <nav class="nav-links"><a href="/">Home</a><a href="/results.html">Results</a><a href="/admin-vendors.html">Vendor admin</a></nav>
-      <a class="nav-cta" href="/">New search</a>
+      <div class="brand"><div class="logo-badge">ET</div><div><h1>EasyTravel Pro</h1><p>Package Planner</p></div></div>
+      <nav class="nav-links"><a href="/">Home</a><a href="/results.html">Results</a><a href="/admin-vendors.html">Vendor Admin</a></nav>
+      <a class="nav-cta" href="/">New Search</a>
     </div>
   </header>
 
@@ -23,36 +23,36 @@
       <div class="package-showcase">
         <div class="package-gallery" id="packageGallery"></div>
         <div class="package-sidebar">
-          <div class="hero-kicker" style="color:var(--navy);background:#edf3ff;border-color:#dbe4f6;">Destination package intake</div>
-          <h2 id="pkgTitle" class="package-main-title">Book your destination package</h2>
+          <div class="hero-kicker" style="color:var(--navy);background:#edf3ff;border-color:#dbe4f6;">Destination Package Intake</div>
+          <h2 id="pkgTitle" class="package-main-title">Book Your Destination Package</h2>
           <div class="price-line"><span class="price-old" id="oldPrice">₹15,900</span> <span class="price-new" id="newPrice">₹11,100</span></div>
 
           <form id="packageForm" class="package-form-grid" style="margin-top:22px;">
             <div class="field"><label>Name</label><input id="travellerName" required placeholder="Traveller name"></div>
             <div class="field"><label>Email</label><input id="emailInput" type="email" placeholder="you@example.com"></div>
             <div class="field"><label>Phone No.</label><input id="phoneInput" placeholder="+91-"></div>
-            <div class="field"><label>Number of people</label><input id="peopleInput" type="number" min="1" value="1"></div>
+            <div class="field"><label>Number Of People</label><input id="peopleInput" type="number" min="1" value="1"></div>
             <div class="field"><label>Destination</label><input id="destinationInput" required></div>
             <div class="field"><label>Age</label><input id="ageInput" type="number" required min="1" max="100"></div>
             <div class="field"><label>Days</label><input id="daysInput" type="number" required min="1" max="15" value="3"></div>
             <div class="field"><label>Budget</label><select id="budgetInput"><option>Budget</option><option>Comfort</option><option>Premium</option></select></div>
-            <div class="field"><label>Arrival mode</label><select id="modeInput"><option>train</option><option>bus</option><option>hotel</option></select></div>
-            <div class="field"><label>Month of travel</label><input id="monthInput" placeholder="April / May / December"></div>
-            <div class="field"><label>Travel preference</label><select id="religionInput"><option value="any">Open for all</option><option value="hindu">Hindu / temple friendly</option><option value="muslim">Muslim / halal friendly</option><option value="buddhist">Buddhist / monastery friendly</option><option value="christian">Christian / church friendly</option><option value="secular">Secular heritage + nature</option></select></div>
+            <div class="field"><label>Arrival Mode</label><select id="modeInput"><option>train</option><option>bus</option><option>hotel</option></select></div>
+            <div class="field"><label>Month Of Travel</label><input id="monthInput" placeholder="April / May / December"></div>
+            <div class="field"><label>Travel Preference</label><select id="religionInput"><option value="any">Open To All Travellers</option><option value="hindu">Hindu / Temple-Friendly</option><option value="muslim">Muslim / Halal-Friendly</option><option value="buddhist">Buddhist / Monastery-Friendly</option><option value="christian">Christian / Church-Friendly</option><option value="secular">Secular Heritage + Nature</option></select></div>
             <div class="field" style="grid-column:1/-1"><label>Query</label><textarea id="prefInput" rows="4" placeholder="Temple / food / official work / family / nightlife / calm stay"></textarea></div>
             <div class="package-actions">
-              <button id="reviewPackageBtn" class="secondary-btn" type="button" style="background:#223f74;color:#fff;">Review package</button>
+              <button id="reviewPackageBtn" class="secondary-btn" type="button" style="background:#223f74;color:#fff;">Review Package</button>
               <button id="enquireBtn" class="primary-btn" type="submit">Enquire Now</button>
-              <a id="whatsappBtn" class="whatsapp-btn" target="_blank" rel="noopener">Whatsapp Us</a>
+              <a id="whatsappBtn" class="whatsapp-btn" target="_blank" rel="noopener">WhatsApp Us</a>
               <button id="payNowBtn" class="pay-btn" type="button" disabled>Pay Now</button>
               <button id="downloadBtn" class="download-btn" type="button">Download Itinerary</button>
             </div>
             <div id="reviewPanel" style="display:none;grid-column:1/-1;margin-top:14px;padding:18px;border-radius:20px;border:1px solid #d7e1f0;background:#f8fbff;">
-              <h3 style="margin:0 0 10px;font-size:28px;color:#1f3c73;">Package review summary</h3>
+              <h3 style="margin:0 0 10px;font-size:28px;color:#1f3c73;">Package Review Summary</h3>
               <div id="reviewContent" style="color:#29456f;line-height:1.8;"></div>
               <label style="display:flex;gap:10px;align-items:flex-start;margin-top:14px;color:#1f3c73;font-weight:800;">
                 <input id="reviewConfirmCheck" type="checkbox" style="margin-top:5px;transform:scale(1.2);" />
-                Maine selected package, traveller details, price, features, coupon aur stay rules review kar liya hai.
+                I have reviewed the selected package, traveller details, price, features, coupon and stay rules.
               </label>
             </div>
           </form>
@@ -78,10 +78,10 @@
   <div id="paymentModal" style="display:none;position:fixed;inset:0;background:rgba(10,20,40,.55);z-index:10000;padding:20px;overflow:auto">
     <div style="max-width:640px;margin:60px auto;background:#fff;border-radius:24px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.2)">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px">
-        <h3 style="margin:0;font-size:34px;color:#1a2d55">Confirm package payment</h3>
+        <h3 style="margin:0;font-size:34px;color:#1a2d55">Confirm Package Payment</h3>
         <button id="closePaymentModal" type="button" style="border:none;background:#eef3ff;color:#1a2d55;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer">Close</button>
       </div>
-      <p style="margin:0 0 18px;color:#51688f;font-size:18px">Traveller details ke basis par payment summary generate hoga. Demo version me payment record MongoDB me save hoga aur confirmation toast show hoga.</p>
+      <p style="margin:0 0 18px;color:#51688f;font-size:18px">A payment summary will be generated from the traveller details. In this demo, the payment record is saved to MongoDB and a confirmation message is shown.</p>
       <div id="paymentSummary" style="background:#f7faff;border:1px solid #d8e2f5;border-radius:18px;padding:18px;margin-bottom:18px"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
         <button id="confirmPaymentBtn" type="button" class="pay-btn" style="height:64px">Confirm Payment</button>

@@ -29,7 +29,7 @@
     },
     outstation: {
       title: 'Ride out of town',
-      text: 'Book and depart in an hour for nearby cities and yatra base points.',
+      text: 'Book and depart in an hour for nearby cities and pilgrimage base points.',
       hero: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80',
       distance: 85
     },
@@ -100,12 +100,12 @@
 
   function requestLocation() {
     if (!navigator.geolocation) {
-      setPickup('City centre pickup', 'Geolocation supported nahi hai. Pickup field manually edit kar sakte ho.');
+      setPickup('City centre pickup', 'Geolocation is not supported. You can edit the pickup field manually.');
       pickupText.removeAttribute('readonly');
       return;
     }
     pickupText.value = 'Fetching current location...';
-    locationStatus.textContent = 'Location permission allow karo. Exact address lookup ho raha hai.';
+    locationStatus.textContent = 'Allow location permission. Looking up the exact address.';
     navigator.geolocation.getCurrentPosition(
       async position => {
         const lat = position.coords.latitude.toFixed(6);
@@ -113,15 +113,15 @@
         try {
           const data = await reverseGeocode(lat, lng);
           setCityFromAddress(data);
-          setPickup(data.address, 'Location fetched. Agar address thoda wrong lage to pickup field edit kar sakte ho.', { lat: Number(lat), lng: Number(lng) });
+          setPickup(data.address, 'Location fetched. You can edit the pickup field if the address looks inaccurate.', { lat: Number(lat), lng: Number(lng) });
           pickupText.removeAttribute('readonly');
         } catch (error) {
-          setPickup(`Current location ${lat}, ${lng}`, 'Coordinates fetched, address lookup fail hua. Pickup field edit kar sakte ho.', { lat: Number(lat), lng: Number(lng) });
+          setPickup(`Current location ${lat}, ${lng}`, 'Coordinates fetched, but address lookup failed. You can edit the pickup field.', { lat: Number(lat), lng: Number(lng) });
           pickupText.removeAttribute('readonly');
         }
       },
       () => {
-        setPickup('City centre pickup', 'Location permission deny hua. Pickup field manually edit kar sakte ho.');
+        setPickup('City centre pickup', 'Location permission was denied. You can edit the pickup field manually.');
         pickupText.removeAttribute('readonly');
         notifySecurity('location_permission_denied', 'Ride page geolocation permission denied');
       },
@@ -173,7 +173,7 @@
       document.getElementById('rideShowcasePanel').style.backgroundImage = `linear-gradient(90deg,rgba(9,20,44,.32),rgba(9,20,44,.52)),url('${content.hero}')`;
       const distanceInput = document.getElementById('rideDistance');
       if (!distanceInput.value) distanceInput.value = content.distance;
-      document.getElementById('availableRideHeading').textContent = activeTab === 'daily' ? 'Available rides' : activeTab === 'outstation' ? 'Outstation rides' : 'Rental packages';
+      document.getElementById('availableRideHeading').textContent = activeTab === 'daily' ? 'Available Rides' : activeTab === 'outstation' ? 'Outstation Rides' : 'Rental Packages';
       calculateQuote();
     });
   });

@@ -43,8 +43,8 @@
     <div class="left">
       <div style="font-size:14px;font-weight:800;margin-bottom:12px;opacity:.9">EasyTravel Pro - User Login</div>
       <h1>Create your account, then explore India with confidence.</h1>
-      <p>Sign up once to unlock travel results, destination packages, local transport support, maps, videos, and booking guidance for India trips and yatra routes.</p>
-      <a href="/" style="display:inline-block;margin-top:22px;padding:12px 18px;border-radius:14px;background:#fff;color:#1a2d55;font-weight:800">Go to home</a>
+      <p>Sign up once to unlock travel results, destination packages, local transport support, maps, videos and booking guidance for India trips.</p>
+      <a href="/" style="display:inline-block;margin-top:22px;padding:12px 18px;border-radius:14px;background:#fff;color:#1a2d55;font-weight:800">Go To Home</a>
     </div>
     <div class="right">
       <div class="tabs">
@@ -53,9 +53,9 @@
       </div>
       <div class="auth-help">
         <b>OTP</b>
-        <p>Registration ke time email OTP verify hoga. Login simple email + password se direct rahega.</p>
+        <p>Email OTP verification is required during registration. Login continues with email and password.</p>
       </div>
-      <p class="trust-note">Use only this official HTTPS website. EasyTravel Pro college project travel planning ke liye hai; kabhi bhi bank OTP, card PIN, ya personal account password yahan enter mat karein.</p>
+      <p class="trust-note">Use only this official HTTPS website. EasyTravel Pro is a college project for travel planning. Never enter bank OTPs, card PINs or third-party account passwords here.</p>
 
       <form id="authForm">
         <div class="row" id="nameRow" style="display:none">
@@ -80,11 +80,11 @@
           <input id="otp" inputmode="numeric" maxlength="6" placeholder="6 digit OTP" />
         </div>
 
-        <button class="submit" id="submitBtn" type="submit">Login now</button>
+        <button class="submit" id="submitBtn" type="submit">Login Now</button>
         <div class="msg" id="msg"></div>
       </form>
 
-      <p class="muted" style="margin-top:16px">Register: email OTP verify karo. Login: email + password se direct explore karo.</p>
+      <p class="muted" style="margin-top:16px">Register with email OTP verification. Login directly with email and password.</p>
     </div>
   </div>
 </div>
@@ -113,7 +113,7 @@
     nameRow.style.display = mode === "register" ? "grid" : "none";
     otpRow.style.display = "none";
     otpInput.value = "";
-    submitBtn.textContent = mode === "register" ? "Send registration OTP" : "Login now";
+    submitBtn.textContent = mode === "register" ? "Send Registration OTP" : "Login Now";
     msg.style.display = "none";
   }
 
@@ -134,7 +134,7 @@
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.success) {
-      throw new Error(data.message || "OTP email send nahi ho pa raha.");
+      throw new Error(data.message || "OTP email could not be sent.");
     }
     return data;
   }
@@ -147,7 +147,7 @@
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.success) {
-      throw new Error(data.message || "OTP verify nahi ho pa raha.");
+      throw new Error(data.message || "OTP could not be verified.");
     }
     return data;
   }
@@ -164,18 +164,18 @@
       password: document.getElementById("password").value.trim()
     };
     if (!payload.password) {
-      showMsg("Password enter karo.");
+      showMsg("Please enter your password.");
       return;
     }
 
     if (mode === "register") {
       payload.name = document.getElementById("name").value.trim();
       if (!payload.name) {
-        showMsg("Register karne ke liye full name required hai.");
+        showMsg("Full name is required for registration.");
         return;
       }
       if (!validPassword(payload.password)) {
-        showMsg("Password me minimum 5 characters, 1 Capital letter aur 1 Special symbol required hai.");
+        showMsg("Password must contain at least 5 characters, 1 capital letter and 1 special symbol.");
         return;
       }
     }
@@ -191,14 +191,14 @@
           otpEmail = payload.email;
           otpRow.style.display = "block";
           submitBtn.textContent = "Verify OTP";
-          showMsg(data.message || "OTP email par send ho gaya. 10 minute ke andar verify karo.");
+          showMsg(data.message || "OTP sent to your email. Please verify within 10 minutes.");
           otpInput.focus();
           return;
         }
 
         const otp = otpInput.value.trim();
         if (!/^\d{6}$/.test(otp)) {
-          showMsg("6 digit OTP enter karo.");
+          showMsg("Please enter the 6-digit OTP.");
           return;
         }
         submitBtn.textContent = "Verifying OTP...";
@@ -212,10 +212,10 @@
           });
           const registerData = await registerRes.json();
           if (!registerData.success) {
-            showMsg(registerData.message || "OTP verified, lekin registration save nahi ho pa raha.");
+            showMsg(registerData.message || "OTP verified, but registration could not be saved.");
             return;
           }
-          showMsg("Registration successful. Ab password se login karo.");
+          showMsg("Registration successful. You can now log in with your password.");
           form.reset();
           setMode("login");
           document.getElementById("email").value = payload.email;
@@ -240,12 +240,12 @@
       }
     } catch (error) {
       console.error("Auth error:", error);
-      showMsg(error.message || "Server error. Backend check karke fir try karo.");
+      showMsg(error.message || "Server error. Please check the backend and try again.");
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = mode === "register"
         ? (otpChallenge ? "Verify OTP" : "Send registration OTP")
-        : "Login now";
+        : "Login Now";
     }
   });
 </script>

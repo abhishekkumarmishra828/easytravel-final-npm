@@ -37,8 +37,8 @@
 
   function setSessionState(unlocked) {
     document.body.classList.toggle('admin-unlocked', unlocked);
-    if (sessionLabel) sessionLabel.textContent = unlocked ? 'Session unlocked after refresh' : 'Session locked';
-    if (unlockBtn) unlockBtn.textContent = unlocked ? 'Refresh panel' : 'Unlock panel';
+    if (sessionLabel) sessionLabel.textContent = unlocked ? 'Session unlocked for this browser session' : 'Session locked';
+    if (unlockBtn) unlockBtn.textContent = unlocked ? 'Refresh Panel' : 'Unlock Panel';
   }
 
   async function adminFetch(url, options = {}) {
@@ -72,10 +72,10 @@
     if (newCount) {
       const firstNew = leads.find(lead => (lead.status || 'new') === 'new');
       notificationEl.classList.add('active');
-      notificationEl.innerHTML = `<strong>${newCount} new approval pending</strong><span>Latest: ${escapeHtml(firstNew.destination)} package by ${escapeHtml(firstNew.traveller)}. Approve karke partner ko forward karo.</span>`;
+      notificationEl.innerHTML = `<strong>${newCount} new approval pending</strong><span>Latest: ${escapeHtml(firstNew.destination)} package by ${escapeHtml(firstNew.traveller)}. Approve and forward it to a partner.</span>`;
     } else {
       notificationEl.classList.remove('active');
-      notificationEl.innerHTML = '<strong>No pending approvals</strong><span>Sab visible package leads approved/assigned state me hain.</span>';
+      notificationEl.innerHTML = '<strong>No pending approvals</strong><span>All visible package leads are approved or assigned.</span>';
     }
   }
 
@@ -83,7 +83,7 @@
     if (!cityFilter) return;
     const selected = cityFilter.value;
     const cities = [...new Set(leads.map(lead => lead.city || lead.destination).filter(Boolean))].sort();
-    cityFilter.innerHTML = '<option value="">All cities</option>' + cities.map(city => `<option value="${escapeHtml(city)}">${escapeHtml(city)}</option>`).join('');
+    cityFilter.innerHTML = '<option value="">All Cities</option>' + cities.map(city => `<option value="${escapeHtml(city)}">${escapeHtml(city)}</option>`).join('');
     if (cities.includes(selected)) cityFilter.value = selected;
   }
 
@@ -100,7 +100,7 @@
           <strong>${escapeHtml(v.name)}</strong>
           <p>${escapeHtml(v.area || 'Area not added')} · ${escapeHtml(v.service || 'Service not added')}</p>
         </div>
-        <a href="${waLink(v.phone, `Hello ${v.name}, EasyTravel partner verification ke liye connect karna hai.`)}" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="${waLink(v.phone, `Hello ${v.name}, this is for EasyTravel partner verification.`)}" target="_blank" rel="noopener">WhatsApp</a>
       </article>
     `).join('');
   }
@@ -116,7 +116,7 @@
     const selectedCity = cityFilter ? cityFilter.value : '';
     const visibleLeads = selectedCity ? leads.filter(lead => String(lead.city || lead.destination) === selectedCity) : leads;
     if (!visibleLeads.length) {
-      leadList.innerHTML = '<div class="admin-empty">Is filter me koi package lead nahi hai.</div>';
+      leadList.innerHTML = '<div class="admin-empty">No package leads match this filter.</div>';
       return;
     }
     leadList.innerHTML = visibleLeads.map(lead => {
@@ -144,7 +144,7 @@
   async function loadAdmin() {
     if (!adminKey) {
       setSessionState(false);
-      setStatus('Admin key required. Vercel me ADMIN_PANEL_KEY set karo.', true);
+      setStatus('Admin key required. Set ADMIN_PANEL_KEY in Vercel.', true);
       return;
     }
     try {
@@ -160,7 +160,7 @@
       renderLeads(latestLeads, latestVendors);
       updateMetrics(latestLeads, latestVendors);
       setSessionState(true);
-      setStatus('Admin panel unlocked. Refresh ke baad bhi current session me panel auto-unlock rahega.');
+      setStatus('Admin panel unlocked. It will remain unlocked for this browser session after refresh.');
     } catch (error) {
       setSessionState(false);
       setStatus(error.message || 'Admin panel unlock failed.', true);

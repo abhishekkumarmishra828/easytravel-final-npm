@@ -18,12 +18,12 @@
   const plans = {
     Delhi: {
       headline: 'Delhi local transport support',
-      summary: 'Metro QR ticket, cab pickup, DTC bus route aur Old Delhi e-rickshaw support ko ek jagah arrange karo.',
+      summary: 'Metro QR tickets, cab pickup, DTC bus routes and Old Delhi e-rickshaw guidance in one place.',
       modes: [
-        { title: 'Cab pickup', text: 'Airport, railway station ya bus stop se Ola/Uber cab book karke hotel ya place tak jao.' },
-        { title: 'Metro ticket', text: 'DMRC QR ticket official portal/app se book karo, phir last-mile cab ya e-rickshaw lo.' },
-        { title: 'Local bus', text: 'Delhi city bus route ke liye DTC/One Delhi support use karo.' },
-        { title: 'Last mile', text: 'Red Fort, Chandni Chowk aur market area ke liye e-rickshaw guidance rakho.' }
+        { title: 'Cab Pickup', text: 'Book an Ola/Uber cab from the airport, railway station or bus stop to the hotel or selected place.' },
+        { title: 'Metro Ticket', text: 'Book DMRC QR tickets through the official portal/app, then use a cab or e-rickshaw for last-mile travel.' },
+        { title: 'Local Bus', text: 'Use DTC/One Delhi support for Delhi city bus routes.' },
+        { title: 'Last Mile', text: 'Use e-rickshaw guidance for Red Fort, Chandni Chowk and market areas.' }
       ],
       links: {
         cab: defaultLinks.cab,
@@ -40,12 +40,12 @@
     },
     Varanasi: {
       headline: 'Varanasi local transport support',
-      summary: 'Ghat area ke liye e-rickshaw, temple lane walk, boat point drop aur UPSRTC bus support clearly plan karo.',
+      summary: 'Plan e-rickshaws, lane walks, boat-point drops and UPSRTC bus support for the ghat area.',
       modes: [
-        { title: 'Cab pickup', text: 'Station ya airport se cab book karke hotel/Assi Ghat/Kashi Vishwanath corridor tak jao.' },
-        { title: 'E-rickshaw', text: 'Temple lane aur ghat area me e-rickshaw + walking route sabse practical rahega.' },
-        { title: 'Boat point', text: 'Dashashwamedh/Assi Ghat boat point ke liye drop guidance aur timing check karo.' },
-        { title: 'State bus', text: 'Intercity ya nearby trip ke liye UPSRTC official booking redirect use karo.' }
+        { title: 'Cab Pickup', text: 'Book a cab from the station or airport to the hotel, Assi Ghat or Kashi Vishwanath corridor.' },
+        { title: 'E-Rickshaw', text: 'E-rickshaw plus walking routes are practical for lanes and ghat areas.' },
+        { title: 'Boat Point', text: 'Check drop guidance and timing for Dashashwamedh or Assi Ghat boat points.' },
+        { title: 'State Bus', text: 'Use the UPSRTC official booking redirect for intercity or nearby trips.' }
       ],
       links: {
         cab: defaultLinks.cab,
@@ -60,12 +60,12 @@
     },
     Jaipur: {
       headline: 'Jaipur local transport support',
-      summary: 'Amber Fort cab route, Jaipur Metro, old city e-rickshaw aur RSRTC/JCTSL bus support.',
+      summary: 'Amber Fort cab routes, Jaipur Metro, old-city e-rickshaws and RSRTC/JCTSL bus support.',
       modes: [
-        { title: 'Cab pickup', text: 'Station/airport se cab book karke hotel, Amber Fort ya City Palace route cover karo.' },
-        { title: 'Metro ticket', text: 'Jaipur Metro route available ho to official metro info/booking page check karo.' },
-        { title: 'Old city ride', text: 'Hawa Mahal, Johri Bazaar aur Bapu Bazaar ke liye e-rickshaw easy rahega.' },
-        { title: 'State/city bus', text: 'RSRTC intercity bus aur Jaipur city bus options ko official redirect se check karo.' }
+        { title: 'Cab Pickup', text: 'Book a cab from the station or airport to cover the hotel, Amber Fort or City Palace route.' },
+        { title: 'Metro Ticket', text: 'Check the official Jaipur Metro information or booking page when metro routes are available.' },
+        { title: 'Old City Ride', text: 'E-rickshaws are convenient for Hawa Mahal, Johri Bazaar and Bapu Bazaar.' },
+        { title: 'State/City Bus', text: 'Check RSRTC intercity bus and Jaipur city bus options through official redirects.' }
       ],
       links: {
         cab: defaultLinks.cab,
@@ -81,12 +81,12 @@
     },
     Mumbai: {
       headline: 'Mumbai local transport support',
-      summary: 'Local train, metro, BEST bus, cab aur Marine Drive/Colaba last-mile transfer ko separate plan me dekho.',
+      summary: 'Review local train, metro, BEST bus, cab and Marine Drive/Colaba last-mile transfer options.',
       modes: [
-        { title: 'Cab pickup', text: 'Airport, railway station ya hotel se Ola/Uber cab book karke direct transfer lo.' },
-        { title: 'Metro/local', text: 'Mumbai Metro aur local train route se fast city movement plan karo.' },
-        { title: 'City bus', text: 'BEST/Chalo mobile ticket support se bus travel check karo.' },
-        { title: 'Last mile', text: 'Gateway, Colaba, Bandra aur Marine Drive ke liye cab + walk route best rahega.' }
+        { title: 'Cab Pickup', text: 'Book an Ola/Uber cab from the airport, railway station or hotel for a direct transfer.' },
+        { title: 'Metro/Local', text: 'Use Mumbai Metro and local train routes for faster city movement.' },
+        { title: 'City Bus', text: 'Check BEST/Chalo mobile ticket support for bus travel.' },
+        { title: 'Last Mile', text: 'Cab plus walking routes work well for Gateway, Colaba, Bandra and Marine Drive.' }
       ],
       links: {
         cab: defaultLinks.cab,
@@ -103,12 +103,12 @@
     },
     Guwahati: {
       headline: 'Guwahati local transport support',
-      summary: 'Kamakhya Temple cab, Umananda ferry point transfer, ASTC bus aur riverfront route support.',
+      summary: 'Kamakhya Temple cab support, Umananda ferry-point transfer, ASTC bus and riverfront route support.',
       modes: [
-        { title: 'Cab pickup', text: 'Station/airport se Kamakhya Temple, hotel ya Brahmaputra riverfront tak cab lo.' },
-        { title: 'Ferry point', text: 'Umananda Island ke liye ferry point drop aur return pickup plan rakho.' },
-        { title: 'State bus', text: 'ASTC bus support se Assam local/intercity route check karo.' },
-        { title: 'Auto/local', text: 'Market aur riverfront ke liye auto/cab mix practical rahega.' }
+        { title: 'Cab Pickup', text: 'Use a cab from the station or airport to Kamakhya Temple, the hotel or Brahmaputra riverfront.' },
+        { title: 'Ferry Point', text: 'Plan ferry-point drop and return pickup for Umananda Island.' },
+        { title: 'State Bus', text: 'Check Assam local and intercity routes through ASTC support.' },
+        { title: 'Auto/Local', text: 'A mix of auto and cab works well for markets and riverfront movement.' }
       ],
       links: {
         cab: defaultLinks.cab,
@@ -123,12 +123,12 @@
     },
     Goa: {
       headline: 'Goa local transport support',
-      summary: 'Airport cab, scooter rental guidance, beach route planning aur Kadamba bus support.',
+      summary: 'Airport cab, scooter rental guidance, beach route planning and Kadamba bus support.',
       modes: [
-        { title: 'Cab pickup', text: 'Airport/station se hotel ya beach cluster tak cab book karo.' },
-        { title: 'Scooter/cab', text: 'North/South Goa beach movement ke liye scooter guidance ya family cab plan rakho.' },
-        { title: 'Local bus', text: 'Kadamba/Goa transport official support se bus route check karo.' },
-        { title: 'Beach route', text: 'Baga, Calangute, Candolim ya South Goa ke liye area-wise route choose karo.' }
+        { title: 'Cab Pickup', text: 'Book a cab from the airport or station to the hotel or beach cluster.' },
+        { title: 'Scooter/Cab', text: 'Use scooter guidance or a family cab plan for North and South Goa beach movement.' },
+        { title: 'Local Bus', text: 'Check bus routes through Kadamba/Goa transport official support.' },
+        { title: 'Beach Route', text: 'Choose area-wise routes for Baga, Calangute, Candolim or South Goa.' }
       ],
       links: {
         cab: defaultLinks.cab,
@@ -143,12 +143,12 @@
     },
     Rameshwaram: {
       headline: 'Rameshwaram local transport support',
-      summary: 'Temple cab, Pamban Bridge stop, Dhanushkodi local cab aur TNSTC bus guidance.',
+      summary: 'Temple cab support, Pamban Bridge stop, Dhanushkodi local cab and TNSTC bus guidance.',
       modes: [
-        { title: 'Cab pickup', text: 'Station se temple/hotel transfer aur Dhanushkodi cab route plan karo.' },
-        { title: 'Auto support', text: 'Temple corridor aur nearby stops ke liye auto/local cab useful rahega.' },
-        { title: 'State bus', text: 'TNSTC official booking/info se Tamil Nadu bus route check karo.' },
-        { title: 'Sightseeing', text: 'Pamban Bridge, Dhanushkodi aur APJ Memorial ko one route me combine karo.' }
+        { title: 'Cab Pickup', text: 'Plan station-to-temple, station-to-hotel and Dhanushkodi cab routes.' },
+        { title: 'Auto Support', text: 'Auto or local cab support is useful for the temple corridor and nearby stops.' },
+        { title: 'State Bus', text: 'Check Tamil Nadu bus routes through TNSTC official booking or information pages.' },
+        { title: 'Sightseeing', text: 'Combine Pamban Bridge, Dhanushkodi and APJ Memorial into one route.' }
       ],
       links: {
         cab: defaultLinks.cab,
@@ -163,12 +163,12 @@
     },
     Dwarka: {
       headline: 'Dwarka local transport support',
-      summary: 'Dwarkadhish Temple cab, Bet Dwarka boat point transfer aur GSRTC bus support.',
+      summary: 'Dwarkadhish Temple cab support, Bet Dwarka boat-point transfer and GSRTC bus support.',
       modes: [
-        { title: 'Cab pickup', text: 'Station/hotel se Dwarkadhish Temple, Rukmini Temple aur Nageshwar route cover karo.' },
-        { title: 'Boat point', text: 'Bet Dwarka ke liye jetty drop, boat timing aur return transfer plan karo.' },
-        { title: 'State bus', text: 'GSRTC official support se Gujarat bus route check karo.' },
-        { title: 'Local auto', text: 'Temple area aur nearby market ke liye auto support practical rahega.' }
+        { title: 'Cab Pickup', text: 'Cover Dwarkadhish Temple, Rukmini Temple and Nageshwar routes from the station or hotel.' },
+        { title: 'Boat Point', text: 'Plan jetty drop, boat timing and return transfer for Bet Dwarka.' },
+        { title: 'State Bus', text: 'Check Gujarat bus routes through GSRTC official support.' },
+        { title: 'Local Auto', text: 'Auto support is practical for temple areas and nearby markets.' }
       ],
       links: {
         cab: defaultLinks.cab,
@@ -183,12 +183,12 @@
     },
     Haridwar: {
       headline: 'Haridwar local transport support',
-      summary: 'Har Ki Pauri e-rickshaw, ropeway point drop, aarti return pickup aur Uttarakhand bus support.',
+      summary: 'Har Ki Pauri e-rickshaw support, ropeway-point drop, evening return pickup and Uttarakhand bus support.',
       modes: [
-        { title: 'Cab pickup', text: 'Station/bus stop se hotel, Har Ki Pauri ya ropeway point tak pickup lo.' },
-        { title: 'E-rickshaw', text: 'Ghat area me e-rickshaw + short walk route best rahega.' },
-        { title: 'State bus', text: 'UTC official support se Uttarakhand bus route check karo.' },
-        { title: 'Aarti return', text: 'Evening Ganga Aarti ke baad return pickup/auto plan pehle set karo.' }
+        { title: 'Cab Pickup', text: 'Use pickup from the station or bus stop to the hotel, Har Ki Pauri or ropeway point.' },
+        { title: 'E-Rickshaw', text: 'E-rickshaw plus short walking routes work best in the ghat area.' },
+        { title: 'State Bus', text: 'Check Uttarakhand bus routes through UTC official support.' },
+        { title: 'Evening Return', text: 'Set return pickup or auto planning before the evening Ganga Aarti.' }
       ],
       links: {
         cab: defaultLinks.cab,
@@ -203,12 +203,12 @@
     },
     Rishikesh: {
       headline: 'Rishikesh local transport support',
-      summary: 'Ram Jhula/Lakshman Jhula auto route, Triveni Ghat transfer, rafting point cab aur UTC bus support.',
+      summary: 'Ram Jhula/Lakshman Jhula auto routes, Triveni Ghat transfer, rafting-point cab and UTC bus support.',
       modes: [
-        { title: 'Cab pickup', text: 'Station/bus stop se hotel, ghat ya rafting point tak cab/auto plan karo.' },
-        { title: 'Auto route', text: 'Bridge area me local auto + walking route user-friendly rahega.' },
-        { title: 'State bus', text: 'UTC official support se Rishikesh/Haridwar/Dehradun bus route check karo.' },
-        { title: 'Activity transfer', text: 'Rafting point ya Neer Garh route ke liye local cab timing plan karo.' }
+        { title: 'Cab Pickup', text: 'Plan cab or auto support from the station or bus stop to hotels, ghats or rafting points.' },
+        { title: 'Auto Route', text: 'Local auto plus walking routes are user-friendly around bridge areas.' },
+        { title: 'State Bus', text: 'Check Rishikesh, Haridwar and Dehradun bus routes through UTC official support.' },
+        { title: 'Activity Transfer', text: 'Plan local cab timing for rafting points or the Neer Garh route.' }
       ],
       links: {
         cab: defaultLinks.cab,
@@ -238,12 +238,12 @@
   function fallbackPlan(city) {
     return {
       headline: `${city} local transport support`,
-      summary: `${city} ke liye cab, auto, local bus aur official route support ko one-page guidance me dekhein.`,
+      summary: `One-page guidance for cab, auto, local bus and official route support in ${city}.`,
       modes: [
-        { title: 'Cab pickup', text: 'Ola/Uber se station, airport ya bus stop pickup book karo.' },
-        { title: 'Local route', text: 'Google Maps route se nearest auto/cab/bus option compare karo.' },
-        { title: 'State bus', text: 'State transport official portal ya trusted booking partner se bus ticket check karo.' },
-        { title: 'Support', text: 'Destination aur place ke hisaab se local pickup/drop plan confirm karo.' }
+        { title: 'Cab Pickup', text: 'Book station, airport or bus-stop pickup through Ola/Uber.' },
+        { title: 'Local Route', text: 'Compare nearby auto, cab and bus options through Google Maps routes.' },
+        { title: 'State Bus', text: 'Check bus tickets through the official state transport portal or a trusted booking partner.' },
+        { title: 'Support', text: 'Confirm local pickup and drop planning based on destination and selected place.' }
       ],
       links: {
         cab: defaultLinks.cab,

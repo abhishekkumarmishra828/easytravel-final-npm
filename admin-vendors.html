@@ -15,7 +15,7 @@
     <div class="container nav">
       <div class="brand"><div class="logo-badge"><img src="/assets/title-tree.png" alt="EasyTravel logo" /></div><div><h1>Vendor Admin</h1><p>City-wise partner network and package leads</p></div></div>
       <nav class="nav-links"><a href="/">Home</a><a href="/package.html">Packages</a><a href="/ride.html">Rides</a></nav>
-      <a class="nav-cta" href="/admin-vendors.html">Admin panel</a>
+      <a class="nav-cta" href="/admin-vendors.html">Admin Panel</a>
     </div>
   </header>
 
@@ -23,59 +23,59 @@
     <div class="container admin-shell">
       <section class="admin-hero">
         <div>
-          <span class="section-kicker">Private admin workspace</span>
-          <h2>Partner network control room</h2>
-          <p>City-wise transporter, hotel, food support aur yatra partners manage karo. New package booking leads ko approve karke local partner tak WhatsApp handoff karo.</p>
+          <span class="section-kicker">Private Admin Workspace</span>
+          <h2>Partner Network Control Room</h2>
+          <p>Manage city-wise transporters, hotels, food support and travel partners. Approve new package leads and hand them off to local partners through WhatsApp.</p>
           <div class="admin-trust-row">
-            <span>Key protected</span>
-            <span>Lead approval flow</span>
-            <span>City partner routing</span>
+            <span>Key Protected</span>
+            <span>Lead Approval Flow</span>
+            <span>City Partner Routing</span>
           </div>
         </div>
         <div class="admin-key-card">
           <div class="admin-lock-head">
             <div>
-              <label>Admin access key</label>
-              <small id="adminSessionLabel">Session locked</small>
+              <label>Admin Access Key</label>
+              <small id="adminSessionLabel">Session Locked</small>
             </div>
             <button id="clearAdminKeyBtn" type="button">Lock</button>
           </div>
           <input id="adminKeyInput" type="password" placeholder="Vercel ADMIN_PANEL_KEY" />
-          <button id="unlockAdminBtn" type="button" class="primary-btn">Unlock panel</button>
-          <small>Vercel Environment Variables me same key set rahega. Browser me ye key sirf session ke liye store hota hai.</small>
+          <button id="unlockAdminBtn" type="button" class="primary-btn">Unlock Panel</button>
+          <small>The same key must be configured in Vercel Environment Variables. The browser stores it only for the current session.</small>
         </div>
       </section>
 
-      <div id="adminStatus" class="search-status">Admin key enter karke panel unlock karo.</div>
+      <div id="adminStatus" class="search-status">Enter the admin key to unlock the panel.</div>
 
       <section class="admin-metrics" aria-label="Booking dashboard metrics">
-        <article><span>Total leads</span><strong id="metricTotalLeads">0</strong></article>
-        <article><span>New approvals</span><strong id="metricNewLeads">0</strong></article>
+        <article><span>Total Leads</span><strong id="metricTotalLeads">0</strong></article>
+        <article><span>New Approvals</span><strong id="metricNewLeads">0</strong></article>
         <article><span>Approved</span><strong id="metricApprovedLeads">0</strong></article>
-        <article><span>City partners</span><strong id="metricVendors">0</strong></article>
+        <article><span>City Partners</span><strong id="metricVendors">0</strong></article>
       </section>
 
       <section class="admin-notification" id="adminNotification">
         <strong>No live approval alerts yet.</strong>
-        <span>Panel unlock hone ke baad latest city-wise package booking leads yahan update honge.</span>
+        <span>Latest city-wise package leads will appear here after the panel is unlocked.</span>
       </section>
 
       <section class="admin-grid">
         <div class="admin-card">
-          <h3>Add city partner</h3>
+          <h3>Add City Partner</h3>
           <form id="vendorForm" class="admin-form">
             <input id="vendorCity" placeholder="City e.g. Delhi" required />
-            <select id="vendorType"><option>Transport</option><option>Stay</option><option>Food</option><option>Yatra</option><option>Guide</option></select>
+            <select id="vendorType"><option>Transport</option><option>Stay</option><option>Food</option><option>Pilgrimage</option><option>Guide</option></select>
             <input id="vendorName" placeholder="Partner / vendor name" required />
             <input id="vendorPhone" placeholder="WhatsApp phone with country code" required />
             <input id="vendorArea" placeholder="Area / pickup zone" />
             <textarea id="vendorService" rows="3" placeholder="Service details"></textarea>
-            <button class="primary-btn" type="submit">Save partner</button>
+            <button class="primary-btn" type="submit">Save Partner</button>
           </form>
         </div>
 
         <div class="admin-card">
-          <h3>Approved partners</h3>
+          <h3>Approved Partners</h3>
           <div id="vendorList" class="admin-list"></div>
         </div>
       </section>
@@ -83,11 +83,11 @@
       <section class="admin-card">
         <div class="admin-section-head">
           <div>
-            <h3>Package leads</h3>
-            <p class="small-note">New enquiry aane ke baad yahan lead dikhegi. Approve karke selected city partner ko forward karo.</p>
+            <h3>Package Leads</h3>
+            <p class="small-note">New enquiries appear here. Approve a lead and forward it to the selected city partner.</p>
           </div>
           <select id="leadCityFilter" aria-label="Filter package leads by city">
-            <option value="">All cities</option>
+            <option value="">All Cities</option>
           </select>
         </div>
         <div id="leadList" class="admin-list lead-list"></div>

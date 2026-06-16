@@ -8,7 +8,7 @@
 
   const API_BASE = window.EASYTRAVEL_API_BASE || 'https://easytravel-backend.onrender.com';
   const CASHFREE_MODE = 'sandbox';
-  const API_TIMEOUT_MESSAGE = 'Backend/Cashfree se response nahi mila. backend server aur .env keys check karo.';
+  const API_TIMEOUT_MESSAGE = 'No response from the backend or Cashfree. Please check the backend server and environment keys.';
   const data = window.EASYTRAVEL_DATA || {};
   const scraped = window.SCRAPED_TRAVEL_DATA || {};
   const vendorNetwork = window.EASYTRAVEL_VENDOR_NETWORK || {};
@@ -305,7 +305,7 @@ const pkgDB = {
 
   function partnerWhatsApp(vendor, formData, finalPrice) {
     const phone = String(vendor.phone || '917366930984').replace(/[^\d]/g, '');
-    const message = `Hello ${vendor.name}, EasyTravel package lead hai.\nDestination: ${formData.destination}\nTraveller: ${formData.fullName || 'Not entered'}\nPhone: ${formData.phone || 'Not entered'}\nPeople: ${formData.numberOfPeople}\nDays: ${formData.days}\nBudget: ${formData.budget}\nApprox price: Rs ${Number(finalPrice || 0).toLocaleString('en-IN')}\nRequest: ${formData.specialRequest || 'NA'}\nPlease share pickup, stay and local package quote.`;
+    const message = `Hello ${vendor.name}, this is an EasyTravel package lead.\nDestination: ${formData.destination}\nTraveller: ${formData.fullName || 'Not entered'}\nPhone: ${formData.phone || 'Not entered'}\nPeople: ${formData.numberOfPeople}\nDays: ${formData.days}\nBudget: ${formData.budget}\nApprox price: Rs ${Number(finalPrice || 0).toLocaleString('en-IN')}\nRequest: ${formData.specialRequest || 'NA'}\nPlease share pickup, stay and local package quote.`;
     return `https://wa.me/${phone || '917366930984'}?text=${encodeURIComponent(message)}`;
   }
 
@@ -315,8 +315,8 @@ const pkgDB = {
     const formData = getFormData();
     const finalPrice = affordablePriceEngine(formData).finalPrice;
     vendorPanel.innerHTML = `
-      <h3>Local partner network</h3>
-      <p>Booking ke baad admin traveller enquiry ko city ke verified transporter, stay ya local support partner ko assign karega. Final pickup, hotel aur quote partner confirmation ke baad lock hoga.</p>
+      <h3>Local Partner Network</h3>
+      <p>After booking, the admin can assign the traveller enquiry to a verified city transporter, stay partner or local support partner. Final pickup, hotel and quotation details are locked after partner confirmation.</p>
       <div class="vendor-card-grid">
         ${vendors.map(vendor => `
           <article class="vendor-mini-card">
@@ -342,6 +342,61 @@ const pkgDB = {
     }[value || 'any'] || 'Open for all travellers';
   }
 
+  const PREFERENCE_PLACE_OVERRIDES = {
+    muslim: {
+      Mumbai: ['Haji Ali Dargah', 'Mohammed Ali Road food trail', 'Gateway of India', 'Marine Drive sunset', 'Colaba Causeway', 'Kala Ghoda', 'Bandra sea face'],
+      Delhi: ['Jama Masjid', 'Humayun Tomb', 'Red Fort', 'India Gate', 'Chandni Chowk halal food trail', 'Lodhi Garden'],
+      Hyderabad: ['Charminar', 'Mecca Masjid', 'Salar Jung Museum', 'Golconda Fort', 'Hussain Sagar', 'Old City food trail'],
+      Lucknow: ['Bara Imambara', 'Chota Imambara', 'Rumi Darwaza', 'Hazratganj', 'Residency', 'Tunday food trail'],
+      Agra: ['Taj Mahal', 'Agra Fort', 'Itmad-ud-Daulah', 'Mehtab Bagh', 'Sadar Bazaar'],
+      'Jammu & Kashmir': ['Hazratbal Shrine', 'Dal Lake easy shikara', 'Mughal Gardens', 'Nishat Bagh', 'Shalimar Bagh'],
+      Srinagar: ['Hazratbal Shrine', 'Dal Lake easy shikara', 'Mughal Gardens', 'Nishat Bagh', 'Shalimar Bagh']
+    },
+    hindu: {
+      Mumbai: ['Siddhivinayak Temple', 'Mahalaxmi Temple', 'Gateway of India', 'Marine Drive sunset', 'Elephanta Caves'],
+      Delhi: ['Akshardham', 'Birla Mandir', 'India Gate', 'Qutub Minar', 'Dilli Haat'],
+      Varanasi: ['Kashi Vishwanath', 'Dashashwamedh Ghat', 'Ganga Aarti experience', 'Sarnath', 'Assi Ghat']
+    },
+    buddhist: {
+      Mumbai: ['Kanheri Caves', 'Gateway of India', 'Marine Drive sunset', 'Kala Ghoda', 'Sanjay Gandhi National Park'],
+      Delhi: ['Buddha Jayanti Park', 'National Museum', 'Humayun Tomb', 'Lodhi Garden', 'India Gate'],
+      Rajgir: ['Vishwa Shanti Stupa', 'Venu Van', 'Jivaka\'s Mango Garden', 'Rajgir Ropeway', 'Cyclopean Wall']
+    },
+    christian: {
+      Mumbai: ['Mount Mary Basilica', 'Bandra sea face', 'Gateway of India', 'Marine Drive sunset', 'Colaba Causeway', 'Kala Ghoda'],
+      Delhi: ['Sacred Heart Cathedral', 'India Gate', 'Humayun Tomb', 'Lodhi Garden', 'Dilli Haat'],
+      Goa: ['Basilica of Bom Jesus', 'Old Goa churches', 'Fort Aguada', 'Miramar promenade', 'Dona Paula']
+    }
+  };
+
+  const PREFERENCE_BLOCK_WORDS = {
+    muslim: ['temple', 'mandir', 'math', 'ashram', 'jyotirlinga', 'balaji', 'mahadev', 'vishwanath', 'siddhivinayak', 'akshardham', 'iskcon', 'gurudwara', 'gurdwara', 'church', 'basilica', 'cathedral'],
+    hindu: ['mosque', 'masjid', 'dargah', 'church', 'basilica', 'cathedral'],
+    buddhist: ['mosque', 'masjid', 'dargah', 'church', 'basilica', 'cathedral', 'temple', 'mandir', 'jyotirlinga', 'balaji', 'mahadev', 'vishwanath', 'siddhivinayak'],
+    christian: ['mosque', 'masjid', 'dargah', 'temple', 'mandir', 'jyotirlinga', 'balaji', 'mahadev', 'vishwanath', 'siddhivinayak', 'gurudwara', 'gurdwara']
+  };
+
+  function preferencePlacePool(cityName, preference, places) {
+    const city = cityNameFromInput(cityName);
+    const normalizedPreference = (preference || 'any').toLowerCase();
+    const overrides = PREFERENCE_PLACE_OVERRIDES[normalizedPreference] || {};
+    const cityOverrides = overrides[city] || overrides[cityName] || [];
+    const blocked = PREFERENCE_BLOCK_WORDS[normalizedPreference] || [];
+    const cleanPlaces = (places || []).filter(Boolean).filter(place => {
+      const lower = String(place).toLowerCase();
+      return !blocked.some(word => lower.includes(word));
+    });
+    const merged = [...cityOverrides, ...cleanPlaces];
+    const unique = [...new Set(merged)].filter(Boolean);
+    if (unique.length) return unique;
+    return [
+      `${city} heritage walk`,
+      `${city} local market`,
+      `${city} food trail`,
+      `${city} lake / sea / garden point`
+    ];
+  }
+
   function buildDayWisePlan(cityName, picks, pack) {
     const formData = getFormData();
     const days = Math.max(1, Math.min(7, Number(formData.days || 3)));
@@ -349,7 +404,7 @@ const pkgDB = {
     const preference = formData.religion || 'any';
     const basePlaces = [...new Set([...(picks || []), ...((pack.highlights || []).map(item => String(item).split(' + ')[0]))])].filter(Boolean);
     const fallback = [`${cityName} arrival and hotel check-in`, `${cityName} famous local market`, `${cityName} food and culture walk`, `${cityName} calm evening point`];
-    const pool = basePlaces.length ? basePlaces : fallback;
+    const pool = preferencePlacePool(cityName, preference, basePlaces.length ? basePlaces : fallback);
     const pace = age >= 55 ? 'slow comfort pace' : age <= 18 ? 'family-safe short hops' : 'balanced explorer pace';
     return Array.from({ length: days }, (_, index) => {
       const placeA = pool[index % pool.length];
@@ -368,9 +423,9 @@ const pkgDB = {
     const memories = JSON.parse(localStorage.getItem(key) || '[]').slice(0, 4);
     memoryVault.innerHTML = `
       <div>
-        <span class="section-kicker">Travel memory vault</span>
-        <h3>Save your best 4 memories</h3>
-        <p>Trip complete hone ke baad user apne account ke naam se 4 best photos yahan save kar sakta hai. Demo me photos browser storage me save honge; phone theft recovery ke liye production me MongoDB + cloud image storage connect karna hoga.</p>
+        <span class="section-kicker">Travel Memory Vault</span>
+        <h3>Save Your Best 4 Memories</h3>
+        <p>After completing a trip, each user can save four favourite photos under their account. This demo stores photos in browser storage; real recovery across devices requires MongoDB plus cloud image storage.</p>
       </div>
       <div class="memory-grid">
         ${[0, 1, 2, 3].map(index => `
@@ -380,14 +435,14 @@ const pkgDB = {
           </label>
         `).join('')}
       </div>
-      <small>Tip: final live recovery ke liye Firebase Storage / Cloudinary / MongoDB GridFS jaisa storage add karna padega.</small>
+      <small>Tip: production-grade recovery requires Firebase Storage, Cloudinary or MongoDB GridFS.</small>
     `;
     memoryVault.querySelectorAll('input[type="file"]').forEach(input => {
       input.addEventListener('change', event => {
         const file = event.target.files && event.target.files[0];
         if (!file) return;
         if (file.size > 900000) {
-          showToast('Photo 900KB se chhota upload karo demo vault ke liye.', true);
+          showToast('Please upload a photo smaller than 900KB for the demo vault.', true);
           return;
         }
         const reader = new FileReader();
@@ -571,16 +626,16 @@ const pkgDB = {
 
     outputEl.innerHTML = `
       <div class="planner-box">
-        <div class="recommend-header" style="margin-bottom:10px;"><div class="hero-kicker" style="color:var(--navy);background:#edf3ff;border-color:#dbe4f6;">Package snapshot</div></div>
+        <div class="recommend-header" style="margin-bottom:10px;"><div class="hero-kicker" style="color:var(--navy);background:#edf3ff;border-color:#dbe4f6;">Package Snapshot</div></div>
         <div class="chip-row">${chips}</div>
         <p class="recommend-note" style="margin-top:14px;">Selected plan: <strong>${budget}</strong> · Visible package price: <strong>${computedPrices.newPrice}</strong> · First user coupon: <strong>₹${Number(pricing.firstUserCoupon).toLocaleString('en-IN')}</strong> · Smart discount: <strong>₹${Number(pricing.discountAmount).toLocaleString('en-IN')}</strong></p>
         <h3 style="font-size:54px;line-height:1.05;margin:24px 0 12px;color:var(--navy);">Highlights –</h3>
         <ul style="font-size:20px;line-height:1.8;margin-top:0;">${highlights}</ul>
         <div class="smart-plan-panel">
           <div>
-            <span class="section-kicker">Days + age + preference planner</span>
-            <h3>Recommended places by your trip days</h3>
-            <p>${ageValue} years traveller ke liye ${days} day plan. Preference: <strong>${religionText(religionInput?.value || 'any')}</strong>.</p>
+            <span class="section-kicker">Days + Age + Preference Planner</span>
+            <h3>Recommended Places By Trip Duration</h3>
+            <p>${ageValue}-year-old traveller, ${days}-day plan. Preference: <strong>${religionText(religionInput?.value || 'any')}</strong>.</p>
           </div>
           <div class="day-plan-grid">${smartPlanHtml}</div>
         </div>
@@ -615,7 +670,7 @@ const pkgDB = {
       });
     });
 
-    const waText = encodeURIComponent(`Hello EasyTravel Pro, mujhe ${cityName} package ke bare me enquiry karni hai. Age: ${ageValue}, Days: ${days}, Budget: ${budget}, Preference: ${pref}`);
+    const waText = encodeURIComponent(`Hello EasyTravel Pro, I want to enquire about the ${cityName} package. Age: ${ageValue}, Days: ${days}, Budget: ${budget}, Preference: ${pref}`);
     if (whatsappBtn) {
       whatsappBtn.href = `https://wa.me/917366930984?text=${waText}`;
     }
@@ -754,18 +809,18 @@ function setPayButtonState() {
   payNowBtn.style.opacity = canPay ? '1' : '.65';
   payNowBtn.style.cursor = canPay ? 'pointer' : 'not-allowed';
   payNowBtn.textContent = canPay ? 'Pay Now' : 'Pay Now';
-  payNowBtn.title = canPay ? 'Cashfree test payment start karo' : 'Review package aur checkbox confirm karke payment enable hoga';
+  payNowBtn.title = canPay ? 'Start Cashfree test payment' : 'Review the package and confirm the checkbox to enable payment';
 }
 
 function validateTravellerBeforePayment(formData) {
   if (!formData.fullName || !formData.email || !formData.phone || !formData.destination || !formData.age) {
-    showPackageMsg('Pay Now se pehle Name, email, phone, destination aur age fill karo.', true);
-    showToast('Traveller details pehle complete karo.', true);
+    showPackageMsg('Please complete name, email, phone, destination and age before payment.', true);
+    showToast('Please complete traveller details first.', true);
     return false;
   }
   if (!reviewReady || !reviewConfirmCheck || !reviewConfirmCheck.checked) {
-    showPackageMsg('Payment se pehle package review aur checkbox confirmation zaruri hai.', true);
-    showToast('Pehle review confirm karo, phir Pay Now dabao.', true);
+    showPackageMsg('Package review and checkbox confirmation are required before payment.', true);
+    showToast('Confirm the review before starting payment.', true);
     reviewPanel?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return false;
   }
@@ -806,7 +861,7 @@ async function createCashfreeOrder(reviewData) {
   }
   const paymentSessionId = data?.order?.payment_session_id || data?.payment_session_id || '';
   if (!paymentSessionId) {
-    throw new Error('payment_session_id response me nahi mila. Backend payment route check karo.');
+    throw new Error('payment_session_id was not returned. Please check the backend payment route.');
   }
   data.paymentSessionId = paymentSessionId;
   return data;
@@ -814,7 +869,7 @@ async function createCashfreeOrder(reviewData) {
 
 async function startCashfreeCheckout(paymentSessionId) {
   if (!window.Cashfree) {
-    throw new Error('Cashfree SDK load nahi hua. package.html me SDK script check karo.');
+    throw new Error('Cashfree SDK did not load. Please check the SDK script in package.html.');
   }
   const cashfree = Cashfree({ mode: CASHFREE_MODE });
   return cashfree.checkout({ paymentSessionId, redirectTarget: '_self' });
@@ -962,13 +1017,13 @@ console.log("Enquiry success:", enqData);
     reviewBtn.addEventListener('click', function () {
       const formData = getFormData();
       if (!formData.fullName || !formData.email || !formData.phone || !formData.destination || !formData.age) {
-        showPackageMsg('Review se pehle traveller details, destination, phone aur age fill karo.', true);
-        showToast('Review ke liye required fields fill karo.', true);
+        showPackageMsg('Please complete traveller details, destination, phone and age before review.', true);
+        showToast('Please complete the required fields for review.', true);
         return;
       }
       renderReviewPanel();
       if (reviewConfirmCheck) reviewConfirmCheck.checked = false;
-      showPackageMsg('Package review ready hai. Checkbox tick karke hi enquiry submit hoga.');
+      showPackageMsg('Package review is ready. Confirm the checkbox before submitting the enquiry.');
       setPayButtonState();
       reviewPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
@@ -984,21 +1039,21 @@ console.log("Enquiry success:", enqData);
     const formData = getFormData();
 
     if (!formData.fullName || !formData.email || !formData.phone || !formData.destination || !formData.age) {
-      showPackageMsg('Name, email, phone, destination aur age required hai.', true);
+      showPackageMsg('Name, email, phone, destination and age are required.', true);
       showToast('Please fill all required traveller details.', true);
       return;
     }
 
     if (!reviewReady) {
-      showPackageMsg('Pehle Review package button dabao. Bina review submit allowed nahi hai.', true);
-      showToast('Review ke bina submit allowed nahi hai.', true);
+      showPackageMsg('Please click Review Package before submitting. Submission is not allowed without review.', true);
+      showToast('Review is required before submission.', true);
       reviewBtn?.focus();
       return;
     }
 
     if (!reviewConfirmCheck || !reviewConfirmCheck.checked) {
-      showPackageMsg('Checkbox tick karna zaruri hai. Bina review confirm kiye form submit nahi hoga.', true);
-      showToast('Checkbox tick karo phir submit karo.', true);
+      showPackageMsg('Please confirm the checkbox. The form cannot be submitted without review confirmation.', true);
+      showToast('Confirm the checkbox before submitting.', true);
       reviewPanel?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
@@ -1013,14 +1068,14 @@ console.log("Enquiry success:", enqData);
     try {
       await savePackageReview(reviewData);
       await savePackageEnquiry(formData);
-      let vendorLeadMessage = ' Local partner lead bhi admin panel me create ho gaya.';
+      let vendorLeadMessage = ' A local partner lead was created in the admin panel.';
       try {
         const lead = await saveVendorLead(formData, reviewData);
-        vendorLeadMessage = ` Local partner lead ${lead.id} admin panel me create ho gaya.`;
+        vendorLeadMessage = ` Local partner lead ${lead.id} was created in the admin panel.`;
       } catch (leadError) {
-        vendorLeadMessage = ' Vendor lead API save nahi ho paaya, lekin enquiry submit ho gayi.';
+        vendorLeadMessage = ' The vendor lead API could not save the lead, but the enquiry was submitted.';
       }
-      showPackageMsg('Review + enquiry submit ho gaya.' + vendorLeadMessage);
+      showPackageMsg('Review and enquiry submitted.' + vendorLeadMessage);
       showToast('Review, enquiry and partner flow submitted.');
       renderPackage(cityName);
       formEl.reset();
@@ -1035,7 +1090,7 @@ console.log("Enquiry success:", enqData);
       setPayButtonState();
     } catch (error) {
       console.error('Review save error:', error);
-      showPackageMsg('Enquiry save nahi ho pa raha. Please try again.' + (error.message || ''), true);
+      showPackageMsg('The enquiry could not be saved. Please try again. ' + (error.message || ''), true);
       showToast('Review submit failed. Please try again.', true);
     } finally {
       if (enquireBtn) {
@@ -1088,12 +1143,12 @@ if (confirmPaymentBtn) {
       confirmPaymentBtn.textContent = 'Creating order...';
       const paymentData = await createCashfreeOrder(reviewData);
       closePayment();
-      showPackageMsg('Cashfree test order create ho gaya. Checkout open ho raha hai...');
-      showToast('Cashfree checkout open ho raha hai.');
+      showPackageMsg('Cashfree test order created. Opening checkout...');
+      showToast('Opening Cashfree checkout.');
       await startCashfreeCheckout(paymentData.paymentSessionId);
     } catch (error) {
       console.error('Cashfree payment error:', error);
-      showPackageMsg('Cashfree payment start nahi ho pa raha. backend/.env me App ID aur Secret Key set karke server restart karo. ' + (error.message || API_TIMEOUT_MESSAGE), true);
+      showPackageMsg('Cashfree payment could not start. Set the App ID and Secret Key in the backend environment and restart the server. ' + (error.message || API_TIMEOUT_MESSAGE), true);
       showToast('Payment start failed.', true);
     } finally {
       confirmPaymentBtn.disabled = false;

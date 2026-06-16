@@ -10,10 +10,10 @@
   const youtube = (place, city) => `https://www.youtube.com/results?search_query=${encodeURIComponent(place + ' ' + city + ' travel guide')}`;
 
   const additions = [
-    { key: 'kedarnath', display: 'Kedarnath Yatra', state: 'Uttarakhand', coords: [30.7352, 79.0669], image: img('Kedarnath_Temple.jpg'), places: ['Kedarnath Temple', 'Gaurikund', 'Sonprayag', 'Triyuginarayan Temple', 'Vasuki Tal'] },
-    { key: 'badrinath', display: 'Badrinath Yatra', state: 'Uttarakhand', coords: [30.7433, 79.4938], image: img('Badrinath_Temple.jpg'), places: ['Badrinath Temple', 'Mana Village', 'Tapt Kund', 'Charan Paduka', 'Vasudhara Falls'] },
-    { key: 'amarnath', display: 'Amarnath Yatra', state: 'Jammu and Kashmir', coords: [34.214, 75.502], image: img('Cave_Temple_of_Lord_Amarnath.jpg'), places: ['Amarnath Cave', 'Pahalgam Base Camp', 'Baltal Base Camp', 'Chandanwari', 'Sheshnag Lake'] },
-    { key: 'vaishno-devi', display: 'Vaishno Devi Yatra', state: 'Jammu and Kashmir', coords: [33.0308, 74.949], image: img('Vaishno_Devi_Bhavan.jpg'), places: ['Vaishno Devi Bhawan', 'Katra Base Camp', 'Ardhkuwari Cave', 'Bhairavnath Temple', 'Banganga'] },
+    { key: 'kedarnath', display: 'Kedarnath Pilgrimage', state: 'Uttarakhand', coords: [30.7352, 79.0669], image: img('Kedarnath_Temple.jpg'), places: ['Kedarnath Temple', 'Gaurikund', 'Sonprayag', 'Triyuginarayan Temple', 'Vasuki Tal'] },
+    { key: 'badrinath', display: 'Badrinath Pilgrimage', state: 'Uttarakhand', coords: [30.7433, 79.4938], image: img('Badrinath_Temple.jpg'), places: ['Badrinath Temple', 'Mana Village', 'Tapt Kund', 'Charan Paduka', 'Vasudhara Falls'] },
+    { key: 'amarnath', display: 'Amarnath Pilgrimage', state: 'Jammu and Kashmir', coords: [34.214, 75.502], image: img('Cave_Temple_of_Lord_Amarnath.jpg'), places: ['Amarnath Cave', 'Pahalgam Base Camp', 'Baltal Base Camp', 'Chandanwari', 'Sheshnag Lake'] },
+    { key: 'vaishno-devi', display: 'Vaishno Devi Pilgrimage', state: 'Jammu and Kashmir', coords: [33.0308, 74.949], image: img('Vaishno_Devi_Bhavan.jpg'), places: ['Vaishno Devi Bhawan', 'Katra Base Camp', 'Ardhkuwari Cave', 'Bhairavnath Temple', 'Banganga'] },
     { key: 'ayodhya', display: 'Ayodhya', state: 'Uttar Pradesh', coords: [26.7922, 82.1998], image: img('Ram_Mandir_Ayodhya.jpg'), places: ['Ram Mandir', 'Hanuman Garhi', 'Kanak Bhawan', 'Saryu Ghat', 'Ram Ki Paidi'] },
     { key: 'mathura', display: 'Mathura', state: 'Uttar Pradesh', coords: [27.4924, 77.6737], image: img('Vishram_Ghat,_Mathura.jpg'), places: ['Shri Krishna Janmabhoomi', 'Vishram Ghat', 'Dwarkadhish Temple Mathura', 'Govardhan Hill', 'Barsana'] },
     { key: 'vrindavan', display: 'Vrindavan', state: 'Uttar Pradesh', coords: [27.565, 77.6593], image: img('Prem_Mandir_Vrindavan.jpg'), places: ['Prem Mandir', 'Banke Bihari Temple', 'ISKCON Vrindavan', 'Nidhivan', 'Radha Raman Temple'] },
@@ -58,10 +58,10 @@
   ];
 
   const imageSets = {
-    'Kedarnath Yatra': [img('Kedarnath_Temple.jpg'), img('Kedarnath_Temple_in_Rainy_season.jpg'), img('Kedarnath_valley.jpg')],
-    'Badrinath Yatra': [img('Badrinath_Temple.jpg'), img('Badrinath_temple,_Uttarakhand.jpg'), img('Badrinath_Temple_and_Neelkanth_peak.jpg')],
-    'Amarnath Yatra': [img('Cave_Temple_of_Lord_Amarnath.jpg'), img('Amarnath_Cave.jpg'), img('Sheshnag_Lake.jpg')],
-    'Vaishno Devi Yatra': [img('Vaishno_Devi_Bhavan.jpg'), img('Vaishno_Devi_Temple.jpg'), img('Katra_Vaishno_Devi.jpg')],
+    'Kedarnath Pilgrimage': [img('Kedarnath_Temple.jpg'), img('Kedarnath_Temple_in_Rainy_season.jpg'), img('Kedarnath_valley.jpg')],
+    'Badrinath Pilgrimage': [img('Badrinath_Temple.jpg'), img('Badrinath_temple,_Uttarakhand.jpg'), img('Badrinath_Temple_and_Neelkanth_peak.jpg')],
+    'Amarnath Pilgrimage': [img('Cave_Temple_of_Lord_Amarnath.jpg'), img('Amarnath_Cave.jpg'), img('Sheshnag_Lake.jpg')],
+    'Vaishno Devi Pilgrimage': [img('Vaishno_Devi_Bhavan.jpg'), img('Vaishno_Devi_Temple.jpg'), img('Katra_Vaishno_Devi.jpg')],
     'Jaisalmer': ['/package-assets/fort_real.jpg', img('Jaisalmer_Fort_Rajasthan.jpg'), img('Jaisalmer_Fort_from_Gadisar_Lake.jpg'), img('Sam_Sand_Dunes_Jaisalmer.jpg')],
     'Rajasthan': [img('Hawa_Mahal_2011.jpg'), img('City_Palace_Udaipur.jpg'), img('Jaisalmer_Fort_Rajasthan.jpg'), img('Mehrangarh_Fort_Jodhpur.jpg')],
     'Uttarakhand': [img('Kedarnath_Temple.jpg'), img('Badrinath_Temple.jpg'), img('Har_Ki_Pauri_Haridwar.jpg'), img('Naini_Lake_Nainital.jpg')],
@@ -101,8 +101,8 @@
     'Kolkata': 'kolkata victoria memorial howrah bridge',
     'Uttarakhand': 'uttarakhand himalayas kedarnath badrinath',
     'Rajasthan': 'rajasthan fort desert palace',
-    'Kedarnath Yatra': 'kedarnath temple himalayas',
-    'Badrinath Yatra': 'badrinath temple uttarakhand',
+    'Kedarnath Pilgrimage': 'kedarnath temple himalayas',
+    'Badrinath Pilgrimage': 'badrinath temple uttarakhand',
     'Jaisalmer': 'jaisalmer fort sam sand dunes',
     'Kanyakumari': 'kanyakumari vivekananda rock memorial sunrise',
     'Chandigarh': 'chandigarh rock garden sukhna lake',
@@ -135,14 +135,14 @@
       coords: [Number(lat.toFixed(4)), Number(lon.toFixed(4))],
       bestFor: index === 0 ? 'Main attraction' : index === 1 ? 'Arrival support' : 'Sightseeing',
       distance: index === 0 ? 'Primary destination point' : `${Math.max(2, index * 4)} km route idea`,
-      summary: `${place} ${city.display} trip ka important stop hai. Isko hotel pickup, local transport aur sightseeing flow ke saath plan kiya ja sakta hai.`,
+      summary: `${place} is an important stop for a ${city.display} trip. It can be planned with hotel pickup, local transport and sightseeing flow.`,
       wiki: wiki(place),
       google: google(place, city.display),
       maps: maps(place, city.display),
       image: placeImage,
       videos: [
-        { title: `${place} travel guide`, desc: `${city.display} me ${place} ka realistic travel preview.`, url: youtube(place, city.display) },
-        { title: `${city.display} itinerary`, desc: 'Route, stay aur local movement planning video search.', url: youtube(city.display, city.state) }
+        { title: `${place} travel guide`, desc: `A realistic travel preview of ${place} in ${city.display}.`, url: youtube(place, city.display) },
+        { title: `${city.display} itinerary`, desc: 'Route, stay and local movement planning video search.', url: youtube(city.display, city.state) }
       ]
     };
   }
@@ -166,8 +166,8 @@
       places
     };
     data.heroCities[city.key] = {
-      title: `${city.display} package, yatra aur local travel support`,
-      subtitle: `${city.state} ke liye realistic place images, age-based recommendations, local transport guidance aur package flow.`,
+      title: `${city.display} package and local travel support`,
+      subtitle: `Realistic place images, age-based recommendations, local transport guidance and package flow for ${city.state}.`,
       slides: city.images,
       landmarks: city.places.slice(0, 5).map(name => ({ name, wiki: wiki(name) }))
     };
@@ -208,7 +208,7 @@
   additions.forEach(city => {
     aliasMap[city.key] = city.key;
     aliasMap[city.display.toLowerCase()] = city.key;
-    aliasMap[city.display.toLowerCase().replace(/\s+yatra$/, '')] = city.key;
+    aliasMap[city.display.toLowerCase().replace(/\s+(yatra|pilgrimage)$/, '')] = city.key;
   });
   Object.assign(aliasMap, {
     'mata vaishno devi': 'vaishno-devi',

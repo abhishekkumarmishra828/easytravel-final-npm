@@ -7,8 +7,8 @@
 
   async function verify() {
     if (!orderId) {
-      messageEl.textContent = 'order_id missing hai. Payment status verify nahi ho pa raha.';
-      cardEl.innerHTML = '<strong>Tip:</strong> Cashfree return_url me order_id pass hona chahiye.';
+      messageEl.textContent = 'Missing order_id. Payment status cannot be verified.';
+      cardEl.innerHTML = '<strong>Tip:</strong> Cashfree return_url must include order_id.';
       return;
     }
 
@@ -21,7 +21,7 @@
       const booking = data.booking || {};
       const paid = order.order_status === 'PAID';
       messageEl.textContent = paid
-        ? 'Payment successful. Booking status backend aur MongoDB me update ho gaya.'
+        ? 'Payment successful. Booking status has been updated in the backend and MongoDB.'
         : `Payment status: ${order.order_status || 'PENDING'}`;
 
       cardEl.innerHTML = `
@@ -35,7 +35,7 @@
         </div>
       `;
     } catch (error) {
-      messageEl.textContent = 'Verification error aa gaya.';
+      messageEl.textContent = 'Verification error occurred.';
       cardEl.innerHTML = `<strong>Error:</strong> ${error.message}`;
     }
   }

@@ -78,13 +78,56 @@ function stableTravelImageFallback(city) {
   const cityName = data.destinationNameFromKey ? data.destinationNameFromKey(cityKey) : cityKey.charAt(0).toUpperCase() + cityKey.slice(1);
   const cityData = data.destinations[cityName] || data.destinations.Delhi;
   const selectedAgeBand = data.ageBand(age);
-  const recommendedNames = cityData.ageBands[selectedAgeBand] || cityData.ageBands['20-29'] || [];
+  const rawRecommendedNames = cityData.ageBands[selectedAgeBand] || cityData.ageBands['20-29'] || [];
   const allPlaceNames = Object.keys(cityData.places || {});
-  const visiblePlaceNames = [...new Set([...recommendedNames, ...allPlaceNames])];
+  const PREFERENCE_PLACE_OVERRIDES = {
+    muslim: {
+      Mumbai: ['Haji Ali Dargah', 'Gateway of India', 'Marine Drive sunset', 'Colaba Causeway', 'Kala Ghoda', 'Bandra sea face', 'Sanjay Gandhi National Park'],
+      Delhi: ['Jama Masjid', 'Humayun Tomb', 'Red Fort', 'India Gate', 'Chandni Chowk food trail', 'Lodhi Garden'],
+      Hyderabad: ['Charminar', 'Mecca Masjid', 'Salar Jung Museum', 'Golconda Fort', 'Hussain Sagar'],
+      Lucknow: ['Bara Imambara', 'Chota Imambara', 'Rumi Darwaza', 'Hazratganj', 'Residency'],
+      Agra: ['Taj Mahal', 'Agra Fort', 'Itmad-ud-Daulah', 'Mehtab Bagh', 'Sadar Bazaar'],
+      'Jammu & Kashmir': ['Hazratbal Shrine', 'Dal Lake easy shikara', 'Mughal Gardens', 'Nishat Bagh', 'Shalimar Bagh']
+    },
+    hindu: {
+      Mumbai: ['Siddhivinayak Temple', 'Gateway of India', 'Marine Drive sunset', 'Elephanta Caves'],
+      Delhi: ['Akshardham', 'India Gate', 'Qutub Minar', 'Dilli Haat'],
+      Varanasi: ['Kashi Vishwanath', 'Dashashwamedh Ghat', 'Ganga Aarti experience', 'Sarnath']
+    },
+    buddhist: {
+      Mumbai: ['Gateway of India', 'Marine Drive sunset', 'Kala Ghoda', 'Sanjay Gandhi National Park'],
+      Delhi: ['Humayun Tomb', 'Lodhi Garden', 'India Gate', 'National Museum'],
+      Rajgir: ['Vishwa Shanti Stupa', 'Venu Van', 'Rajgir Ropeway', 'Cyclopean Wall']
+    },
+    christian: {
+      Mumbai: ['Bandra sea face', 'Gateway of India', 'Marine Drive sunset', 'Colaba Causeway', 'Kala Ghoda'],
+      Delhi: ['India Gate', 'Humayun Tomb', 'Lodhi Garden', 'Dilli Haat'],
+      Goa: ['Basilica of Bom Jesus', 'Old Goa churches', 'Fort Aguada', 'Miramar promenade']
+    }
+  };
+  const PREFERENCE_BLOCK_WORDS = {
+    muslim: ['temple', 'mandir', 'math', 'ashram', 'jyotirlinga', 'balaji', 'mahadev', 'vishwanath', 'siddhivinayak', 'akshardham', 'iskcon', 'gurudwara', 'gurdwara', 'church', 'basilica', 'cathedral'],
+    hindu: ['mosque', 'masjid', 'dargah', 'church', 'basilica', 'cathedral'],
+    buddhist: ['mosque', 'masjid', 'dargah', 'church', 'basilica', 'cathedral', 'temple', 'mandir', 'jyotirlinga', 'balaji', 'mahadev', 'vishwanath', 'siddhivinayak'],
+    christian: ['mosque', 'masjid', 'dargah', 'temple', 'mandir', 'jyotirlinga', 'balaji', 'mahadev', 'vishwanath', 'siddhivinayak', 'gurudwara', 'gurdwara']
+  };
+  function filterPlacesByPreference(names) {
+    const blocked = PREFERENCE_BLOCK_WORDS[religion] || [];
+    return [...new Set(names || [])].filter(name => {
+      const lower = String(name).toLowerCase();
+      return !blocked.some(word => lower.includes(word));
+    });
+  }
+  const preferredNames = filterPlacesByPreference([
+    ...((PREFERENCE_PLACE_OVERRIDES[religion] && PREFERENCE_PLACE_OVERRIDES[religion][cityName]) || []),
+    ...rawRecommendedNames
+  ]).filter(name => cityData.places[name]);
+  const recommendedNames = preferredNames.length ? preferredNames : filterPlacesByPreference(rawRecommendedNames).filter(name => cityData.places[name]);
+  const visiblePlaceNames = [...new Set([...recommendedNames, ...filterPlacesByPreference(allPlaceNames)])];
   let selectedPlace = cityData.places[recommendedNames[0]] || cityData.places[cityData.defaultPlace] || cityData.places[visiblePlaceNames[0]];
 
-  resultTitle.textContent = `${age} years traveller ke liye ${cityName} me recommended famous places`;
-  if (resultSubtitle) resultSubtitle.textContent = `${cityName} ke liye age, days aur ${religion === 'any' ? 'open travel' : religion} preference based famous places, route planning, map access, video links aur stay ideas ek saath dikh rahe hain.`;
+  resultTitle.textContent = `Recommended Famous Places In ${cityName} For A ${age}-Year-Old Traveller`;
+  if (resultSubtitle) resultSubtitle.textContent = `${cityName} recommendations are tailored by age, trip duration and ${religion === 'any' ? 'open travel' : religion} preference, with route planning, maps, video links and stay ideas.`;
   routeBadges.innerHTML = '';
   [from, to, `Date: ${date}`, `Mode: ${mode}`, `Preference: ${religion}`].forEach(text => {
     const span = document.createElement('span');
@@ -93,12 +136,12 @@ function stableTravelImageFallback(city) {
   });
 
   ticketHeading.textContent = mode === 'train' ? 'Suggested train routes' : mode === 'bus' ? 'Suggested bus routes' : 'Suggested hotel + stay options';
-  routeInsight.textContent = `Route insight: ${from} → ${to}. Traveller age ${age}. Mode: ${mode} booking flow. Arrival ke baad yahi platform business stay, station pickup cab concept, aur city ke nightlife / food / calm options bhi suggest karega.`;
-  recHeading.textContent = `${cityName} recommendations by age`;
+  routeInsight.textContent = `Route insight: ${from} -> ${to}. Traveller age ${age}. Mode: ${mode} booking flow. After arrival, this platform also suggests business stays, station pickup concepts, food areas, nightlife and calm city options.`;
+  recHeading.textContent = `${cityName} Recommendations By Age`;
   if (miniStatPlaces) miniStatPlaces.textContent = `${recommendedNames.length || visiblePlaceNames.length} places`;
   if (miniStatMood) miniStatMood.textContent = age < 22 ? 'Budget' : age < 35 ? 'Comfort' : 'Premium';
   if (miniStatFlow) miniStatFlow.textContent = `${mode.charAt(0).toUpperCase()+mode.slice(1)} + city`;
-  recNote.textContent = `Age + preference based smart picks pehle dikh rahe hain. ${religion === 'muslim' ? 'Halal-friendly food aur mosque-nearby flow consider karo.' : religion === 'buddhist' ? 'Peaceful monastery, museum aur calm route flow consider karo.' : religion === 'christian' ? 'Church, colonial heritage aur calm family route consider karo.' : 'Family-friendly open route consider karo.'} Kisi bhi place par click karke map, video aur details dekhe ja sakte hain.`;
+  recNote.textContent = `Age and preference-based smart picks are shown first. ${religion === 'muslim' ? 'Halal-friendly food and mosque-nearby flow are prioritised.' : religion === 'buddhist' ? 'Peaceful monasteries, museums and calm routes are prioritised.' : religion === 'christian' ? 'Churches, colonial heritage and calm family routes are prioritised.' : 'Family-friendly open routes are prioritised.'} Click any place to view maps, videos and details.`;
 
   renderTickets();
   renderRecommendationChips();
@@ -112,7 +155,7 @@ function stableTravelImageFallback(city) {
       const source = encodeURIComponent(from);
       const dest = encodeURIComponent(to);
       window.open(`https://www.irctc.co.in/nget/train-search`, '_blank');
-      alert(`Train final booking ke liye official IRCTC page khola gaya. EasyTravel ka role planning, route discovery, age-based place explorer, station pickup and city intelligence provide karna hai.`);
+      alert('The official IRCTC page has been opened for final train booking. EasyTravel Pro supports planning, route discovery, age-based place exploration, station pickup ideas and city intelligence.');
       return;
     }
 
@@ -227,7 +270,7 @@ if (img) {
         <div class="video-thumb" style="background-image:url(${place.image})"></div>
         <div class="video-copy">
           <h5>${video.title || ('Travel video ' + (idx + 1))}</h5>
-          <p>${video.desc || (place.name + ' ka travel preview aur arrival feel.')}</p>
+          <p>${video.desc || (place.name + ' travel preview and arrival experience.')}</p>
           <a class="video-open" href="${video.url}" target="_blank">Watch video ${idx + 1}</a>
         </div>`;
       videoCards.appendChild(card);
@@ -283,7 +326,7 @@ if (img) {
     cultureCard.innerHTML = `
       <div class="culture-hot-caption">Hot local pick: ${hot.dish}</div>
       <h4>${plan.city} famous food and shopping</h4>
-      <p>Package book karne se pehle yahan ka old/popular food, restaurant aur local article idea dekh lo.</p>
+      <p>Review classic food, legacy restaurants and local product ideas before booking the package.</p>
       <div class="culture-legacy-box">
         <span>40-50+ years legacy style pick</span>
         <strong>${legacy.name}</strong>

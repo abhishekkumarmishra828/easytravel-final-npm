@@ -59,12 +59,12 @@ window.EASYTRAVEL_VENDOR_NETWORK = {
   ],
   Haridwar: [
     {
-      id: 'haridwar-yatra-01',
-      type: 'Yatra',
-      name: 'Haridwar Rishikesh Yatra Desk',
+      id: 'haridwar-pilgrimage-01',
+      type: 'Pilgrimage',
+      name: 'Haridwar Rishikesh Pilgrimage Desk',
       area: 'Haridwar Station / Rishikesh',
       phone: '917366930984',
-      service: 'Station pickup, ashram stay concept, yatra cab coordination',
+      service: 'Station pickup, ashram stay concept and pilgrimage cab coordination',
       budget: 'Budget to Comfort',
       verified: true
     }

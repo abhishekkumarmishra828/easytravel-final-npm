@@ -66,7 +66,7 @@ function citySpecificPlaceImage(city) {
 
   const NATIONAL_HERO = {
     title: 'Discover India before you arrive',
-    subtitle: 'Search ke baad traveller age ke hisaab se places, videos, map, station pickup and stay ideas milenge.',
+    subtitle: 'After search, travellers get age-aware places, videos, maps, station pickup ideas and stay options.',
     landmarks: [
       { name: 'Delhi', wiki: 'https://en.wikipedia.org/wiki/Delhi' },
       { name: 'Mumbai', wiki: 'https://en.wikipedia.org/wiki/Mumbai' },
@@ -166,7 +166,7 @@ function citySpecificPlaceImage(city) {
     strong.textContent = 'Live search preview:';
     searchStatus.replaceChildren(
       strong,
-      ` ${fromValue} -> ${toValue} | ${modeValue.toUpperCase()} | age ${ageValue} | preference ${religionValue}. Search karte hi next page par route cards aur destination suggestions open honge.`
+      ` ${fromValue} -> ${toValue} | ${modeValue.toUpperCase()} | age ${ageValue} | preference ${religionValue}. Results will open route cards, destination suggestions and package planning.`
     );
   }
 
@@ -209,7 +209,7 @@ function citySpecificPlaceImage(city) {
       if (searchStatus) {
         const strong = document.createElement('strong');
         strong.textContent = 'Required:';
-        searchStatus.replaceChildren(strong, ' source, destination, date aur age fill karo.');
+        searchStatus.replaceChildren(strong, ' please enter source, destination, date and age.');
       }
       return;
     }
@@ -235,7 +235,7 @@ function citySpecificPlaceImage(city) {
     const popularList = document.getElementById('popularDestinationsList');
     const footerPosts = document.getElementById('footerPosts');
     if (!ticker || !popularList || !footerPosts) return;
-    const fallback = ['Kedarnath Yatra','Badrinath Yatra','Vaishno Devi Yatra','Amarnath Yatra','Ayodhya','Varanasi','Puri','Goa','Dwarka','Haridwar','Kanyakumari','Guwahati','Shillong','Delhi','Mumbai','Udaipur','Jaisalmer','Leh Ladakh','Kochi','Munnar','Darjeeling','Gangtok','Hampi','Mysuru'];
+    const fallback = ['Kedarnath Pilgrimage','Badrinath Pilgrimage','Vaishno Devi Pilgrimage','Amarnath Pilgrimage','Ayodhya','Varanasi','Puri','Goa','Dwarka','Haridwar','Kanyakumari','Guwahati','Shillong','Delhi','Mumbai','Udaipur','Jaisalmer','Leh Ladakh','Kochi','Munnar','Darjeeling','Gangtok','Hampi','Mysuru'];
     popularList.innerHTML = '';
     fallback.forEach(name => {
       const a = document.createElement('a');

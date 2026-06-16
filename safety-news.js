@@ -23,7 +23,7 @@
       summary: 'Government press releases for national advisories, public alerts and important travel-related updates.'
     }
   ];
-  const KEYWORDS = /flood|rain|cyclone|landslide|disaster|weather|alert|warning|yatra|tourism|rail|road|airport|rescue|earthquake|heatwave|cold wave|avalanche|pilgrim/i;
+  const KEYWORDS = /flood|rain|cyclone|landslide|disaster|weather|alert|warning|pilgrimage|tourism|rail|road|airport|rescue|earthquake|heatwave|cold wave|avalanche|pilgrim/i;
 
   function escapeHtml(value) {
     return String(value || '').replace(/[&<>"']/g, char => ({

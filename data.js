@@ -98,14 +98,14 @@ function slideImages(display, state, landmarks){
         places[name] = {
           name,
           city: city.display,
-          summary: `${name} ${city.display} ke highlighted attractions me se ek hai. Age, travel mood, family comfort aur arrival planning ke hisaab se EasyTravel is jagah ko recommend karta hai.`,
+          summary: `${name} is one of the highlighted attractions in ${city.display}. EasyTravel recommends it based on age, travel mood, family comfort and arrival planning.`,
           coords,
-          bestFor: `${city.state} travel, local discovery, arrival ke baad smart city exploration`,
-          distance: `Hotel ya station location ke hisaab se distance change hoga. Map open karke exact route dekha ja sakta hai.`,
+          bestFor: `${city.state} travel, local discovery and smart city exploration after arrival`,
+          distance: `Distance depends on the hotel or station location. Open the map to view the exact route.`,
           image: placeImage(city.display,name),
           videos: [
-            {title:`${name} travel guide`, desc:`${name} ka travel guide aur arrival experience videos.`, url: youtubeSearch(name,city.display)},
-            {title:`${name} vlog / walkthrough`, desc:`${name} ke vlog, walkthrough aur local experience clips.`, url: `https://www.youtube.com/results?search_query=${encodeURIComponent(name + ' ' + city.display + ' vlog walkthrough')}`}
+            {title:`${name} travel guide`, desc:`Travel guide and arrival experience videos for ${name}.`, url: youtubeSearch(name,city.display)},
+            {title:`${name} vlog / walkthrough`, desc:`Vlogs, walkthroughs and local experience clips for ${name}.`, url: `https://www.youtube.com/results?search_query=${encodeURIComponent(name + ' ' + city.display + ' vlog walkthrough')}`}
           ],
           wiki: wikiLink(name),
           google: googleSearch(name,city.display),
@@ -113,7 +113,7 @@ function slideImages(display, state, landmarks){
         };
       });
       destinations[city.display] = { mapCenter:city.coords, defaultPlace:city.landmarks[0], ageBands:city.ageBands, places };
-      heroCities[key]={ title:`${city.display} travel, booking aur city planning ek saath.`, subtitle:`Ticket discovery ke saath age-based famous places, map access, video links, station arrival comfort aur stay planning.`, slides: slideImages(city.display, city.state, city.landmarks), landmarks: city.landmarks.map(name=>({name,wiki:wikiLink(name)})) };
+      heroCities[key]={ title:`${city.display} travel, booking and city planning in one place.`, subtitle:`Ticket discovery with age-aware famous places, map access, video links, station-arrival comfort and stay planning.`, slides: slideImages(city.display, city.state, city.landmarks), landmarks: city.landmarks.map(name=>({name,wiki:wikiLink(name)})) };
     });
     return {destinations,heroCities};
   }
