@@ -48,6 +48,7 @@ function citySpecificPlaceImage(city) {
   const heroDots = document.getElementById('heroDots');
   const heroPrev = document.getElementById('heroPrev');
   const heroNext = document.getElementById('heroNext');
+  const defaultSubmitLabel = 'Find My Trip';
 
   (data.stations || []).forEach(item => {
     const option = document.createElement('option');
@@ -157,16 +158,22 @@ function citySpecificPlaceImage(city) {
 
   function renderSearchStatus() {
     if (!searchStatus) return;
-    const fromValue = (fromInput && fromInput.value.trim()) || 'Source';
-    const toValue = (toInput && toInput.value.trim()) || 'Destination';
-    const ageValue = (ageInput && ageInput.value) || '28';
+    const fromValue = (fromInput && fromInput.value.trim()) || '';
+    const toValue = (toInput && toInput.value.trim()) || '';
+    const ageValue = (ageInput && ageInput.value) || '';
     const modeValue = (modeInput && modeInput.value) || 'train';
     const religionValue = (religionInput && religionInput.value) || 'any';
+    if (!fromValue && !toValue && !ageValue) {
+      const strong = document.createElement('strong');
+      strong.textContent = 'Ready when you are:';
+      searchStatus.replaceChildren(strong, ' enter your source, destination, travel date and age to get personalised routes.');
+      return;
+    }
     const strong = document.createElement('strong');
     strong.textContent = 'Live search preview:';
     searchStatus.replaceChildren(
       strong,
-      ` ${fromValue} -> ${toValue} | ${modeValue.toUpperCase()} | age ${ageValue} | preference ${religionValue}. Results will open route cards, destination suggestions and package planning.`
+      ` ${fromValue || 'Source'} -> ${toValue || 'Destination'} | ${modeValue.toUpperCase()} | age ${ageValue || 'not set'} | preference ${religionValue}. Results will open route cards, destination suggestions and package planning.`
     );
   }
 
@@ -213,8 +220,11 @@ function citySpecificPlaceImage(city) {
       }
       return;
     }
-    submitBtn && (submitBtn.textContent = 'Opening results...');
-    submitBtn && (submitBtn.disabled = true);
+    if (submitBtn) {
+      submitBtn.innerHTML = '<span>Finding Best Routes</span>';
+      submitBtn.classList.add('is-loading');
+      submitBtn.disabled = true;
+    }
 
     const params = new URLSearchParams({
       from: fromValue,
@@ -228,6 +238,18 @@ function citySpecificPlaceImage(city) {
     setTimeout(() => {
       window.location.href = '/results.html?' + params.toString();
     }, 200);
+  });
+
+  window.addEventListener('pageshow', (event) => {
+    const submitBtn = form ? form.querySelector('.primary-btn') : null;
+    if (event.persisted && form) {
+      form.reset();
+    }
+    if (!submitBtn) return;
+    submitBtn.innerHTML = `<span>${defaultSubmitLabel}</span>`;
+    submitBtn.classList.remove('is-loading');
+    submitBtn.disabled = false;
+    renderSearchStatus();
   });
 
   function renderLiveFooter() {

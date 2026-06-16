@@ -81,6 +81,32 @@ button, input, select { font: inherit; }
   border:none; border-radius: 24px; padding: 0 28px; height:72px; font-weight:900; cursor:pointer;
 }
 .primary-btn { background: linear-gradient(135deg, var(--brand), #ff835d); color:#fff; box-shadow: 0 18px 32px rgba(255,109,74,.22); }
+.search-submit-btn{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-width:210px;
+  padding:0 34px;
+  border-radius:20px;
+  letter-spacing:0;
+  background:linear-gradient(135deg,#ff6d4a,#ff8a63);
+  box-shadow:0 18px 34px rgba(255,109,74,.24), inset 0 1px 0 rgba(255,255,255,.28);
+  white-space:nowrap;
+}
+.search-submit-btn::after{
+  content:'';
+  width:18px;
+  height:18px;
+  border-radius:999px;
+  border:3px solid rgba(255,255,255,.42);
+  border-top-color:#fff;
+  display:none;
+  animation:spin .8s linear infinite;
+}
+.search-submit-btn.is-loading::after{display:block;}
+@keyframes spin{to{transform:rotate(360deg);}}
 .secondary-btn { background: #eef3ff; color: var(--navy); }
 .section { padding: 42px 0; }
 .section-card { background: var(--card); border:1px solid var(--line); border-radius: 34px; box-shadow: var(--shadow); }
