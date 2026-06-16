@@ -50,6 +50,17 @@ function citySpecificPlaceImage(city) {
   const heroNext = document.getElementById('heroNext');
   const defaultSubmitLabel = 'Find My Trip';
 
+  function todayIsoDate() {
+    const now = new Date();
+    const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    return localDate.toISOString().slice(0, 10);
+  }
+
+  const minTravelDate = todayIsoDate();
+  if (dateInput) {
+    dateInput.min = minTravelDate;
+  }
+
   (data.stations || []).forEach(item => {
     const option = document.createElement('option');
     option.value = item;
@@ -218,6 +229,15 @@ function citySpecificPlaceImage(city) {
         strong.textContent = 'Required:';
         searchStatus.replaceChildren(strong, ' please enter source, destination, date and age.');
       }
+      return;
+    }
+    if (dateValue < minTravelDate) {
+      if (searchStatus) {
+        const strong = document.createElement('strong');
+        strong.textContent = 'Invalid date:';
+        searchStatus.replaceChildren(strong, ' please choose today or a future travel date.');
+      }
+      dateInput && dateInput.focus();
       return;
     }
     if (submitBtn) {

@@ -430,13 +430,25 @@ const pkgDB = {
       <div class="memory-grid">
         ${[0, 1, 2, 3].map(index => `
           <label class="memory-slot">
-            ${memories[index] ? `<img src="${memories[index]}" alt="Saved travel memory ${index + 1}">` : `<strong>Photo ${index + 1}</strong><span>Add trip photo</span>`}
+            ${memories[index] ? `<img src="${memories[index]}" alt="Saved travel memory ${index + 1}"><button class="memory-delete" type="button" data-memory-delete="${index}" aria-label="Delete photo ${index + 1}">Delete</button>` : `<strong>Photo ${index + 1}</strong><span>Add trip photo</span>`}
             <input type="file" accept="image/*" data-memory-index="${index}">
           </label>
         `).join('')}
       </div>
       <small>Tip: production-grade recovery requires Firebase Storage, Cloudinary or MongoDB GridFS.</small>
     `;
+    memoryVault.querySelectorAll('[data-memory-delete]').forEach(button => {
+      button.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        const index = Number(button.dataset.memoryDelete);
+        const next = JSON.parse(localStorage.getItem(key) || '[]').slice(0, 4);
+        next[index] = null;
+        localStorage.setItem(key, JSON.stringify(next));
+        renderMemoryVault(cityName);
+        showToast('Memory photo deleted.');
+      });
+    });
     memoryVault.querySelectorAll('input[type="file"]').forEach(input => {
       input.addEventListener('change', event => {
         const file = event.target.files && event.target.files[0];
