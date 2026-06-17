@@ -30,6 +30,12 @@
     input{width:100%;padding:14px 16px;border-radius:14px;border:1px solid #d8e2f5;font:inherit}
     button.submit{width:100%;padding:15px 18px;border:none;border-radius:16px;background:#ff7b57;color:#fff;font-weight:800;font-size:17px;cursor:pointer}
     button.submit:disabled{opacity:.8;cursor:wait}
+    .divider{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin:18px 0;color:#6b7890;font-weight:800}
+    .divider::before,.divider::after{content:'';height:1px;background:#d8e2f5}
+    .google-panel{display:grid;gap:10px;margin:0 0 16px}
+    .google-fallback{display:none;width:100%;min-height:52px;border:1px solid #d8e2f5;border-radius:16px;background:#fff;color:#182a4b;font-weight:900;font-size:16px;cursor:pointer}
+    .google-fallback span{display:inline-flex;align-items:center;gap:10px}
+    .google-icon{width:22px;height:22px;display:inline-grid;place-items:center;border-radius:50%;font-weight:900;color:#4285f4}
     .muted{color:#617494;font-size:14px}
     .msg{margin-top:14px;padding:12px 14px;border-radius:12px;background:#f5f8ff;border:1px solid #d8e2f5;color:#243b67;display:none}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -84,14 +90,22 @@
         <div class="msg" id="msg"></div>
       </form>
 
-      <p class="muted" style="margin-top:16px">Register with email OTP verification. Login directly with email and password.</p>
+      <div class="divider">or</div>
+      <div class="google-panel">
+        <div id="googleSignIn"></div>
+        <button id="googleFallback" class="google-fallback" type="button"><span><b class="google-icon">G</b> Continue with Google</span></button>
+      </div>
+
+      <p class="muted" style="margin-top:16px">Register with email OTP verification, or continue with Google to create an account from your verified Google email.</p>
     </div>
   </div>
 </div>
 
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="/config.js"></script>
 <script>
   const API_BASE = window.EASYTRAVEL_API_BASE || "https://easytravel-backend.onrender.com";
+  const GOOGLE_CLIENT_ID = window.EASYTRAVEL_GOOGLE_CLIENT_ID || "";
   const loginTab = document.getElementById("loginTab");
   const registerTab = document.getElementById("registerTab");
   const nameRow = document.getElementById("nameRow");
@@ -100,6 +114,8 @@
   const submitBtn = document.getElementById("submitBtn");
   const otpRow = document.getElementById("otpRow");
   const otpInput = document.getElementById("otp");
+  const googleFallback = document.getElementById("googleFallback");
+  const googleSignIn = document.getElementById("googleSignIn");
   let mode = "login";
   let otpChallenge = "";
   let otpEmail = "";
@@ -120,6 +136,73 @@
   function showMsg(text) {
     msg.style.display = "block";
     msg.textContent = text;
+  }
+
+  function decodeJwtPayload(token) {
+    const payload = token.split(".")[1];
+    const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const decoded = decodeURIComponent(
+      atob(normalized)
+        .split("")
+        .map(char => "%" + ("00" + char.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(decoded);
+  }
+
+  function finishGoogleLogin(profile) {
+    if (!profile.email) {
+      showMsg("Google did not return an email address. Please try another account.");
+      return;
+    }
+    const user = {
+      id: profile.sub,
+      name: profile.name || profile.email.split("@")[0],
+      email: profile.email.toLowerCase(),
+      picture: profile.picture || "",
+      provider: "google"
+    };
+    localStorage.setItem("easytravel_token", `google_${user.id || Date.now()}`);
+    localStorage.setItem("easytravel_user", JSON.stringify(user));
+    showMsg(`Google account connected: ${user.email}. Opening EasyTravel Pro...`);
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 650);
+  }
+
+  function handleGoogleCredential(response) {
+    try {
+      const profile = decodeJwtPayload(response.credential);
+      finishGoogleLogin(profile);
+    } catch (error) {
+      console.error("Google login parse error:", error);
+      showMsg("Google sign-in could not be verified in this browser. Please try again.");
+    }
+  }
+
+  function initGoogleSignIn() {
+    if (!GOOGLE_CLIENT_ID) {
+      googleFallback.style.display = "block";
+      googleFallback.addEventListener("click", () => {
+        showMsg("Google Sign-In is ready in the code. Add your Google OAuth Client ID in config.js or Vercel environment to enable it.");
+      });
+      return;
+    }
+    if (!window.google || !google.accounts || !google.accounts.id) {
+      setTimeout(initGoogleSignIn, 300);
+      return;
+    }
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleGoogleCredential
+    });
+    google.accounts.id.renderButton(googleSignIn, {
+      theme: "outline",
+      size: "large",
+      width: Math.min(420, googleSignIn.parentElement.offsetWidth || 360),
+      text: "continue_with"
+    });
+    googleFallback.style.display = "none";
   }
 
   function validPassword(password) {
@@ -154,6 +237,7 @@
 
   loginTab.addEventListener("click", () => setMode("login"));
   registerTab.addEventListener("click", () => setMode("register"));
+  window.addEventListener("load", initGoogleSignIn);
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
