@@ -90,7 +90,7 @@
         <div class="msg" id="msg"></div>
       </form>
 
-      <div class="divider">or</div>
+      <div class="divider" id="googleDivider">or</div>
       <div class="google-panel">
         <div id="googleSignIn"></div>
         <button id="googleFallback" class="google-fallback" type="button"><span><b class="google-icon">G</b> Continue with Google</span></button>
@@ -101,7 +101,6 @@
   </div>
 </div>
 
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="/config.js"></script>
 <script>
   const API_BASE = window.EASYTRAVEL_API_BASE || "https://easytravel-backend.onrender.com";
@@ -116,6 +115,7 @@
   const otpInput = document.getElementById("otp");
   const googleFallback = document.getElementById("googleFallback");
   const googleSignIn = document.getElementById("googleSignIn");
+  const googleDivider = document.getElementById("googleDivider");
   let mode = "login";
   let otpChallenge = "";
   let otpEmail = "";
@@ -182,10 +182,9 @@
 
   function initGoogleSignIn() {
     if (!GOOGLE_CLIENT_ID) {
-      googleFallback.style.display = "block";
-      googleFallback.addEventListener("click", () => {
-        showMsg("Google Sign-In is ready in the code. Add your Google OAuth Client ID in config.js or Vercel environment to enable it.");
-      });
+      if (googleDivider) googleDivider.style.display = "none";
+      if (googleSignIn) googleSignIn.style.display = "none";
+      if (googleFallback) googleFallback.style.display = "none";
       return;
     }
     if (!window.google || !google.accounts || !google.accounts.id) {
@@ -237,7 +236,19 @@
 
   loginTab.addEventListener("click", () => setMode("login"));
   registerTab.addEventListener("click", () => setMode("register"));
-  window.addEventListener("load", initGoogleSignIn);
+  window.addEventListener("load", () => {
+    if (!GOOGLE_CLIENT_ID) {
+      initGoogleSignIn();
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = initGoogleSignIn;
+    script.onerror = () => showMsg("Google Sign-In could not load. Please use email login.");
+    document.head.appendChild(script);
+  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
