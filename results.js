@@ -125,6 +125,8 @@ function stableTravelImageFallback(city) {
   const recommendedNames = preferredNames.length ? preferredNames : filterPlacesByPreference(rawRecommendedNames).filter(name => cityData.places[name]);
   const visiblePlaceNames = [...new Set([...recommendedNames, ...filterPlacesByPreference(allPlaceNames)])];
   let selectedPlace = cityData.places[recommendedNames[0]] || cityData.places[cityData.defaultPlace] || cityData.places[visiblePlaceNames[0]];
+  let selectedPackagePlaces = visiblePlaceNames.slice(0, Math.min(3, visiblePlaceNames.length));
+  if (!selectedPackagePlaces.length && selectedPlace?.name) selectedPackagePlaces = [selectedPlace.name];
 
   resultTitle.textContent = `Recommended Famous Places In ${cityName} For A ${age}-Year-Old Traveller`;
   if (resultSubtitle) resultSubtitle.textContent = `${cityName} recommendations are tailored by age, trip duration and ${religion === 'any' ? 'open travel' : religion} preference, with route planning, maps, video links and stay ideas.`;
@@ -284,16 +286,48 @@ if (img) {
     const band = selectedAgeBand;
     const budget = age < 22 ? 'Budget' : age < 35 ? 'Comfort' : 'Premium';
     const days = age < 22 ? 2 : age < 40 ? 3 : 2;
+    const packagePlaceOptions = visiblePlaceNames.slice(0, Math.min(9, visiblePlaceNames.length));
+    selectedPackagePlaces = selectedPackagePlaces.filter(name => packagePlaceOptions.includes(name));
+    if (!selectedPackagePlaces.length) selectedPackagePlaces = [selectedPlace?.name || packagePlaceOptions[0]].filter(Boolean);
+    const selectedCount = selectedPackagePlaces.length || 1;
+    const scopeText = selectedPackagePlaces.join(', ');
+    const savingsText = selectedCount <= 2 ? 'Lean route pricing for selected spots only' : selectedCount <= 4 ? 'Balanced route pricing with smart discount' : 'Full sightseeing route with bundle discount';
     packagePreview.innerHTML = `
       <div class="package-badge">${days}-day smart package</div>
       <h4>${city} ${budget.toLowerCase()} package</h4>
-      <p>Recommended around ${selectedPlace.name}. Age band ${band}. Includes stay suggestions, local transfer idea, and sightseeing flow.</p>
+      <p>Recommended around ${selectedPlace.name}. Age band ${band}. Choose only the places you want, and the package page will adjust the price from those selections.</p>
+      <div class="package-place-picker">
+        <div class="picker-head">
+          <strong>Choose Places For This Package</strong>
+          <span>${selectedCount} selected</span>
+        </div>
+        <div class="package-place-options">
+          ${packagePlaceOptions.map(name => `
+            <label class="package-place-option ${selectedPackagePlaces.includes(name) ? 'checked' : ''}">
+              <input type="checkbox" data-package-place="${name}" ${selectedPackagePlaces.includes(name) ? 'checked' : ''}>
+              <span>${name}</span>
+            </label>
+          `).join('')}
+        </div>
+        <div class="package-place-note">${savingsText}. Current scope: ${scopeText}.</div>
+      </div>
       <ul>
         <li>Arrival pickup concept from station / bus stop</li>
-        <li>${days} day city exploration around ${selectedPlace.name}</li>
+        <li>${days} day city exploration around ${selectedCount} selected place${selectedCount > 1 ? 's' : ''}</li>
         <li>${budget === 'Budget' ? 'Launch saver offer 5% off' : budget === 'Comfort' ? 'Combo offer 8% off' : 'Premium package benefit 12% off'} </li>
       </ul>`;
-    packageBtn.href = `/package.html?from=${encodeURIComponent(from)}&to=${encodeURIComponent(cityName)}&date=${encodeURIComponent(date)}&age=${encodeURIComponent(age)}&mode=${encodeURIComponent(mode)}&religion=${encodeURIComponent(religion)}&place=${encodeURIComponent(selectedPlace.name)}`;
+    packagePreview.querySelectorAll('[data-package-place]').forEach(input => {
+      input.addEventListener('change', () => {
+        const checked = [...packagePreview.querySelectorAll('[data-package-place]:checked')].map(el => el.dataset.packagePlace);
+        if (!checked.length) {
+          input.checked = true;
+          return;
+        }
+        selectedPackagePlaces = checked;
+        renderPackage();
+      });
+    });
+    packageBtn.href = `/package.html?from=${encodeURIComponent(from)}&to=${encodeURIComponent(cityName)}&date=${encodeURIComponent(date)}&age=${encodeURIComponent(age)}&mode=${encodeURIComponent(mode)}&religion=${encodeURIComponent(religion)}&place=${encodeURIComponent(selectedPackagePlaces[0] || selectedPlace.name)}&places=${encodeURIComponent(selectedPackagePlaces.join('|'))}`;
   }
 
   function renderCultureGuide() {

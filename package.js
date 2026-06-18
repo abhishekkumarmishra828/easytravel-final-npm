@@ -19,6 +19,11 @@
   const ageFromUrl = Number(params.get('age') || 28);
   const modeFromUrl = (params.get('mode') || 'train').toLowerCase();
   const religionFromUrl = (params.get('religion') || 'any').toLowerCase();
+  const selectedPlacesFromUrl = (params.get('places') || params.get('place') || '')
+    .split('|')
+    .map(item => item.trim())
+    .filter(Boolean);
+  let selectedPackagePlaces = selectedPlacesFromUrl.slice(0, 9);
 
   const titleEl = document.getElementById('pkgTitle');
   const oldPriceEl = document.getElementById('oldPrice');
@@ -478,10 +483,15 @@ const pkgDB = {
     const finalDays = budgetName === 'Budget' ? Math.min(2, requestedDays) : requestedDays;
     const routeKm = routeKmForPricing(from, formData.destination || cityNameFromInput(destinationInput.value));
     const distanceSlab = Math.min(1800, Math.max(250, Math.round(routeKm * rules.distanceRate)));
+    const selectedPlaceCount = Math.max(1, Number(formData.selectedPlaceCount || selectedPackagePlaces.length || 3));
+    const sightseeingScopeFactor = Math.max(0.54, Math.min(1, 0.42 + (selectedPlaceCount * 0.12)));
     const modeDiscount = { train: 300, bus: 450, hotel: 150, flight: 0 }[(formData.arrivalMode || '').toLowerCase()] || 250;
     const groupDiscount = people >= 5 ? 0.12 : people >= 3 ? 0.08 : people === 2 ? 0.04 : 0;
     const seasonalDiscount = /june|july|august|september/i.test(formData.travelMonth || '') ? 0.06 : 0.03;
-    const baseBeforeDiscount = (rules.basePerDay * finalDays * people) + distanceSlab;
+    const stayBase = rules.basePerDay * finalDays * people;
+    const variableSightseeingBase = Math.round((stayBase * 0.42 + distanceSlab) * sightseeingScopeFactor);
+    const fixedStayBase = Math.round(stayBase * 0.58);
+    const baseBeforeDiscount = fixedStayBase + variableSightseeingBase;
     const firstUserCoupon = rules.firstUserCoupon || 0;
     const discountAmount = Math.round((baseBeforeDiscount * (groupDiscount + seasonalDiscount)) + firstUserCoupon + modeDiscount);
     const floor = { Budget: 1999, Comfort: 3499, Premium: 5999 }[budgetName] || 3499;
@@ -494,6 +504,8 @@ const pkgDB = {
       nights: budgetName === 'Budget' ? 3 : Math.max(1, finalDays - 1),
       routeKm,
       distanceSlab,
+      selectedPlaceCount,
+      sightseeingScopeFactor,
       baseBeforeDiscount,
       discountAmount,
       firstUserCoupon,
@@ -513,7 +525,8 @@ const pkgDB = {
       budget,
       days,
       travelMonth: monthInput.value || 'April',
-      arrivalMode: modeInput.value || modeFromUrl
+      arrivalMode: modeInput.value || modeFromUrl,
+      selectedPlaceCount: selectedPackagePlaces.length || 3
     });
     return { oldPrice: formatInr(pricing.oldPrice), newPrice: formatInr(pricing.finalPrice), pricing };
   }
@@ -599,11 +612,6 @@ const pkgDB = {
     const pack = pkgDB[cityName] || packageTemplate(cityName);
     const budget = budgetInput.value || 'Comfort';
     const days = Number(daysInput.value || 3);
-    const computedPrices = computeHeaderPrices(pack, budget, days);
-    const pricing = computedPrices.pricing;
-    titleEl.textContent = pack.title;
-    oldPriceEl.textContent = computedPrices.oldPrice;
-    newPriceEl.textContent = computedPrices.newPrice;
     categoriesEl.textContent = pack.categories + ' • ' + budget + ' plan';
     renderGallery(cityName, getImageSet(cityName));
 
@@ -615,16 +623,47 @@ const pkgDB = {
     const band = data.ageBand ? data.ageBand(ageValue) : '20-29';
     const picks = cityData ? ((cityData.ageBands && (cityData.ageBands[band] || cityData.ageBands['20-29'])) || cityData.landmarks || []) : [];
     const selected = picks.slice(0, 6);
+    const packagePlaceOptions = [...new Set([
+      ...(selectedPlacesFromUrl || []),
+      ...selected,
+      ...((pack.highlights || []).map(item => String(item).replace(/^Day\s+\d+:\s*/i, '')))
+    ])].filter(Boolean).slice(0, 9);
+    selectedPackagePlaces = selectedPackagePlaces.filter(name => packagePlaceOptions.includes(name));
+    if (!selectedPackagePlaces.length) selectedPackagePlaces = packagePlaceOptions.slice(0, Math.min(3, packagePlaceOptions.length));
+    if (!selectedPackagePlaces.length && selected[0]) selectedPackagePlaces = [selected[0]];
+    const computedPrices = computeHeaderPrices(pack, budget, days);
+    const pricing = computedPrices.pricing;
+    titleEl.textContent = pack.title;
+    oldPriceEl.textContent = computedPrices.oldPrice;
+    newPriceEl.textContent = computedPrices.newPrice;
+    categoriesEl.textContent = `${pack.categories} • ${budget} plan`;
     const pref = (prefInput.value || 'city highlights').trim();
     const budgetMap = { Budget: '₹3,999 - ₹6,999', Comfort: '₹7,000 - ₹12,999', Premium: '₹13,000 - ₹24,999' };
     const region = regionAliases[cityName.toLowerCase()] || cityName;
     const tours = getScrapedTourNames(region);
     const faqs = getScrapedFaqs(region);
     const src = regionSource(region);
-    const chips = selected.map(p => `<span class="recommend-chip">${p}</span>`).join('');
-    const highlights = (pack.highlights || selected).map(h => `<li>${h}</li>`).join('');
-    const itinerary = (pack.itinerary || []).map(p => `<li>${p}</li>`).join('');
-    const smartPlan = buildDayWisePlan(cityName, selected, pack);
+    const chips = selectedPackagePlaces.map(p => `<span class="recommend-chip">${p}</span>`).join('');
+    const placePickerHtml = `
+      <div class="package-place-picker package-page-picker">
+        <div class="picker-head">
+          <strong>Customize Places In Your Package</strong>
+          <span>${selectedPackagePlaces.length} selected</span>
+        </div>
+        <div class="package-place-options">
+          ${packagePlaceOptions.map(name => `
+            <label class="package-place-option ${selectedPackagePlaces.includes(name) ? 'checked' : ''}">
+              <input type="checkbox" data-package-place="${name}" ${selectedPackagePlaces.includes(name) ? 'checked' : ''}>
+              <span>${name}</span>
+            </label>
+          `).join('')}
+        </div>
+        <div class="package-place-note">The price is recalculated from selected sightseeing scope, stay plan, distance slab, group discount and first-user coupon.</div>
+      </div>
+    `;
+    const highlights = (selectedPackagePlaces.length ? selectedPackagePlaces.map(name => `${name} guided/local exploration`) : (pack.highlights || selected)).map(h => `<li>${h}</li>`).join('');
+    const itinerary = selectedPackagePlaces.map((place, index) => `<li>Day ${Math.min(index + 1, days)}: ${place} with local transfer and food break</li>`).join('') || (pack.itinerary || []).map(p => `<li>${p}</li>`).join('');
+    const smartPlan = buildDayWisePlan(cityName, selectedPackagePlaces.length ? selectedPackagePlaces : selected, pack);
     const smartPlanHtml = smartPlan.map(item => `
       <article class="day-plan-card">
         <span>Day ${item.day}</span>
@@ -640,6 +679,7 @@ const pkgDB = {
       <div class="planner-box">
         <div class="recommend-header" style="margin-bottom:10px;"><div class="hero-kicker" style="color:var(--navy);background:#edf3ff;border-color:#dbe4f6;">Package Snapshot</div></div>
         <div class="chip-row">${chips}</div>
+        ${placePickerHtml}
         <p class="recommend-note" style="margin-top:14px;">Selected plan: <strong>${budget}</strong> · Visible package price: <strong>${computedPrices.newPrice}</strong> · First user coupon: <strong>₹${Number(pricing.firstUserCoupon).toLocaleString('en-IN')}</strong> · Smart discount: <strong>₹${Number(pricing.discountAmount).toLocaleString('en-IN')}</strong></p>
         <h3 style="font-size:54px;line-height:1.05;margin:24px 0 12px;color:var(--navy);">Highlights –</h3>
         <ul style="font-size:20px;line-height:1.8;margin-top:0;">${highlights}</ul>
@@ -659,6 +699,18 @@ const pkgDB = {
         ${faqHtml}
       </div>
     `;
+
+    outputEl.querySelectorAll('[data-package-place]').forEach(input => {
+      input.addEventListener('change', () => {
+        const checked = [...outputEl.querySelectorAll('[data-package-place]:checked')].map(el => el.dataset.packagePlace);
+        if (!checked.length) {
+          input.checked = true;
+          return;
+        }
+        selectedPackagePlaces = checked;
+        renderPackage(cityName);
+      });
+    });
 
     outputEl.querySelectorAll('[data-accept-plan]').forEach(button => {
       button.addEventListener('click', () => {
@@ -682,7 +734,7 @@ const pkgDB = {
       });
     });
 
-    const waText = encodeURIComponent(`Hello EasyTravel Pro, I want to enquire about the ${cityName} package. Age: ${ageValue}, Days: ${days}, Budget: ${budget}, Preference: ${pref}`);
+    const waText = encodeURIComponent(`Hello EasyTravel Pro, I want to enquire about the ${cityName} package. Age: ${ageValue}, Days: ${days}, Budget: ${budget}, Selected places: ${selectedPackagePlaces.join(', ') || 'not selected'}, Preference: ${pref}`);
     if (whatsappBtn) {
       whatsappBtn.href = `https://wa.me/917366930984?text=${waText}`;
     }
@@ -713,6 +765,8 @@ const pkgDB = {
       travelMonth: (monthInput.value || '').trim(),
       arrivalMode: (modeInput.value || '').trim(),
       religion: (religionInput?.value || 'any').trim(),
+      selectedPlaces: selectedPackagePlaces.slice(),
+      selectedPlaceCount: selectedPackagePlaces.length || 1,
       specialRequest: (prefInput.value || '').trim()
     };
   }
@@ -737,6 +791,8 @@ const pkgDB = {
       nights: pricing.nights,
       arrivalMode: formData.arrivalMode || 'Not entered',
       religion: formData.religion || 'any',
+      selectedPlaces: formData.selectedPlaces || [],
+      selectedPlaceCount: formData.selectedPlaceCount || 1,
       travelMonth: formData.travelMonth || 'Not entered',
       specialRequest: formData.specialRequest || 'No special request',
       coupon: pricing.firstUserCoupon,
@@ -768,6 +824,7 @@ const pkgDB = {
         <div><strong>Travel preference</strong><br>${religionText(r.religion)}</div>
         <div><strong>Travel month</strong><br>${r.travelMonth}</div>
         <div><strong>Tour duration</strong><br>${r.days} days / ${r.nights} nights</div>
+        <div style="grid-column:1 / -1"><strong>Selected places</strong><br>${r.selectedPlaces.join(', ') || 'Not selected'}</div>
         <div style="grid-column:1 / -1"><strong>Special request</strong><br>${r.specialRequest}</div>
       </div>
       <div style="margin-top:14px;padding:14px;border-radius:16px;background:#eef5ff;">
@@ -799,6 +856,7 @@ const pkgDB = {
       <div><strong>People</strong><br>${summary.people}</div>
       <div><strong>Package</strong><br>${summary.budget}</div>
       <div><strong>Arrival mode</strong><br>${summary.arrivalMode}</div>
+      <div style="grid-column:1 / -1"><strong>Selected places</strong><br>${summary.selectedPlaces.join(', ') || 'Not selected'}</div>
       <div style="grid-column:1 / -1"><strong>Included features</strong><br>${summary.rules.features.join(', ')}</div>
       <div><strong>First user coupon</strong><br>${summary.coupon ? '₹' + summary.coupon + ' off' : 'No coupon'}</div>
       <div><strong>Smart discount</strong><br>₹${Number(summary.discountAmount).toLocaleString('en-IN')} off</div>
