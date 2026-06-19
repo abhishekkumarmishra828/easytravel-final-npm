@@ -45,6 +45,25 @@
     .muted{color:#617494;font-size:14px}
     .msg{margin-top:14px;padding:12px 14px;border-radius:12px;background:#f5f8ff;border:1px solid #d8e2f5;color:#243b67;display:none}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .loading-travel{position:fixed;inset:0;z-index:20;display:none;place-items:center;padding:20px;background:rgba(5,15,35,.48);backdrop-filter:blur(8px)}
+    .loading-travel.active{display:grid}
+    .loading-card{width:min(420px,100%);border-radius:28px;background:rgba(255,255,255,.96);box-shadow:0 28px 90px rgba(5,15,35,.34);border:1px solid rgba(216,226,245,.95);overflow:hidden;text-align:center}
+    .loading-image-strip{display:grid;grid-template-columns:repeat(3,1fr);height:112px}
+    .loading-image-strip span{background-size:cover;background-position:center;filter:saturate(1.08)}
+    .loading-image-strip span:nth-child(1){background-image:linear-gradient(rgba(12,30,60,.08),rgba(12,30,60,.18)),url('/package-assets/hill_real.jpg')}
+    .loading-image-strip span:nth-child(2){background-image:linear-gradient(rgba(12,30,60,.08),rgba(12,30,60,.18)),url('/package-assets/varanasi-ghat1.jpg')}
+    .loading-image-strip span:nth-child(3){background-image:linear-gradient(rgba(12,30,60,.08),rgba(12,30,60,.18)),url('/package-assets/sunset_real.jpg')}
+    .loading-body{padding:24px 24px 26px;display:grid;gap:12px;justify-items:center}
+    .loading-spinner{width:76px;height:76px;border-radius:50%;background:conic-gradient(from 0deg,#ff7b57,#ffd166,#49c6e5,#1a2d55,#ff7b57);display:grid;place-items:center;animation:travelSpin 1s linear infinite;box-shadow:0 12px 32px rgba(31,60,115,.22)}
+    .loading-spinner::after{content:'';width:52px;height:52px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 1px #dce7f8}
+    .loading-card h3{margin:6px 0 0;color:#1a2d55;font-size:28px;line-height:1.1}
+    .loading-card p{margin:0;color:#5d708f;font-size:15px;line-height:1.5}
+    .loading-dots{display:flex;gap:7px;justify-content:center;margin-top:2px}
+    .loading-dots i{width:8px;height:8px;border-radius:50%;background:#ff7b57;animation:dotPulse 1s ease-in-out infinite}
+    .loading-dots i:nth-child(2){animation-delay:.15s;background:#49c6e5}
+    .loading-dots i:nth-child(3){animation-delay:.3s;background:#1a2d55}
+    @keyframes travelSpin{to{transform:rotate(360deg)}}
+    @keyframes dotPulse{0%,100%{opacity:.35;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
     a{text-decoration:none;color:inherit}
     @media (max-width:800px){.wrap{padding:12px}.card{grid-template-columns:1fr;border-radius:22px}.left{padding:28px}.left h1{font-size:34px}.right{padding:22px}.row{grid-template-columns:1fr}.field[style]{grid-column:auto!important}}
   </style>
@@ -112,6 +131,18 @@
   </div>
 </div>
 
+<div class="loading-travel" id="travelLoading" aria-live="polite" aria-label="Loading travel account">
+  <div class="loading-card">
+    <div class="loading-image-strip" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="loading-body">
+      <div class="loading-spinner" aria-hidden="true"></div>
+      <h3 id="loadingTitle">Loading</h3>
+      <p id="loadingText">Preparing your travel account and destination access. Please stay on this page.</p>
+      <div class="loading-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+    </div>
+  </div>
+</div>
+
 <script src="/config.js"></script>
 <script>
   const API_BASE = window.EASYTRAVEL_API_BASE || "https://easytravel-backend.onrender.com";
@@ -129,9 +160,23 @@
   const googleDivider = document.getElementById("googleDivider");
   const passwordInput = document.getElementById("password");
   const togglePassword = document.getElementById("togglePassword");
+  const travelLoading = document.getElementById("travelLoading");
+  const loadingTitle = document.getElementById("loadingTitle");
+  const loadingText = document.getElementById("loadingText");
   let mode = "login";
   let otpChallenge = "";
   let otpEmail = "";
+
+  function showTravelLoading(title, text) {
+    if (!travelLoading) return;
+    loadingTitle.textContent = title || "Loading";
+    loadingText.textContent = text || "Preparing your travel account and destination access. Please stay on this page.";
+    travelLoading.classList.add("active");
+  }
+
+  function hideTravelLoading() {
+    if (travelLoading) travelLoading.classList.remove("active");
+  }
 
   if (togglePassword && passwordInput) {
     togglePassword.addEventListener("click", () => {
@@ -303,12 +348,14 @@
       if (mode === "register") {
         if (!otpChallenge || otpEmail !== payload.email) {
           submitBtn.textContent = "Sending OTP...";
+          showTravelLoading("Sending OTP", "Connecting securely and sending registration OTP to your email.");
           const data = await requestOtp(payload);
           otpChallenge = data.challenge;
           otpEmail = payload.email;
           otpRow.style.display = "block";
           submitBtn.textContent = "Verify OTP";
           showMsg(data.message || "OTP sent to your email. Please verify within 10 minutes.");
+          hideTravelLoading();
           otpInput.focus();
           return;
         }
@@ -319,9 +366,11 @@
           return;
         }
         submitBtn.textContent = "Verifying OTP...";
+        showTravelLoading("Verifying OTP", "Checking your OTP and unlocking registration access.");
         const verified = await verifyOtp({ ...payload, otp, challenge: otpChallenge });
         if (verified.success) {
           submitBtn.textContent = "Creating account...";
+          showTravelLoading("Creating Account", "Saving your traveller profile so packages and memories stay connected.");
           const registerRes = await fetch(API_BASE + "/api/auth/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -330,17 +379,20 @@
           const registerData = await registerRes.json();
           if (!registerData.success) {
             showMsg(registerData.message || "OTP verified, but registration could not be saved.");
+            hideTravelLoading();
             return;
           }
           showMsg("Registration successful. You can now log in with your password.");
           form.reset();
           setMode("login");
           document.getElementById("email").value = payload.email;
+          hideTravelLoading();
           return;
         }
       }
 
       submitBtn.textContent = "Logging in...";
+      showTravelLoading("Loading", "Opening your EasyTravel Pro account with maps, packages and local travel support.");
       const res = await fetch(API_BASE + "/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -351,6 +403,7 @@
       if (data.success && data.token) {
         localStorage.setItem("easytravel_token", data.token);
         localStorage.setItem("easytravel_user", JSON.stringify(data.user));
+        showTravelLoading("Welcome Back", "Your India travel dashboard is ready. Redirecting now...");
         setTimeout(() => {
           window.location.href = "/";
         }, 700);
@@ -358,7 +411,11 @@
     } catch (error) {
       console.error("Auth error:", error);
       showMsg(error.message || "Server error. Please check the backend and try again.");
+      hideTravelLoading();
     } finally {
+      if (!(localStorage.getItem("easytravel_token") && submitBtn.textContent === "Logging in...")) {
+        hideTravelLoading();
+      }
       submitBtn.disabled = false;
       submitBtn.textContent = mode === "register"
         ? (otpChallenge ? "Verify OTP" : "Send registration OTP")
