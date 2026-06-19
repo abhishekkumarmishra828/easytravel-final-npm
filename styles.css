@@ -81,19 +81,29 @@ button, input, select { font: inherit; }
   border:none; border-radius: 24px; padding: 0 28px; height:72px; font-weight:900; cursor:pointer;
 }
 .primary-btn { background: linear-gradient(135deg, var(--brand), #ff835d); color:#fff; box-shadow: 0 18px 32px rgba(255,109,74,.22); }
+.action-wrap{
+  grid-column:1 / -1;
+  display:flex;
+  justify-content:center;
+  align-items:end;
+  width:100%;
+}
 .search-submit-btn{
   position:relative;
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:10px;
-  min-width:210px;
+  min-width:250px;
   padding:0 34px;
   border-radius:20px;
   letter-spacing:0;
-  background:linear-gradient(135deg,#ff6d4a,#ff8a63);
-  box-shadow:0 18px 34px rgba(255,109,74,.24), inset 0 1px 0 rgba(255,255,255,.28);
+  background:linear-gradient(135deg,#1b4f9c,#2f80ed 54%,#53a7ff);
+  box-shadow:0 18px 36px rgba(31,91,180,.30), inset 0 1px 0 rgba(255,255,255,.30);
   white-space:nowrap;
+}
+.search-submit-btn:hover{
+  background:linear-gradient(135deg,#173f82,#2872d5 54%,#4199f3);
 }
 .search-submit-btn::after{
   content:'';
