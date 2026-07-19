@@ -232,9 +232,7 @@
     localStorage.setItem("easytravel_token", `google_${user.id || Date.now()}`);
     localStorage.setItem("easytravel_user", JSON.stringify(user));
     showMsg(`Google account connected: ${user.email}. Opening EasyTravel Pro...`);
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 650);
+    window.location.href = "/";
   }
 
   function handleGoogleCredential(response) {
@@ -404,9 +402,7 @@
         localStorage.setItem("easytravel_token", data.token);
         localStorage.setItem("easytravel_user", JSON.stringify(data.user));
         showTravelLoading("Welcome Back", "Your India travel dashboard is ready. Redirecting now...");
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 700);
+        window.location.href = "/";
       }
     } catch (error) {
       console.error("Auth error:", error);

@@ -104,6 +104,12 @@ function citySpecificPlaceImage(city) {
   function cityKeyFromValue(v) {
     return data.cityKeyFromValue ? data.cityKeyFromValue(v) : (v || 'Delhi').toLowerCase().trim();
   }
+  function knownCityKeyFromValue(v) {
+    if (data.knownCityKeyFromValue) return data.knownCityKeyFromValue(v);
+    const raw = (v || '').trim().toLowerCase();
+    if (!raw) return null;
+    return Object.keys(data.destinations || {}).some(name => name.toLowerCase() === raw) ? raw : null;
+  }
 
   function updateActiveSlide() {
     const slides = heroSlides ? heroSlides.querySelectorAll('.hero-slide') : [];
@@ -169,6 +175,7 @@ function citySpecificPlaceImage(city) {
 
   function renderSearchStatus() {
     if (!searchStatus) return;
+    searchStatus.classList.remove('no-result');
     const fromValue = (fromInput && fromInput.value.trim()) || '';
     const toValue = (toInput && toInput.value.trim()) || '';
     const ageValue = (ageInput && ageInput.value) || '';
@@ -240,6 +247,18 @@ function citySpecificPlaceImage(city) {
       dateInput && dateInput.focus();
       return;
     }
+    const resolvedDestinationKey = knownCityKeyFromValue(toValue);
+    if (!resolvedDestinationKey) {
+      if (searchStatus) {
+        searchStatus.classList.add('no-result');
+        const strong = document.createElement('strong');
+        strong.textContent = 'No Such Result Found:';
+        searchStatus.replaceChildren(strong, ` "${toValue}" is not available in our destination database yet. Please choose a city from the suggestions list.`);
+      }
+      toInput && toInput.focus();
+      return;
+    }
+    searchStatus && searchStatus.classList.remove('no-result');
     if (submitBtn) {
       submitBtn.innerHTML = '<span>Finding Best Routes</span>';
       submitBtn.classList.add('is-loading');

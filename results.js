@@ -74,9 +74,42 @@ function stableTravelImageFallback(city) {
   const localTransportModes = document.getElementById('localTransportModes');
   const localTransportBtn = document.getElementById('localTransportBtn');
 
-  const cityKey = data.cityKeyFromValue(to);
+  const knownCityKey = data.knownCityKeyFromValue ? data.knownCityKeyFromValue(to) : data.cityKeyFromValue(to);
+  if (!knownCityKey) {
+    document.body.classList.add('no-results-page');
+    resultTitle.textContent = 'No Such Result Found';
+    if (resultSubtitle) resultSubtitle.textContent = `"${to}" is not available in the EasyTravel destination database yet. Please return to search and choose a supported destination from the suggestion list.`;
+    routeBadges.innerHTML = '';
+    [from || 'Source not selected', to || 'Destination not selected', `Date: ${date}`, `Mode: ${mode}`].forEach(text => {
+      const span = document.createElement('span');
+      span.textContent = text;
+      routeBadges.appendChild(span);
+    });
+    if (ticketHeading) ticketHeading.textContent = 'No routes available';
+    if (routeInsight) routeInsight.textContent = 'We could not match this destination with a verified city profile, so package recommendations are paused for accuracy.';
+    if (ticketListWrap) ticketListWrap.innerHTML = '<div class="empty-result-card"><h3>No Such Result Found</h3><p>Please search again with a supported Indian city or destination from the homepage suggestions.</p><a class="primary-btn" href="/#plan">Search Again</a></div>';
+    if (recHeading) recHeading.textContent = 'Destination Not Available';
+    if (recNote) recNote.textContent = 'No places are shown because this destination is not currently in the database.';
+    if (placeChips) placeChips.innerHTML = '';
+    if (recQuickLinks) recQuickLinks.innerHTML = '';
+    if (visualPlaceName) visualPlaceName.textContent = 'No verified destination';
+    if (visualPlaceLine) visualPlaceLine.textContent = 'Choose a supported place to see images, maps and route ideas.';
+    if (resultHeroImage) resultHeroImage.src = '/assets/hero-show-1.png';
+    if (miniStatPlaces) miniStatPlaces.textContent = '0 places';
+    if (miniStatMood) miniStatMood.textContent = 'Unavailable';
+    if (miniStatFlow) miniStatFlow.textContent = 'Search again';
+    if (bookNowTop) bookNowTop.style.display = 'none';
+    if (packageBtn) packageBtn.style.display = 'none';
+    if (packagePreview) packagePreview.style.display = 'none';
+    if (cultureCard) cultureCard.style.display = 'none';
+    if (localTransportSummary) localTransportSummary.style.display = 'none';
+    if (localTransportModes) localTransportModes.style.display = 'none';
+    if (localTransportBtn) localTransportBtn.style.display = 'none';
+    return;
+  }
+  const cityKey = knownCityKey;
   const cityName = data.destinationNameFromKey ? data.destinationNameFromKey(cityKey) : cityKey.charAt(0).toUpperCase() + cityKey.slice(1);
-  const cityData = data.destinations[cityName] || data.destinations.Delhi;
+  const cityData = data.destinations[cityName];
   const selectedAgeBand = data.ageBand(age);
   const rawRecommendedNames = cityData.ageBands[selectedAgeBand] || cityData.ageBands['20-29'] || [];
   const allPlaceNames = Object.keys(cityData.places || {});

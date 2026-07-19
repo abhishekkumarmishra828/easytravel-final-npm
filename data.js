@@ -48,6 +48,15 @@ const placeImage = (city, place) => SERIAL_CITY_PLACE_IMAGE[city] || SERIAL_CITY
     for(const [alias,key] of Object.entries(aliases)){ if(raw.includes(alias)) return key; }
     return 'delhi';
   }
+  function knownCityKeyFromValue(v){
+    const raw = normalizeInput(v);
+    if(!raw) return null;
+    for(const [alias,key] of Object.entries(aliases)){ if(raw.includes(alias)) return key; }
+    return null;
+  }
+  function destinationNameFromKey(key){
+    return CITY_MAP[key]?.display || null;
+  }
   function ageBand(age){
     if(age <= 9) return '0-9';
     if(age <= 19) return '10-19';
@@ -183,5 +192,5 @@ function slideImages(display, state, landmarks){
       {name:`Premium Suites ${title}`, area:`City landmark side`, price:'₹4,950 / night', vibe:'Premium stay + pickup support concept', rating:'4.6', distance:'Approx 20–35 min from arrival point'}
     ];
   }
-  window.EASYTRAVEL_DATA = { stations: STATIONS, heroCities: built.heroCities, destinations: built.destinations, cityKeyFromValue, ageBand, trains: {}, buses: {}, hotels: {}, dynamicTrainRoute: trainRoute, dynamicBusRoute: busRoute, dynamicHotelRoute: hotelRoute };
+  window.EASYTRAVEL_DATA = { stations: STATIONS, heroCities: built.heroCities, destinations: built.destinations, cityKeyFromValue, knownCityKeyFromValue, destinationNameFromKey, ageBand, trains: {}, buses: {}, hotels: {}, dynamicTrainRoute: trainRoute, dynamicBusRoute: busRoute, dynamicHotelRoute: hotelRoute };
 })();

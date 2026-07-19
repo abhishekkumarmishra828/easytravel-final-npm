@@ -259,6 +259,13 @@ const pkgDB = {
     const alias = regionAliases[raw.toLowerCase()];
     if (alias) return alias;
 
+    if (data.knownCityKeyFromValue) {
+      const knownKey = data.knownCityKeyFromValue(raw);
+      if (!knownKey) return null;
+      if (data.destinationNameFromKey) return data.destinationNameFromKey(knownKey);
+      return capitalize(knownKey);
+    }
+
     if (data.cityKeyFromValue) {
       const key = data.cityKeyFromValue(raw);
       if (key) {
@@ -270,7 +277,7 @@ const pkgDB = {
         return proper;
       }
     }
-    return raw || 'Delhi';
+    return raw || null;
   }
 
 
@@ -609,6 +616,22 @@ const pkgDB = {
   }
 
   function renderPackage(cityName) {
+    if (!cityName) {
+      titleEl.textContent = 'No Such Result Found';
+      oldPriceEl.textContent = '';
+      newPriceEl.textContent = '--';
+      categoriesEl.textContent = 'Destination unavailable';
+      if (galleryEl) galleryEl.innerHTML = '<div class="empty-result-card package-empty-result"><h3>No Such Result Found</h3><p>This destination is not available in the EasyTravel package database yet. Please choose a supported city from the suggestions.</p><a class="primary-btn" href="/#plan">Search Again</a></div>';
+      if (outputEl) outputEl.innerHTML = '';
+      if (vendorPanel) vendorPanel.style.display = 'none';
+      if (memoryVault) memoryVault.style.display = 'none';
+      if (enquireBtn) enquireBtn.disabled = true;
+      if (whatsappBtn) whatsappBtn.style.display = 'none';
+      showPackageMsg('No Such Result Found. Please choose a supported destination from the suggestions.', true);
+      return;
+    }
+    if (enquireBtn) enquireBtn.disabled = false;
+    if (whatsappBtn) whatsappBtn.style.display = '';
     const pack = pkgDB[cityName] || packageTemplate(cityName);
     const budget = budgetInput.value || 'Comfort';
     const days = Number(daysInput.value || 3);
@@ -1085,6 +1108,13 @@ console.log("Enquiry success:", enqData);
 
   if (reviewBtn) {
     reviewBtn.addEventListener('click', function () {
+      const cityName = cityNameFromInput(destinationInput.value);
+      if (!cityName) {
+        showPackageMsg('No Such Result Found. Please choose a supported destination from the suggestions.', true);
+        showToast('Destination not available.', true);
+        destinationInput.focus();
+        return;
+      }
       const formData = getFormData();
       if (!formData.fullName || !formData.email || !formData.phone || !formData.destination || !formData.age) {
         showPackageMsg('Please complete traveller details, destination, phone and age before review.', true);
@@ -1107,6 +1137,13 @@ console.log("Enquiry success:", enqData);
     e.preventDefault();
     const cityName = cityNameFromInput(destinationInput.value);
     const formData = getFormData();
+
+    if (!cityName) {
+      showPackageMsg('No Such Result Found. Please choose a supported destination from the suggestions.', true);
+      showToast('Destination not available.', true);
+      destinationInput.focus();
+      return;
+    }
 
     if (!formData.fullName || !formData.email || !formData.phone || !formData.destination || !formData.age) {
       showPackageMsg('Name, email, phone, destination and age are required.', true);
